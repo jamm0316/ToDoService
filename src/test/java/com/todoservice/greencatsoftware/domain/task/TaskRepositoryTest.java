@@ -9,6 +9,7 @@ import com.todoservice.greencatsoftware.domain.color.ColorRepository;
 import com.todoservice.greencatsoftware.domain.project.ProjectRepository;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import com.todoservice.greencatsoftware.domain.task.entity.Task;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -75,5 +77,16 @@ public class TaskRepositoryTest {
         assertThat(savedTask.getId()).isNotNull();
         assertThat(savedTask.getColor().getHexCode()).isEqualTo("#FF0000");
         assertThat(savedTask.getPriority()).isEqualTo(Priority.HIGH);
+    }
+
+    @Test
+    @DisplayName("필수값 누락시 제약 발생")
+    public void 필수값_누락시_제약_발생() throws Exception {
+        //given
+        Task task = new Task();
+
+        //then
+        assertThatThrownBy(() -> taskRepository.saveAndFlush(task))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 }
