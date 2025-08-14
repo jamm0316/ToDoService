@@ -29,7 +29,6 @@ public class Project extends SuperEntity {
     @NotNull(message = "상태값은 필수 입니다.")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(10) default 'SCHEDULE'")
-    @Length(max = 10)
     private Status status;
 
     private String startDate;
@@ -47,6 +46,5 @@ public class Project extends SuperEntity {
     @NotNull(message = "공개 범위는 필수입니다.")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(20) default 'PRIVATE'")
-    @Length(max = 20)
     private Visibility visibility;
 }
