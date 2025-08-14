@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -47,12 +49,31 @@ public class ColorJpaTest {
         color2.setName("RED");
         color2.setHexCode("#FF0010");
 
+        //when
+        colorRepository.saveAndFlush(color1);
+
+        //then
+        assertThatThrownBy(() -> colorRepository.saveAndFlush(color2))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    @DisplayName("색상코드_유니크_제약")
+    public void 생상코드_유니크_제약() throws Exception {
+        //given
+        Color color1 = new Color();
+        color1.setName("GREEN");
+        color1.setHexCode("#00FF00");
+
+        Color color2 = new Color();
+        color2.setName("RED");
+        color2.setHexCode("#00FF00");
 
         //when
         colorRepository.saveAndFlush(color1);
 
         //then
         assertThatThrownBy(() -> colorRepository.saveAndFlush(color2))
-                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }
