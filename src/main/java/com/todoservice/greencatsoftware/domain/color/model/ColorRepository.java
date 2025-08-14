@@ -1,5 +1,6 @@
-package com.todoservice.greencatsoftware.domain.color;
+package com.todoservice.greencatsoftware.domain.color.model;
 
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

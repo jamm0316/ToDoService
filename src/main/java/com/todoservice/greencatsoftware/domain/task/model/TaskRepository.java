@@ -1,4 +1,4 @@
-package com.todoservice.greencatsoftware.domain.task;
+package com.todoservice.greencatsoftware.domain.task.model;
 
 import com.todoservice.greencatsoftware.domain.task.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;

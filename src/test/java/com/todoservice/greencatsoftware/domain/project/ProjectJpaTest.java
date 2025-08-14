@@ -2,9 +2,10 @@ package com.todoservice.greencatsoftware.domain.project;
 
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.enums.Visibility;
-import com.todoservice.greencatsoftware.domain.color.Color;
-import com.todoservice.greencatsoftware.domain.color.ColorRepository;
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
+import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.model.ProjectRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

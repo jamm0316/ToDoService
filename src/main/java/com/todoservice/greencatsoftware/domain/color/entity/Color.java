@@ -1,4 +1,4 @@
-package com.todoservice.greencatsoftware.domain.color;
+package com.todoservice.greencatsoftware.domain.color.entity;
 
 import com.todoservice.greencatsoftware.common.superEntity.SuperEntity;
 import jakarta.persistence.*;

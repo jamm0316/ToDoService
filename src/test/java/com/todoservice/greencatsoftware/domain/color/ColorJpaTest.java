@@ -1,5 +1,7 @@
 package com.todoservice.greencatsoftware.domain.color;
 
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
+import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
