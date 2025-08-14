@@ -65,6 +65,5 @@ public class Task extends SuperEntity {
     @NotNull(message = "상태는 필수 입니다.")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(10) default 'SCHEDULE'")
-    @Length(max = 20)
     private Status status;
 }
