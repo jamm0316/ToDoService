@@ -22,7 +22,10 @@ public class ColorService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.VALIDATION_ERROR));
     }
 
-    public Color createColor(Color color) {
+    public Color createColor(String name, String hexCode) {
+        Color color = new Color();
+        color.setName(name);
+        color.setHexCode(hexCode);
         return colorRepository.save(color);
     }
 
@@ -30,7 +33,10 @@ public class ColorService {
         colorRepository.deleteById(id);
     }
 
-    public Color updateColor(Color color) {
-        return colorRepository.save(color);
+    public Color updateColor(String name, String hexCode, Long id) {
+        Color color = getColorByIdOrThrow(id);
+        color.setName(name);
+        color.setHexCode(hexCode);
+        return color;
     }
 }
