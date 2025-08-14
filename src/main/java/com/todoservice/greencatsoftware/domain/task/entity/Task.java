@@ -4,13 +4,12 @@ import com.todoservice.greencatsoftware.common.enums.DayLabel;
 import com.todoservice.greencatsoftware.common.enums.Priority;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.superEntity.SuperEntity;
-import com.todoservice.greencatsoftware.domain.color.Color;
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,7 +43,7 @@ public class Task extends SuperEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private DayLabel day;
+    private DayLabel dayLabel;
 
     private LocalDate startDate;
 
@@ -65,6 +64,5 @@ public class Task extends SuperEntity {
     @NotNull(message = "상태는 필수 입니다.")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(10) default 'SCHEDULE'")
-    @Length(max = 20)
     private Status status;
 }
