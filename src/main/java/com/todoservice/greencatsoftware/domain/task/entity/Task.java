@@ -44,7 +44,7 @@ public class Task extends SuperEntity {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private DayLabel day;
+    private DayLabel dayLabel;
 
     private LocalDate startDate;
 
