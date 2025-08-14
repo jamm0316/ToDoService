@@ -5,12 +5,14 @@ import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.domain.color.Color;
 import com.todoservice.greencatsoftware.domain.color.ColorRepository;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
+import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.*;
@@ -52,5 +54,16 @@ public class ProjectJpaTest {
         //then
         assertThat(savedProject.getId()).isNotNull();
         assertThat(savedProject.getColor().getHexCode()).isEqualTo("FF0000");
+    }
+
+    @Test
+    @DisplayName("필수값 누락 시 제약발생")
+    public void 필수값_누락시_제약발생() throws Exception {
+        //given
+        Project project = new Project();
+
+        //then
+        assertThatThrownBy(() -> projectRepository.saveAndFlush(project))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 }
