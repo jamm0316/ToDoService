@@ -34,4 +34,25 @@ public class ColorJpaTest {
         assertThat(savedColor.getId()).isNotNull();
         assertThat(savedColor.getHexCode()).isEqualTo("#FF0000");
     }
+
+    @Test
+    @DisplayName("색상명_유니크_제약")
+    public void 색상명_유니크_제약() throws Exception {
+        //given
+        Color color1 = new Color();
+        color1.setName("RED");
+        color1.setHexCode("#FF0000");
+
+        Color color2 = new Color();
+        color2.setName("RED");
+        color2.setHexCode("#FF0010");
+
+
+        //when
+        colorRepository.saveAndFlush(color1);
+
+        //then
+        assertThatThrownBy(() -> colorRepository.saveAndFlush(color2))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
 }
