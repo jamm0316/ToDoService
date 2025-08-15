@@ -1,10 +1,12 @@
 package com.todoservice.greencatsoftware.domain.project;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
+import com.todoservice.greencatsoftware.domain.project.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.model.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,4 +22,10 @@ public class ProjectController {
     public BaseResponse<List<Project>> listProject() {
         return new BaseResponse<>(projectService.listProject());
     }
+
+    @PostMapping("")
+    public BaseResponse<Project> createColor(ProjectCreateRequest newProjectDTO) {
+        return new BaseResponse<>(projectService.createProject(newProjectDTO));
+    }
+
 }
