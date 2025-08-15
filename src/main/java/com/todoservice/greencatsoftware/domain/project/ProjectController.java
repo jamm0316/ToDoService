@@ -1,6 +1,7 @@
 package com.todoservice.greencatsoftware.domain.project;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.project.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.model.ProjectService;
@@ -28,5 +29,11 @@ public class ProjectController {
     @PatchMapping("/{id}")
     public BaseResponse<Project> updateColor(ProjectCreateRequest newProjectDTO, @PathVariable Long id) {
         return new BaseResponse<>(projectService.updateProject(newProjectDTO, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public BaseResponse<Void> deleteColor(@PathVariable Long id) {
+        projectService.deleteProject(id);
+        return new BaseResponse<>();
     }
 }
