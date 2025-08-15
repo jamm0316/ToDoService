@@ -2,7 +2,9 @@ package com.todoservice.greencatsoftware.domain.project.model;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
-import com.todoservice.greencatsoftware.domain.project.dto.NewProjectDTO;
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
+import com.todoservice.greencatsoftware.domain.color.model.ColorService;
+import com.todoservice.greencatsoftware.domain.project.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ModelMapper modelMapper;
+    private final ColorService colorService;
 
     public List<Project> listProject() {
         return projectRepository.findAll();
@@ -28,11 +31,11 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project createProject(NewProjectDTO newProjectDTO) {
+    public Project createProject(ProjectCreateRequest newProjectDTO) {
         return projectRepository.save(toEntity(newProjectDTO));
     }
 
-    private Project toEntity(NewProjectDTO newProjectDTO) {
+    private Project toEntity(ProjectCreateRequest newProjectDTO) {
         return modelMapper.map(newProjectDTO, Project.class);
     };
 
@@ -42,25 +45,28 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project updateProject(NewProjectDTO newProjectDTO, Long id) {
+    public Project updateProject(ProjectCreateRequest newProjectDTO, Long id) {
         Project project = getProjectByIdOrThrow(id);
         applyProjectUpdate(project, newProjectDTO);
         applyProjectRelations(project, newProjectDTO);
         return projectRepository.save(project);
     }
 
-    private void applyProjectUpdate(Project project, NewProjectDTO newProjectDTO) {
-        if (newProjectDTO.getName() != null) project.setName(newProjectDTO.getName());
-        if (newProjectDTO.getStatus() != null) project.setStatus(newProjectDTO.getStatus());
-        if (newProjectDTO.getStartDate() != null) project.setStartDate(newProjectDTO.getStartDate());
-        if (newProjectDTO.getEndDate() != null) project.setEndDate(newProjectDTO.getEndDate());
-        if (newProjectDTO.getActualEndDate() != null) project.setActualEndDate(newProjectDTO.getActualEndDate());
-        if (newProjectDTO.getDescription() != null) project.setDescription(newProjectDTO.getDescription());
-        if (newProjectDTO.getIsPublic() != null) project.setIsPublic(newProjectDTO.getIsPublic());
-        if (newProjectDTO.getVisibility() != null) project.setVisibility(newProjectDTO.getVisibility());
+    private void applyProjectUpdate(Project project, ProjectCreateRequest newProjectDTO) {
+        if (newProjectDTO.name() != null) project.setName(newProjectDTO.name());
+        if (newProjectDTO.status() != null) project.setStatus(newProjectDTO.status());
+        if (newProjectDTO.startDate() != null) project.setStartDate(newProjectDTO.startDate());
+        if (newProjectDTO.endDate() != null) project.setEndDate(newProjectDTO.endDate());
+        if (newProjectDTO.actualEndDate() != null) project.setActualEndDate(newProjectDTO.actualEndDate());
+        if (newProjectDTO.description() != null) project.setDescription(newProjectDTO.description());
+        if (newProjectDTO.isPublic() != null) project.setIsPublic(newProjectDTO.isPublic());
+        if (newProjectDTO.visibility() != null) project.setVisibility(newProjectDTO.visibility());
     }
 
-    private void applyProjectRelations(Project project, NewProjectDTO newProjectDTO) {
-        if (newProjectDTO.getColor() != null) project.setColor(newProjectDTO.getColor());
+    private void applyProjectRelations(Project project, ProjectCreateRequest newProjectDTO) {
+        if (newProjectDTO.colorId() != null) {
+            Color color = colorService.getColorByIdOrThrow(newProjectDTO.colorId());
+            project.setColor(color);
+        }
     }
 }
