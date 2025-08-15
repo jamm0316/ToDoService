@@ -5,10 +5,7 @@ import com.todoservice.greencatsoftware.domain.project.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.model.ProjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +25,8 @@ public class ProjectController {
         return new BaseResponse<>(projectService.createProject(newProjectDTO));
     }
 
+    @PatchMapping("/{id}")
+    public BaseResponse<Project> updateColor(ProjectCreateRequest newProjectDTO, @PathVariable Long id) {
+        return new BaseResponse<>(projectService.updateProject(newProjectDTO, id));
+    }
 }
