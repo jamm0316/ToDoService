@@ -173,4 +173,31 @@ public class ProjectServiceTest {
         verify(colorService, never()).getColorByIdOrThrow(anyLong());
         verify(projectRepository).save(any(Project.class));
     }
+
+    @Test
+    @DisplayName("colorId가 있으면 colorService로 조회 후 연관 관계 설정")
+    public void colorId있으면_colorService로_조회_후_연관관계_설정() throws Exception {
+        //given
+        Project project = new Project();
+        project.setId(1L);
+
+        when(projectRepository.findById(project.getId())).thenReturn(Optional.of(project));
+        when(projectRepository.save(any(Project.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Color color = new Color();
+        color.setId(77L);
+        when(colorService.getColorByIdOrThrow(color.getId())).thenReturn(color);
+
+        ProjectCreateRequest dto = new ProjectCreateRequest(77L,
+                null, null, null, null,
+                null, null, null, null);
+
+        //when
+        projectService.updateProject(dto, project.getId());
+
+        //then
+        assertThat(project.getColor().getId()).isEqualTo(color.getId());
+        verify(colorService).getColorByIdOrThrow(color.getId());
+        verify(projectRepository).save(project);
+    }
 }
