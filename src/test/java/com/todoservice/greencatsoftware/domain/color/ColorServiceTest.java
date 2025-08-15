@@ -66,4 +66,17 @@ public class ColorServiceTest {
         assertThat(findedColor.getName()).isEqualTo("RED");
         assertThat(findedColor.getHexCode()).isEqualTo("#FF0000");
     }
+
+    @Test
+    @DisplayName("색상이 존재하지 않으면 BaseException 반환")
+    public void 색상없으면_BaseException반환() throws Exception {
+        //given
+        when(colorRepository.findById(99L)).thenReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> colorService.getColorByIdOrThrow(99L))
+                .isInstanceOf(BaseException.class)
+                .hasMessage("요청 데이터가 유효하지 않습니다.");
+    }
+
 }
