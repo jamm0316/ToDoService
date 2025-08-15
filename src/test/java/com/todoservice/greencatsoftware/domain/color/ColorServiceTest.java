@@ -18,8 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ColorServiceTest {
@@ -109,5 +108,24 @@ public class ColorServiceTest {
 
         //then
         verify(colorRepository).deleteById(100L);
+    }
+
+    @Test
+    @DisplayName("Color를 갱신한다")
+    public void color를_갱신한다() throws Exception {
+        //given
+        Color color = new Color();
+        color.setId(1L);
+        color.setName("RED");
+        color.setHexCode("#FF0000");
+        when(colorRepository.findById(1L)).thenReturn(Optional.of(color));
+
+        //when
+        Color updatedColor = colorService.updateColor("BLUE", "#0000FF", color.getId());
+
+        //then
+        assertThat(updatedColor.getName()).isEqualTo("BLUE");
+        assertThat(updatedColor.getHexCode()).isEqualTo("#0000FF");
+        verify(colorRepository, never()).save(any(Color.class));
     }
 }
