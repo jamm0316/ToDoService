@@ -1,5 +1,7 @@
 package com.todoservice.greencatsoftware.domain.project.model;
 
+import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
+import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,5 +19,10 @@ public class ProjectService {
 
     public List<Project> listProject() {
         return projectRepository.findAll();
+    }
+
+    public Project getProjectByIdOrThrow(Long id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_PROJECT));
     }
 }
