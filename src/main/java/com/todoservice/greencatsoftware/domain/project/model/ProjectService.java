@@ -40,4 +40,27 @@ public class ProjectService {
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
     }
+
+    @Transactional
+    public Project updateProject(NewProjectDTO newProjectDTO, Long id) {
+        Project project = getProjectByIdOrThrow(id);
+        applyProjectUpdate(project, newProjectDTO);
+        applyProjectRelations(project, newProjectDTO);
+        return projectRepository.save(project);
+    }
+
+    private void applyProjectUpdate(Project project, NewProjectDTO newProjectDTO) {
+        if (newProjectDTO.getName() != null) project.setName(newProjectDTO.getName());
+        if (newProjectDTO.getStatus() != null) project.setStatus(newProjectDTO.getStatus());
+        if (newProjectDTO.getStartDate() != null) project.setStartDate(newProjectDTO.getStartDate());
+        if (newProjectDTO.getEndDate() != null) project.setEndDate(newProjectDTO.getEndDate());
+        if (newProjectDTO.getActualEndDate() != null) project.setActualEndDate(newProjectDTO.getActualEndDate());
+        if (newProjectDTO.getDescription() != null) project.setDescription(newProjectDTO.getDescription());
+        if (newProjectDTO.getIsPublic() != null) project.setIsPublic(newProjectDTO.getIsPublic());
+        if (newProjectDTO.getVisibility() != null) project.setVisibility(newProjectDTO.getVisibility());
+    }
+
+    private void applyProjectRelations(Project project, NewProjectDTO newProjectDTO) {
+        if (newProjectDTO.getColor() != null) project.setColor(newProjectDTO.getColor());
+    }
 }
