@@ -26,8 +26,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
@@ -139,5 +138,39 @@ public class ProjectServiceTest {
 
         //then
         verify(projectRepository).deleteById(100L);
+    }
+
+    @Test
+    @DisplayName("스칼라 필드를 갱신하고 저장한다")
+    public void 스칼라_필드_갱신_저장() throws Exception {
+        //given
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("projectA");
+        project.setDescription("abc");
+        project.setStatus(Status.SCHEDULE);
+        project.setStartDate(LocalDate.of(2025, 1, 1));
+        project.setEndDate(LocalDate.of(2025, 1, 15));
+        project.setIsPublic(true);
+        project.setVisibility(Visibility.PUBLIC);
+
+        when(projectRepository.findById(project.getId())).thenReturn(Optional.of(project));
+        when(projectRepository.save(any(Project.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        //when
+        projectService.updateProject(projectCreateRequest, project.getId());
+
+        //then
+        assertThat(project.getName()).isEqualTo("newProject");
+        assertThat(project.getDescription()).isEqualTo("newDescription");
+        assertThat(project.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(project.getStartDate()).isEqualTo(LocalDate.of(2025, 1, 1));
+        assertThat(project.getEndDate()).isEqualTo(LocalDate.of(2025, 1, 15));
+        assertThat(project.getIsPublic()).isEqualTo(true);
+        assertThat(project.getVisibility()).isEqualTo(Visibility.PUBLIC);
+
+        verify(projectRepository).findById(project.getId());
+        verify(colorService, never()).getColorByIdOrThrow(anyLong());
+        verify(projectRepository).save(any(Project.class));
     }
 }
