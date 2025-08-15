@@ -34,10 +34,12 @@ public class ColorServiceTest {
     public void 모든_색상_목록_반환() throws Exception {
         //given
         Color color1 = new Color();
+        color1.setId(1L);
         color1.setName("RED");
         color1.setHexCode("#FF0000");
 
         Color color2 = new Color();
+        color2.setId(2L);
         color2.setName("GREEN");
         color2.setHexCode("#00FF00");
         when(colorRepository.findAll()).thenReturn(Arrays.asList(color1, color2));
@@ -56,6 +58,7 @@ public class ColorServiceTest {
     public void 색상_단건_조회() throws Exception {
         //given
         Color color = new Color();
+        color.setId(1L);
         color.setName("RED");
         color.setHexCode("#FF0000");
         when(colorRepository.findById(color.getId())).thenReturn(Optional.of(color));
