@@ -17,7 +17,7 @@ public enum BaseResponseStatus {
     INVALID_REFRESH_TOKEN(false, 2004, "유효하지 않거나 만료된 리프레시 토큰입니다."),
 
     /**
-     * 3000: 외부 API 연동오류
+     * 3000: Project 오류
      */
     KAKAO_REDIRECT_MISMATCH(false, 3001, "카카오 Redirect URI가 일치하지 않습니다."),
 
@@ -34,7 +34,13 @@ public enum BaseResponseStatus {
     TOKEN_MALFORMED(false, 5002, "JWT 구조가 올바르지 않습니다."),
     TOKEN_EXPIRED(false, 5003, "JWT 토큰이 만료되었습니다."),
     TOKEN_UNSUPPORTED(false, 5004, "지원되지 않는 JWT 토큰입니다."),
-    TOKEN_ILLEGAL_ARGUMENT(false, 5006, "JWT 클레임이 비어 있거나 잘못 되었습니다.");
+    TOKEN_ILLEGAL_ARGUMENT(false, 5006, "JWT 클레임이 비어 있거나 잘못 되었습니다."),
+
+    /**
+     * 6000: Project 오류
+     */
+    NOT_FOUND_PROJECT(false, 6001, "유효하지 않은 프로젝트 입니다");
+
 
     private final boolean isSuccess;
     private final int code;
@@ -45,5 +51,5 @@ public enum BaseResponseStatus {
         this.code = code;
         this.message = message;
     }
-}
+    }
 
