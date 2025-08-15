@@ -200,4 +200,30 @@ public class ProjectServiceTest {
         verify(colorService).getColorByIdOrThrow(color.getId());
         verify(projectRepository).save(project);
     }
+
+    @Test
+    @DisplayName("null 필드는 건너뛰고 기존 값 유지")
+    public void null_필드건너뛰기_기존값유지() throws Exception {
+        // given
+        Project existing = new Project();
+        existing.setId(3L);
+        existing.setName("Keep");
+        existing.setDescription("keep desc");
+
+        when(projectRepository.findById(3L)).thenReturn(Optional.of(existing));
+        when(projectRepository.save(any(Project.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        // name만 변경, 나머지는 null → 유지되어야 함
+        ProjectCreateRequest dto = new ProjectCreateRequest(
+                null, "Changed", null, null, null, null, null, null, null
+        );
+
+        // when
+        Project updated = projectService.updateProject(dto, 3L);
+
+        // then
+        assertThat(updated.getName()).isEqualTo("Changed");
+        assertThat(updated.getDescription()).isEqualTo("keep desc"); // 유지
+        verify(projectRepository).save(existing);
+    }
 }
