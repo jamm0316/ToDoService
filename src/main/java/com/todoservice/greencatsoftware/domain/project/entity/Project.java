@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -30,11 +32,11 @@ public class Project extends SuperEntity {
     @Column(columnDefinition = "varchar(10) default 'SCHEDULE'")
     private Status status;
 
-    private String startDate;
+    private LocalDate startDate;
 
-    private String endDate;
+    private LocalDate endDate;
 
-    private String actualEndDate;
+    private LocalDate actualEndDate;
 
     private String description;
 
