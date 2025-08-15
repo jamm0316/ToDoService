@@ -35,4 +35,9 @@ public class ProjectService {
     private Project toEntity(NewProjectDTO newProjectDTO) {
         return modelMapper.map(newProjectDTO, Project.class);
     };
+
+    @Transactional
+    public void deleteProject(Long id) {
+        projectRepository.deleteById(id);
+    }
 }
