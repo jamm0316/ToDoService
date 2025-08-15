@@ -17,6 +17,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +51,7 @@ public class ColorServiceTest {
         assertThat(colors.get(0).getName()).isEqualTo("RED");
         assertThat(colors.get(1).getName()).isEqualTo("GREEN");
     }
-    
+
     @Test
     @DisplayName("색상이 존재하면 해당 색상을 반환한다.")
     public void 색상_단건_조회() throws Exception {
@@ -79,4 +81,23 @@ public class ColorServiceTest {
                 .hasMessage("요청 데이터가 유효하지 않습니다.");
     }
 
+    @Test
+    @DisplayName("Color 생성한다.")
+    public void color를_생성한다() throws Exception {
+        //given
+        when(colorRepository.save(any(Color.class))).thenAnswer(inv -> {
+            Color savedColor = inv.getArgument(0);
+            savedColor.setId(100L);
+            return savedColor;
+        });
+
+        //when
+        Color saved = colorService.createColor("RED", "#FF0000");
+
+        //then
+        assertThat(saved.getId()).isEqualTo(100L);
+        assertThat(saved.getName()).isEqualTo("RED");
+        assertThat(saved.getHexCode()).isEqualTo("#FF0000");
+        verify(colorRepository).save(any(Color.class));
+    }
 }
