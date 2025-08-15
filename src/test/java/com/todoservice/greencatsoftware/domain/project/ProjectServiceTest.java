@@ -4,6 +4,7 @@ import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.model.ColorService;
 import com.todoservice.greencatsoftware.domain.project.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
@@ -20,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,6 +42,11 @@ public class ProjectServiceTest {
 
     @InjectMocks
     private ProjectService projectService;
+
+    private ProjectCreateRequest projectCreateRequest =
+            new ProjectCreateRequest(null, "newProject", Status.SCHEDULE,
+                    LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 15),
+                    null, "newDescription", true, Visibility.PUBLIC);
 
     @Test
     @DisplayName("모든 프로젝트 목록을 반환한다.")
@@ -94,11 +101,6 @@ public class ProjectServiceTest {
     @DisplayName("DTO를 엔티티로 매핑하고 저장한다")
     public void 엔티티를_매핑하고_저장한다() throws Exception {
         //given
-        ProjectCreateRequest projectCreateRequest =
-                new ProjectCreateRequest(1L, "newProject", Status.SCHEDULE,
-                        LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 15),
-                        null, null, true, Visibility.PUBLIC);
-
         Project project = new Project();
         project.setName(projectCreateRequest.name());
         project.setStatus(projectCreateRequest.status());
@@ -127,5 +129,15 @@ public class ProjectServiceTest {
         assertThat(savedProject.getVisibility()).isEqualTo(Visibility.PUBLIC);
         verify(modelMapper).map(projectCreateRequest, Project.class);
         verify(projectRepository).save(any(Project.class));
+    }
+
+    @Test
+    @DisplayName("프로젝트 삭제 호출")
+    public void 프로젝트_삭제_호출() throws Exception {
+        //when
+        projectService.deleteProject(100L);
+
+        //then
+        verify(projectRepository).deleteById(100L);
     }
 }
