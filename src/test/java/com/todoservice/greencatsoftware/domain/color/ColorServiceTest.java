@@ -1,5 +1,6 @@
 package com.todoservice.greencatsoftware.domain.color;
 
+import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
 import com.todoservice.greencatsoftware.domain.color.model.ColorService;
@@ -12,8 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +48,22 @@ public class ColorServiceTest {
         assertThat(colors).hasSize(2);
         assertThat(colors.get(0).getName()).isEqualTo("RED");
         assertThat(colors.get(1).getName()).isEqualTo("GREEN");
+    }
+    
+    @Test
+    @DisplayName("색상이 존재하면 해당 색상을 반환한다.")
+    public void 색상_단건_조회() throws Exception {
+        //given
+        Color color = new Color();
+        color.setName("RED");
+        color.setHexCode("#FF0000");
+        when(colorRepository.findById(color.getId())).thenReturn(Optional.of(color));
 
+        //when
+        Color findedColor = colorService.getColorByIdOrThrow(color.getId());
+
+        //then
+        assertThat(findedColor.getName()).isEqualTo("RED");
+        assertThat(findedColor.getHexCode()).isEqualTo("#FF0000");
     }
 }
