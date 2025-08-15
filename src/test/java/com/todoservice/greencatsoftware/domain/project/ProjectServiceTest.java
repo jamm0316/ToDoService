@@ -63,4 +63,16 @@ public class ProjectServiceTest {
         assertThat(projectService.getProjectByIdOrThrow(1L)).isEqualTo(project);
         assertThat(projectService.getProjectByIdOrThrow(1L).getName()).isEqualTo("projectA");
     }
+
+    @Test
+    @DisplayName("프로젝트가 존재하지 않으면 BaseException 반환")
+    public void 프로젝트_없으면_BaseException_반환() throws Exception {
+        //given
+        when(projectRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> projectService.getProjectByIdOrThrow(99L))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.NOT_FOUND_PROJECT.getMessage());
+    }
 }
