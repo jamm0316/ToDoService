@@ -89,4 +89,19 @@ public class TaskService {
             task.setDueTimeEnabled(newDueTimeEnabled);
         }
     }
+
+    //todo: 작업 대량 생성
+    public void bulkCreateTasks(List<TaskCreateRequest> newTaskDTOList) {
+        throw new UnsupportedOperationException("TODO: 작업 대량 생성 작성");
+    }
+
+    //todo: 작업 대량 수정
+    public void bulkUpdateTasks(List<TaskCreateRequest> newTaskDTOList) {
+        throw new UnsupportedOperationException("TODO: 작업 대량 수정 작성");
+    }
+
+    //todo: 작업 대량 삭제
+    public void bulkDeleteTasks(List<Long> taskIdList) {
+        throw new UnsupportedOperationException("TODO: 작업 대량 삭제 작성");
+    }
 }
