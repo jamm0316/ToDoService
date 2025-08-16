@@ -78,4 +78,15 @@ public class TaskService {
         Task task = getTaskByIdOrThrow(id);
         task.setStatus(newStatus);
     }
+
+    @Transactional
+    public void updateTaskTimeEnable(Long id, Boolean newStartTimeEnabled, Boolean newDueTimeEnabled) {
+        Task task = getTaskByIdOrThrow(id);
+        if (newStartTimeEnabled != null) {
+            task.setStartTimeEnabled(newStartTimeEnabled);
+        }
+        if (newDueTimeEnabled != null) {
+            task.setDueTimeEnabled(newDueTimeEnabled);
+        }
+    }
 }
