@@ -43,9 +43,17 @@ public class ProjectServiceTest {
     private ProjectService projectService;
 
     private ProjectCreateRequest projectCreateRequest =
-            new ProjectCreateRequest(null, "newProject", Status.SCHEDULE,
-                    LocalDate.of(2025, 1, 1), LocalDate.of(2025, 1, 15),
-                    null, "newDescription", true, Visibility.PUBLIC);
+            ProjectCreateRequest.builder()
+                    .colorId(null)
+                    .name("newProject")
+                    .status(Status.SCHEDULE)
+                    .startDate(LocalDate.of(2025, 1, 1))
+                    .endDate(LocalDate.of(2025, 1, 15))
+                    .actualEndDate(null)
+                    .description("newDescription")
+                    .isPublic(true)
+                    .visibility(Visibility.PUBLIC)
+                    .build();
 
     @Test
     @DisplayName("모든 프로젝트 목록을 반환한다.")
@@ -188,9 +196,9 @@ public class ProjectServiceTest {
         color.setId(77L);
         when(colorService.getColorByIdOrThrow(color.getId())).thenReturn(color);
 
-        ProjectCreateRequest dto = new ProjectCreateRequest(77L,
-                null, null, null, null,
-                null, null, null, null);
+        ProjectCreateRequest dto = ProjectCreateRequest.builder()
+                .colorId(77L)
+                .build();
 
         //when
         projectService.updateProject(dto, project.getId());
