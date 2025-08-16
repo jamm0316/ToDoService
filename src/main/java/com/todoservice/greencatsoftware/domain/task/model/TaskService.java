@@ -1,6 +1,7 @@
 package com.todoservice.greencatsoftware.domain.task.model;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
+import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.model.ColorService;
 import com.todoservice.greencatsoftware.domain.project.model.ProjectService;
@@ -70,5 +71,11 @@ public class TaskService {
     private void applyTaskRelations(Task task, TaskCreateRequest newTaskDTO) {
         if(newTaskDTO.projectId() != null) task.setProject(projectService.getProjectByIdOrThrow(newTaskDTO.projectId()));
         if(newTaskDTO.colorId() != null) task.setColor(colorService.getColorByIdOrThrow(newTaskDTO.colorId()));
+    }
+
+    @Transactional
+    public void updateTaskStatus(Long id, Status newStatus) {
+        Task task = getTaskByIdOrThrow(id);
+        task.setStatus(newStatus);
     }
 }
