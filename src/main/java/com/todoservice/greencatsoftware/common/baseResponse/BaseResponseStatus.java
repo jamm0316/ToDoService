@@ -41,7 +41,12 @@ public enum BaseResponseStatus {
      */
     NOT_FOUND_PROJECT(false, 6001, "유효하지 않은 프로젝트 입니다"),
     END_DATE_BEFORE_START_DATE(false, 6002, "종료일은 시작일보다 빠를 수 없습니다."),
-    ACTUAL_END_DATE_BEFORE_START_DATE(false, 6003, "실제 종료일은 시작일보다 빠를 수 없습니다.")
+    ACTUAL_END_DATE_BEFORE_START_DATE(false, 6003, "실제 종료일은 시작일보다 빠를 수 없습니다."),
+
+    /**
+     * 7000: Task 오류
+     */
+    NOT_FOUND_TASK(false, 7001, "유효하지 않은 TASK 입니다"),
     ;
 
 
