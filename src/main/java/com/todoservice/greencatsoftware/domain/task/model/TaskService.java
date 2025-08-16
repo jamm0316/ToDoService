@@ -30,6 +30,7 @@ public class TaskService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_TASK));
     }
 
+    @Transactional
     public Task createTask(TaskCreateRequest newTaskDTO) {
         return taskRepository.save(toEntity(newTaskDTO));
     }
@@ -38,6 +39,7 @@ public class TaskService {
         return modelMapper.map(newTaskDTO, Task.class);
     }
 
+    @Transactional
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }
