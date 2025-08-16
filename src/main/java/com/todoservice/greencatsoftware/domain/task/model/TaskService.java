@@ -34,11 +34,18 @@ public class TaskService {
 
     @Transactional
     public Task createTask(TaskCreateRequest newTaskDTO) {
-        return taskRepository.save(toEntity(newTaskDTO));
+        Task entity = toEntity(newTaskDTO);
+        applyTaskRelations(entity, newTaskDTO);
+        return taskRepository.save(entity);
     }
 
     private Task toEntity(TaskCreateRequest newTaskDTO) {
         return modelMapper.map(newTaskDTO, Task.class);
+    }
+
+    private void applyTaskRelations(Task task, TaskCreateRequest newTaskDTO) {
+        if(newTaskDTO.projectId() != null) task.setProject(projectService.getProjectByIdOrThrow(newTaskDTO.projectId()));
+        if(newTaskDTO.colorId() != null) task.setColor(colorService.getColorByIdOrThrow(newTaskDTO.colorId()));
     }
 
     @Transactional
@@ -66,11 +73,6 @@ public class TaskService {
         if(newTaskDTO.dueTime() != null) task.setDueTime(newTaskDTO.dueTime());
         if(newTaskDTO.dueTimeEnabled() != null) task.setDueTimeEnabled(newTaskDTO.dueTimeEnabled());
         if(newTaskDTO.status() != null) task.setStatus(newTaskDTO.status());
-    }
-
-    private void applyTaskRelations(Task task, TaskCreateRequest newTaskDTO) {
-        if(newTaskDTO.projectId() != null) task.setProject(projectService.getProjectByIdOrThrow(newTaskDTO.projectId()));
-        if(newTaskDTO.colorId() != null) task.setColor(colorService.getColorByIdOrThrow(newTaskDTO.colorId()));
     }
 
     @Transactional
