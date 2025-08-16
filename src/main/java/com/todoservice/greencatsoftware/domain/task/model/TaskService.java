@@ -1,5 +1,7 @@
 package com.todoservice.greencatsoftware.domain.task.model;
 
+import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
+import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.task.entity.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,5 +15,10 @@ public class TaskService {
 
     public List<Task> listTask() {
         return taskRepository.findAll();
+    }
+
+    public Task getTaskByIdOrThrow(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_TASK));
     }
 }
