@@ -32,4 +32,8 @@ public class TaskService {
     private Task toEntity(TaskCreateRequest newTaskDTO) {
         return modelMapper.map(newTaskDTO, Task.class);
     }
+
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
 }
