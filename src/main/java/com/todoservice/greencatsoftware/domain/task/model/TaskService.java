@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TaskService {
     private final TaskRepository taskRepository;
     private final ModelMapper modelMapper;
