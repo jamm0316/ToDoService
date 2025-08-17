@@ -47,6 +47,12 @@ public enum BaseResponseStatus {
      * 7000: Task 오류
      */
     NOT_FOUND_TASK(false, 7001, "유효하지 않은 TASK 입니다"),
+    MISSING_PROJECT_FOR_TASK(false, 7002, "Task는 반드시 Project에 속해야 합니다."),
+    MISSING_COLOR_FOR_TASK(false, 7003, "Task는 반드시 색상을 가지고 있어야 합니다."),
+    MISSING_TITLE_FOR_TASK(false, 7004, "Task는 제목은 필수 입니다."),
+    TITLE_EXCEEDS_LIMIT(false, 7005, "제목은 100자를 초과할 수 없습니다."),
+    MISSING_PRIORITY_FOR_TASK(false, 7006, "Task는 우선순위가 필수 입니다."),
+    MISSING_STATUS_FOR_TASK(false, 7007, "Task는 상태값이 필수 입니다."),
 
     /**
      * 8000: Schedule 오류
