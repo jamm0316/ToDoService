@@ -5,10 +5,7 @@ import com.todoservice.greencatsoftware.domain.task.dto.TaskCreateRequest;
 import com.todoservice.greencatsoftware.domain.task.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.model.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,8 @@ public class TaskController {
         return new BaseResponse<>(taskService.createTask(newTaskDTO));
     }
 
-
+    @PatchMapping("/{id}")
+    public BaseResponse<Task> updateColor(TaskCreateRequest newProjectDTO, @PathVariable Long id) {
+        return new BaseResponse<>(taskService.updateTask(newProjectDTO, id));
+    }
 }
