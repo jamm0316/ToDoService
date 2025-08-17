@@ -48,6 +48,10 @@ public record Schedule(
                 if (Boolean.TRUE.equals(startTimeEnabled) && startTime == null) {
                         throw new BaseException(BaseResponseStatus.MISSING_START_TIME_VALUE);
                 }
+
+                if (Boolean.TRUE.equals(dueTimeEnabled) && dueTime == null) {
+                        throw new BaseException(BaseResponseStatus.MISSING_DUE_TIME_VALUE);
+                }
         }
 
 }
