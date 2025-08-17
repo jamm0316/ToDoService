@@ -47,6 +47,11 @@ public enum BaseResponseStatus {
      * 7000: Task 오류
      */
     NOT_FOUND_TASK(false, 7001, "유효하지 않은 TASK 입니다"),
+
+    /**
+     * 8000: Schedule 오류
+     */
+    INVALID_DATE_ORDER(false, 8001, "마감일은 시작일보다 이후여야 합니다"),
     ;
 
 
