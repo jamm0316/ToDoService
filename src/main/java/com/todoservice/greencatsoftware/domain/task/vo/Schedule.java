@@ -37,11 +37,11 @@ public record Schedule(
                         throw new BaseException(BaseResponseStatus.INVALID_DATE_ORDER);
                 }
 
-                if (Boolean.TRUE.equals(startTimeEnabled) && startTime == null) {
+                if (Boolean.TRUE.equals(startTimeEnabled) && startDate == null) {
                         throw new BaseException(BaseResponseStatus.MISSING_START_DATE_FOR_TIME);
                 }
 
-                if (Boolean.TRUE.equals(dueTimeEnabled) && dueTime == null) {
+                if (Boolean.TRUE.equals(dueTimeEnabled) && dueDate == null) {
                         throw new BaseException(BaseResponseStatus.MISSING_DUE_DATE_FOR_TIME);
                 }
         }
