@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1//task")
+@RequestMapping("/api/v1/task")
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
@@ -41,6 +41,4 @@ public class TaskController {
     public void updateTaskStatus(@PathVariable Long id, @RequestParam Status newStatus) {
         taskService.updateTaskStatus(id, newStatus);
     }
-
-
 }
