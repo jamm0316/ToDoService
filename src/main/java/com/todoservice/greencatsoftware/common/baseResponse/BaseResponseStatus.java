@@ -56,6 +56,7 @@ public enum BaseResponseStatus {
     MISSING_DUE_DATE_FOR_TIME(false, 8003, "마감 시간을 사용하려면 마감 날짜가 필요합니다"),
     MISSING_START_TIME_VALUE(false, 8004, "시작 시간이 활성화되면 시작 시간 값이 필요합니다"),
     MISSING_DUE_TIME_VALUE(false, 8005, "마감 시간이 활성화되면 마감 시간 값이 필요합니다"),
+    INVALID_TIME_ORDER_SAME_DATE(false, 8006, "같은 날짜에서 마감 시간은 시작 시간보다 이후여야 합니다"),
     ;
 
 
