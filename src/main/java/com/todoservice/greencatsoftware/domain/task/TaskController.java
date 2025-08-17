@@ -29,4 +29,10 @@ public class TaskController {
     public BaseResponse<Task> updateColor(TaskCreateRequest newProjectDTO, @PathVariable Long id) {
         return new BaseResponse<>(taskService.updateTask(newProjectDTO, id));
     }
+
+    @DeleteMapping("/{id}")
+    public BaseResponse<Void> deleteColor(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return new BaseResponse<>();
+    }
 }
