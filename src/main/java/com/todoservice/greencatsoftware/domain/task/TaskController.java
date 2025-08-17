@@ -37,7 +37,7 @@ public class TaskController {
         return new BaseResponse<>();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/status")
     public void updateTaskStatus(@PathVariable Long id, @RequestParam Status newStatus) {
         taskService.updateTaskStatus(id, newStatus);
     }
