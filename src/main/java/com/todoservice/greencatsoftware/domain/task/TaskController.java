@@ -21,17 +21,17 @@ public class TaskController {
     }
 
     @PostMapping("")
-    public BaseResponse<Task> createColor(TaskCreateRequest newTaskDTO) {
+    public BaseResponse<Task> createTask(TaskCreateRequest newTaskDTO) {
         return new BaseResponse<>(taskService.createTask(newTaskDTO));
     }
 
     @PatchMapping("/{id}")
-    public BaseResponse<Task> updateColor(TaskCreateRequest newProjectDTO, @PathVariable Long id) {
+    public BaseResponse<Task> updateTask(TaskCreateRequest newProjectDTO, @PathVariable Long id) {
         return new BaseResponse<>(taskService.updateTask(newProjectDTO, id));
     }
 
     @DeleteMapping("/{id}")
-    public BaseResponse<Void> deleteColor(@PathVariable Long id) {
+    public BaseResponse<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return new BaseResponse<>();
     }
