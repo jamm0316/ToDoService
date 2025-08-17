@@ -1,6 +1,7 @@
 package com.todoservice.greencatsoftware.domain.task;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
+import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.domain.task.dto.TaskCreateRequest;
 import com.todoservice.greencatsoftware.domain.task.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.model.TaskService;
@@ -35,4 +36,11 @@ public class TaskController {
         taskService.deleteTask(id);
         return new BaseResponse<>();
     }
+
+    @PatchMapping("/{id}")
+    public void updateTaskStatus(@PathVariable Long id, @RequestParam Status newStatus) {
+        taskService.updateTaskStatus(id, newStatus);
+    }
+
+
 }
