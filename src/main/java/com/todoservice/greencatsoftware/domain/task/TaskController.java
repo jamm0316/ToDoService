@@ -1,11 +1,12 @@
 package com.todoservice.greencatsoftware.domain.task;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
-import com.todoservice.greencatsoftware.domain.project.entity.Project;
+import com.todoservice.greencatsoftware.domain.task.dto.TaskCreateRequest;
 import com.todoservice.greencatsoftware.domain.task.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.model.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,4 +22,11 @@ public class TaskController {
     public BaseResponse<List<Task>> listTask() {
         return new BaseResponse<>(taskService.listTask());
     }
+
+    @PostMapping("")
+    public BaseResponse<Task> createColor(TaskCreateRequest newTaskDTO) {
+        return new BaseResponse<>(taskService.createTask(newTaskDTO));
+    }
+
+
 }
