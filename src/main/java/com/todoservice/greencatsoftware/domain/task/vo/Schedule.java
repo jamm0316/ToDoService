@@ -36,5 +36,10 @@ public record Schedule(
                 if (startDate != null && dueDate != null && dueDate.isBefore(startDate)) {
                         throw new BaseException(BaseResponseStatus.INVALID_DATE_ORDER);
                 }
+
+                if (Boolean.TRUE.equals(startTimeEnabled) && startTime == null) {
+                        throw new BaseException(BaseResponseStatus.MISSING_START_DATE_FOR_TIME);
+                }
         }
+
 }
