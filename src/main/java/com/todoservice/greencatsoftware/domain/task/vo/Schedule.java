@@ -52,6 +52,12 @@ public record Schedule(
                 if (Boolean.TRUE.equals(dueTimeEnabled) && dueTime == null) {
                         throw new BaseException(BaseResponseStatus.MISSING_DUE_TIME_VALUE);
                 }
+
+                if (startDate != null && dueDate != null && startDate.equals(dueDate)
+                        && Boolean.TRUE.equals(startTimeEnabled) && Boolean.TRUE.equals(dueTimeEnabled &&
+                        startTime != null && dueTime != null && dueTime.isBefore(startTime))) {
+                        throw new BaseException(BaseResponseStatus.INVALID_TIME_ORDER_SAME_DATE);
+                }
         }
 
 }
