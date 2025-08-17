@@ -52,6 +52,7 @@ public enum BaseResponseStatus {
      * 8000: Schedule 오류
      */
     INVALID_DATE_ORDER(false, 8001, "마감일은 시작일보다 이후여야 합니다"),
+    MISSING_START_DATE_FOR_TIME(false, 8002, "시작 시간을 사용하려면 시작 날짜가 필요합니다"),
     ;
 
 
