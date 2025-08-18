@@ -1,6 +1,7 @@
 package com.todoservice.greencatsoftware.domain.task.application;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
+import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.model.ColorService;
@@ -45,9 +46,6 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    //todo: entity에서 entity 수정 로직 만들기
-    //todo: factory에서 update로직 컨트롤 메서드 만들기
-    //todo: factory를 통해 service는 update 로직 수행
     @Transactional
     public Task updateTask(TaskUpdateRequest request, Long id) {
         Task task = getTaskByIdOrThrow(id);
@@ -70,6 +68,13 @@ public class TaskService {
         task.changeSchedule(schedule);
         task.changeStatus(request.status());
 
+        return task;
+    }
+
+    @Transactional
+    public Task updateTaskStatus(Long id, Status status) {
+        Task task = getTaskByIdOrThrow(id);
+        task.changeStatus(status);
         return task;
     }
 
