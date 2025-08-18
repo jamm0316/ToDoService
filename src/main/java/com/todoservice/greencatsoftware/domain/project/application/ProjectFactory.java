@@ -15,14 +15,15 @@ public class ProjectFactory {
 
     public Project createProject(ProjectCreateRequest request) {
         Color color = colorService.getColorByIdOrThrow(request.colorId());
-        Period period = Period.of(request.startDate(), request.endDate(), request.actualEndDate());
+        Period period = Period.of(request.period().startDate(), request.period().endDate(),
+                                  request.period().actualEndDate());
 
         return (period.isNull())
                 ? Project.create(color, request.name(), request.status(),
                 request.description(), request.isPublic(), request.visibility())
 
                 : Project.createWithPeriod(color, request.name(), request.status(),
-                request.startDate(), request.endDate(), request.actualEndDate(),
+                request.period().startDate(), request.period().endDate(), request.period().actualEndDate(),
                 request.description(), request.isPublic(), request.visibility());
     }
 }
