@@ -69,7 +69,7 @@ public class Project extends SuperEntity {
         this.visibility = visibility;
     }
 
-    public void validateDomainInvariants(Color color,
+    private void validateDomainInvariants(Color color,
                                          String name,
                                          Status status,
                                          String description,
