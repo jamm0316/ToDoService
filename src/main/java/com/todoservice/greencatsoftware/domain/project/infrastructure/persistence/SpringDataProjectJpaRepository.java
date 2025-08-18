@@ -17,23 +17,17 @@ public interface SpringDataProjectJpaRepository extends JpaRepository<Project, L
         private final SpringDataProjectJpaRepository jpa;
 
         @Override
-        public List<Project> findAll() {
-            return jpa.findAll();
-        }
+        public List<Project> findAll() {return jpa.findAll();}
+
 
         @Override
-        public Project save(Project project) {
-            return jpa.save(project);
-        }
+        public Project save(Project project) {return jpa.save(project);}
 
         @Override
-        public Optional<Project> findById(Long id) {
-            return jpa.findById(id);
-        }
+        public Optional<Project> findById(Long id) {return jpa.findById(id);}
 
         @Override
-        public void deleteById(Long id) {
-            jpa.deleteById(id);
-        }
+        public void deleteById(Long id) {jpa.deleteById(id);}
+
     }
 }
