@@ -27,7 +27,7 @@ public record Schedule(
                 validationSchedule(startDate, startTime, startTimeEnabled, dueDate, dueTime, dueTimeEnabled);
         }
 
-        public void validationSchedule(LocalDate startDate,
+        private void validationSchedule(LocalDate startDate,
                                        LocalDateTime startTime,
                                        Boolean startTimeEnabled,
                                        LocalDate dueDate,
@@ -68,5 +68,10 @@ public record Schedule(
                 LocalDate dueDate, LocalDateTime dueTime, Boolean dueTimeEnabled) {
                 return new Schedule(startDate, startTime, startTimeEnabled,
                         dueDate, dueTime, dueTimeEnabled);
+        }
+
+        public boolean isNull() {
+                return startDate == null && startTime == null && startTimeEnabled == null
+                        && dueDate == null && dueTime == null && dueTimeEnabled == null;
         }
 }

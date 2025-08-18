@@ -30,6 +30,5 @@ public record TaskCreateRequest(
     public TaskCreateRequest {
         // description이 빈 문자열이면 null로 정규화
         if (description != null && description.isBlank()) description = null;
-
     }
 }

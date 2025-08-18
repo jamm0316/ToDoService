@@ -23,10 +23,10 @@ public class TaskFactory {
                 request.schedule().startDate(), request.schedule().startTime(), request.schedule().startTimeEnabled(),
                 request.schedule().dueDate(), request.schedule().dueTime(), request.schedule().dueTimeEnabled());
 
-        return (schedule != null)
-                ? Task.createWithSchedule(project, color, request.priority(), request.title(), request.description(),
-                request.dayLabel(), schedule, request.status())
-                : Task.create(project, color, request.priority(), request.title(), request.description(),
-                request.dayLabel(), request.status());
+        return (schedule.isNull())
+                ? Task.create(project, color, request.priority(), request.title(), request.description(),
+                request.dayLabel(), request.status())
+                : Task.createWithSchedule(project, color, request.priority(), request.title(), request.description(),
+                request.dayLabel(), schedule, request.status());
     }
 }
