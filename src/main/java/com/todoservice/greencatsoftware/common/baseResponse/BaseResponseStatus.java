@@ -47,6 +47,22 @@ public enum BaseResponseStatus {
      * 7000: Task 오류
      */
     NOT_FOUND_TASK(false, 7001, "유효하지 않은 TASK 입니다"),
+    MISSING_PROJECT_FOR_TASK(false, 7002, "Task는 반드시 Project에 속해야 합니다."),
+    MISSING_COLOR_FOR_TASK(false, 7003, "Task는 반드시 색상을 가지고 있어야 합니다."),
+    MISSING_TITLE_FOR_TASK(false, 7004, "Task는 제목은 필수 입니다."),
+    TITLE_EXCEEDS_LIMIT(false, 7005, "제목은 100자를 초과할 수 없습니다."),
+    MISSING_PRIORITY_FOR_TASK(false, 7006, "Task는 우선순위가 필수 입니다."),
+    MISSING_STATUS_FOR_TASK(false, 7007, "Task는 상태값이 필수 입니다."),
+
+    /**
+     * 8000: Schedule 오류
+     */
+    INVALID_DATE_ORDER(false, 8001, "마감일은 시작일보다 이후여야 합니다"),
+    MISSING_START_DATE_FOR_TIME(false, 8002, "시작 시간을 사용하려면 시작 날짜가 필요합니다"),
+    MISSING_DUE_DATE_FOR_TIME(false, 8003, "마감 시간을 사용하려면 마감 날짜가 필요합니다"),
+    MISSING_START_TIME_VALUE(false, 8004, "시작 시간이 활성화되면 시작 시간 값이 필요합니다"),
+    MISSING_DUE_TIME_VALUE(false, 8005, "마감 시간이 활성화되면 마감 시간 값이 필요합니다"),
+    INVALID_TIME_ORDER_SAME_DATE(false, 8006, "같은 날짜에서 마감 시간은 시작 시간보다 이후여야 합니다"),
     ;
 
 

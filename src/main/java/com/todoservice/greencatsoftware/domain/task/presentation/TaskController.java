@@ -1,10 +1,11 @@
-package com.todoservice.greencatsoftware.domain.task;
+package com.todoservice.greencatsoftware.domain.task.presentation;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
 import com.todoservice.greencatsoftware.common.enums.Status;
-import com.todoservice.greencatsoftware.domain.task.dto.TaskCreateRequest;
-import com.todoservice.greencatsoftware.domain.task.entity.Task;
-import com.todoservice.greencatsoftware.domain.task.model.TaskService;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
+import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
+import com.todoservice.greencatsoftware.domain.task.application.TaskService;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    public BaseResponse<Task> updateTask(TaskCreateRequest newProjectDTO, @PathVariable Long id) {
-        return new BaseResponse<>(taskService.updateTask(newProjectDTO, id));
+    public BaseResponse<Task> updateTask(TaskUpdateRequest updateTaskDTO, @PathVariable Long id) {
+        return new BaseResponse<>(taskService.updateTask(updateTaskDTO, id));
     }
 
     @DeleteMapping("/{id}")
