@@ -12,11 +12,8 @@ public record Period(
         LocalDate endDate,
         LocalDate actualEndDate
 ) {
-    public Period (LocalDate startDate, LocalDate endDate, LocalDate actualEndDate) {
+    public Period  {
         validationPeriod(startDate, endDate, actualEndDate);
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.actualEndDate = actualEndDate;
     }
 
     private void validationPeriod(LocalDate startDate, LocalDate endDate, LocalDate actualEndDate) {
