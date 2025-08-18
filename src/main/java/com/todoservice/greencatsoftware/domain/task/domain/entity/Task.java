@@ -162,7 +162,7 @@ public class Task extends SuperEntity {
     }
 
     public void changeSchedule(Schedule schedule) {
-        if (schedule == null) {
+        if (schedule.isNull()) {
             this.schedule = Schedule.noSchedule();
         } else {
             this.schedule = schedule;
