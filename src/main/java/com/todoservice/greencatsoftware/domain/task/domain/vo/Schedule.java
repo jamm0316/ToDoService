@@ -1,4 +1,4 @@
-package com.todoservice.greencatsoftware.domain.task.vo;
+package com.todoservice.greencatsoftware.domain.task.domain.vo;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
@@ -60,4 +60,13 @@ public record Schedule(
                 }
         }
 
+        public static Schedule noSchedule() {
+                return new Schedule(null, null, null, null, null, null);
+        }
+
+        public static Schedule of (LocalDate startDate, LocalDateTime startTime, Boolean startTimeEnabled,
+                LocalDate dueDate, LocalDateTime dueTime, Boolean dueTimeEnabled) {
+                return new Schedule(startDate, startTime, startTimeEnabled,
+                        dueDate, dueTime, dueTimeEnabled);
+        }
 }
