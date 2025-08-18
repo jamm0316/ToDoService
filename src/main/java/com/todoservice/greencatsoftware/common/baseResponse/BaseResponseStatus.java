@@ -42,6 +42,13 @@ public enum BaseResponseStatus {
     NOT_FOUND_PROJECT(false, 6001, "유효하지 않은 프로젝트 입니다"),
     END_DATE_BEFORE_START_DATE(false, 6002, "종료일은 시작일보다 빠를 수 없습니다."),
     ACTUAL_END_DATE_BEFORE_START_DATE(false, 6003, "실제 종료일은 시작일보다 빠를 수 없습니다."),
+    MISSING_COLOR_FOR_PROJECT(false, 6004, "Project의 Color는 필수입니다."),
+    MISSING_TITLE_FOR_PROJECT(false, 6005, "Project의 제목은 필수 입니다."),
+    TITLE_EXCEEDS_LIMIT_FOR_PROJECT(false, 6006, "제목은 100자를 초과할 수 없습니다."),
+    MISSING_STATUS_FOR_PROJECT(false, 6007, "Project는 상태값이 필수 입니다."),
+    MISSING_IS_PUBLIC_FOR_PROJECT(false, 6008, "Project 공개 여부는 필수 입니다."),
+    MISSING_VISIBILITY_FOR_PROJECT(false, 6009, "Project 공개 범위는 필수 입니다."),
+
 
     /**
      * 7000: Task 오류
