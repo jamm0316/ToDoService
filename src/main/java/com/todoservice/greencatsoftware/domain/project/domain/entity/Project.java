@@ -6,6 +6,7 @@ import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.common.superEntity.SuperEntity;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
+import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -35,11 +36,8 @@ public class Project extends SuperEntity {
     @Column(columnDefinition = "varchar(10) default 'SCHEDULE'")
     private Status status;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    private LocalDate actualEndDate;
+    @Embedded
+    private Period period;
 
     private String description;
 
@@ -55,33 +53,25 @@ public class Project extends SuperEntity {
     public Project(Color color,
                    String name,
                    Status status,
-                   LocalDate startDate,
-                   LocalDate endDate,
-                   LocalDate actualEndDate,
+                   Period period,
                    String description,
                    Boolean isPublic,
                    Visibility visibility) {
 
-        validateDomainInvariants(color, name, status, startDate, endDate, actualEndDate, description, isPublic, visibility);
+        validateDomainInvariants(color, name, status, isPublic, visibility);
 
         this.color = color;
         this.name = name.trim();
         this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.actualEndDate = actualEndDate;
+        this.period = period;
         this.description = description != null ? description.trim() : null;
         this.isPublic = isPublic;
         this.visibility = visibility;
     }
 
-    public void validateDomainInvariants(Color color,
+    private void validateDomainInvariants(Color color,
                                          String name,
                                          Status status,
-                                         LocalDate startDate,
-                                         LocalDate endDate,
-                                         LocalDate actualEndDate,
-                                         String description,
                                          Boolean isPublic,
                                          Visibility visibility) {
         if (color == null) {
@@ -100,14 +90,6 @@ public class Project extends SuperEntity {
             throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_TASK);
         }
 
-        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new BaseException(BaseResponseStatus.END_DATE_BEFORE_START_DATE);
-        }
-
-        if (startDate != null && actualEndDate != null && actualEndDate.isBefore(startDate)) {
-            throw new BaseException(BaseResponseStatus.ACTUAL_END_DATE_BEFORE_START_DATE);
-        }
-
         if (isPublic == null) {
             throw new BaseException(BaseResponseStatus.MISSING_IS_PUBLIC_FOR_PROJECT);
         }
@@ -119,41 +101,69 @@ public class Project extends SuperEntity {
 
     public static Project create(Color color, String name, Status status,
                                  String description, Boolean isPublic, Visibility visibility) {
-        return new Project(color, name, status, null, null, null, description, isPublic, visibility);
+        return new Project(color, name, status, null, description, isPublic, visibility);
     }
 
-    public static Project createWithSchedule(Color color, String name, Status status,
-                                 LocalDate startDate, LocalDate endDate, LocalDate actualEndDate,
-                                 String description, Boolean isPublic, Visibility visibility) {
-        return new Project(color, name, status, startDate, endDate, actualEndDate, description, isPublic, visibility);
+    public static Project createWithPeriod(Color color, String name, Status status,
+                                           LocalDate startDate, LocalDate endDate, LocalDate actualEndDate,
+                                           String description, Boolean isPublic, Visibility visibility) {
+        Period period = Period.of(startDate, endDate, actualEndDate);
+        return new Project(color, name, status, period, description, isPublic, visibility);
     }
 
-    //todo: update 로직 추
-    public void changeColor() {
+    public void changeColor(Color color) {
+        if (color == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT);
+        }
+        this.color = color;
     }
 
-    public void changeName() {
+    public void changeName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new BaseException(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT);
+        }
+
+        if (name.length() > 100) {
+            throw new BaseException(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_PROJECT);
+        }
+
+        this.name = name.trim();
     }
 
-    public void changeStatus() {
+    public void changeStatus(Status status) {
+        if (status == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_PROJECT);
+        }
+        this.status = status;
     }
 
-    public void changeStartDate() {
+    public void changePeriod(Period period) {
+        if (period.isNull()) {
+            this.period = Period.noPeriod();
+        } else {
+            this.period = period;
+        }
     }
 
-    public void changeEndDate() {
+    public void changeDescription(String description) {
+        if (description != null && !description.isBlank()) {
+            this.description = description.trim();
+        } else {
+            this.description = null;
+        }
     }
 
-    public void changeActualEndDate() {
+    public void changeIsPublic(Boolean isPublic) {
+        if (isPublic == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_IS_PUBLIC_FOR_PROJECT);
+        }
+        this.isPublic = isPublic;
     }
 
-    public void changeDescription() {
+    public void changeVisibility(Visibility visibility) {
+        if (visibility == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_VISIBILITY_FOR_PROJECT);
+        }
+        this.visibility = visibility;
     }
-
-    public void changeIsPublic() {
-    }
-
-    public void changeVisibility() {
-    }
-
 }
