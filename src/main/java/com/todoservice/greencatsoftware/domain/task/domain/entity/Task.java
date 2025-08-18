@@ -1,4 +1,4 @@
-package com.todoservice.greencatsoftware.domain.task.entity;
+package com.todoservice.greencatsoftware.domain.task.domain.entity;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.enums.DayLabel;
@@ -8,15 +8,16 @@ import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.common.superEntity.SuperEntity;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.project.entity.Project;
-import com.todoservice.greencatsoftware.domain.task.vo.Schedule;
+import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Task extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,5 +103,76 @@ public class Task extends SuperEntity {
         if (status == null) {
             throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_TASK);
         }
+    }
+
+    public static Task create(Project project, Color color, Priority priority, String title, String description,
+                              DayLabel dayLabel, Status status
+                              ) {
+        return new Task(project, color, priority, title, description, dayLabel, null, status);
+    }
+
+    public static Task createWithSchedule(Project project, Color color, Priority priority, String title, String description,
+                              DayLabel dayLabel, Schedule schedule, Status status
+                              ) {
+        return new Task(project, color, priority, title, description, dayLabel, schedule, status);
+    }
+
+    public void changeProject(Project project) {
+        if (project == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_PROJECT_FOR_TASK);
+        }
+        this.project = project;
+    }
+
+    public void changeColor(Color color) {
+        if (color == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_TASK);
+        }
+        this.color = color;
+    }
+
+    public void changePriority(Priority priority) {
+        if (priority == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_PRIORITY_FOR_TASK);
+        }
+        this.priority = priority;
+    }
+
+    public void changeTitle(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new BaseException(BaseResponseStatus.MISSING_TITLE_FOR_TASK);
+        }
+
+        if (name.length() > 100) {
+            throw new BaseException(BaseResponseStatus.TITLE_EXCEEDS_LIMIT);
+        }
+        this.title = name.trim();
+    }
+
+    public void changeDescription(String description) {
+        if (description != null && !description.isBlank()) {
+            this.description = description.trim();
+        }
+    }
+
+    public void changeDayLabel(DayLabel dayLabel) {
+        if (dayLabel != null) {
+            this.dayLabel = dayLabel;
+        }
+    }
+
+    public void changeSchedule(Schedule schedule) {
+        if (schedule == null) {
+            this.schedule = Schedule.noSchedule();
+        } else {
+            this.schedule = schedule;
+        }
+    }
+
+    public void changeStatus(Status status) {
+        if (status == null) {
+            throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_TASK);
+        }
+        this.status = status;
     }
 }
