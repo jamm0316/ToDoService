@@ -1,4 +1,4 @@
-package com.todoservice.greencatsoftware.domain.project.dto;
+package com.todoservice.greencatsoftware.domain.project.presentation.dto;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.enums.Status;

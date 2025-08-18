@@ -1,10 +1,9 @@
-package com.todoservice.greencatsoftware.domain.project;
+package com.todoservice.greencatsoftware.domain.project.presentation;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
-import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.project.dto.ProjectCreateRequest;
-import com.todoservice.greencatsoftware.domain.project.entity.Project;
-import com.todoservice.greencatsoftware.domain.project.model.ProjectService;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
+import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +25,10 @@ public class ProjectController {
         return new BaseResponse<>(projectService.createProject(newProjectDTO));
     }
 
+    //todo: update로직 수정필요
     @PatchMapping("/{id}")
     public BaseResponse<Project> updateColor(ProjectCreateRequest newProjectDTO, @PathVariable Long id) {
-        return new BaseResponse<>(projectService.updateProject(newProjectDTO, id));
+        return new BaseResponse<>();
     }
 
     @DeleteMapping("/{id}")

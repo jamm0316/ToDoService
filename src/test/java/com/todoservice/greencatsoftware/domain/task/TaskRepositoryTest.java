@@ -6,12 +6,11 @@ import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
-import com.todoservice.greencatsoftware.domain.project.model.ProjectRepository;
-import com.todoservice.greencatsoftware.domain.project.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
+import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
-import com.todoservice.greencatsoftware.domain.task.application.TaskFactory;
 import com.todoservice.greencatsoftware.domain.task.infrastructure.persistence.SpringDataTaskJpaRepository;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -35,7 +31,7 @@ public class TaskRepositoryTest {
     ColorRepository colorRepository;
 
     @Autowired
-    ProjectRepository projectRepository;
+    SpringDataProjectJpaRepository projectRepository;
 
     private Color saveColor(String name, String hexCode) {
         Color color = new Color();
@@ -45,12 +41,13 @@ public class TaskRepositoryTest {
     }
 
     private Project saveProject(Color color) {
-        Project project = new Project();
-        project.setColor(color);
-        project.setName("프로젝트B");
-        project.setStatus(Status.SCHEDULE);
-        project.setIsPublic(true);
-        project.setVisibility(Visibility.PRIVATE);
+        Project project = Project.create(
+                color,
+                "프로젝트B",
+                Status.SCHEDULE,
+                "프로젝트 입니다",
+                true,
+                Visibility.PRIVATE);
         return projectRepository.saveAndFlush(project);
     }
 
@@ -78,14 +75,14 @@ public class TaskRepositoryTest {
         assertThat(savedTask.getPriority()).isEqualTo(Priority.HIGH);
     }
 
-    @Test
-    @DisplayName("필수값 누락시 제약 발생")
-    public void 필수값_누락시_제약_발생() throws Exception {
+//    @Test
+//    @DisplayName("필수값 누락시 제약 발생")
+//    public void 필수값_누락시_제약_발생() throws Exception {
         //given
         //Task task = new Task();
 
         //then
         //assertThatThrownBy(() -> taskRepository.saveAndFlush(task))
-          //      .isInstanceOf(ConstraintViolationException.class);
-    }
+        //      .isInstanceOf(ConstraintViolationException.class);
+//    }
 }
