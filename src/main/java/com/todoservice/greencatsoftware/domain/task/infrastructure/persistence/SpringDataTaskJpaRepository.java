@@ -17,23 +17,15 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
         private final SpringDataTaskJpaRepository jpa;
 
         @Override
-        public List<Task> findAll() {
-            return jpa.findAll();
-        }
+        public List<Task> findAll() {return jpa.findAll();}
 
         @Override
-        public Task save(Task task) {
-            return jpa.save(task);
-        }
+        public Task save(Task task) {return jpa.save(task);}
 
         @Override
-        public void deleteById(Long id) {
-            jpa.deleteById(id);
-        }
+        public void deleteById(Long id) {jpa.deleteById(id);}
 
         @Override
-        public Optional<Task> findById(Long id) {
-            return jpa.findById(id);
-        }
+        public Optional<Task> findById(Long id) {return jpa.findById(id);}
     }
 }
