@@ -58,7 +58,7 @@ public class Project extends SuperEntity {
                    Boolean isPublic,
                    Visibility visibility) {
 
-        validateDomainInvariants(color, name, status, description, isPublic, visibility);
+        validateDomainInvariants(color, name, status, isPublic, visibility);
 
         this.color = color;
         this.name = name.trim();
@@ -72,7 +72,6 @@ public class Project extends SuperEntity {
     private void validateDomainInvariants(Color color,
                                          String name,
                                          Status status,
-                                         String description,
                                          Boolean isPublic,
                                          Visibility visibility) {
         if (color == null) {
@@ -139,8 +138,8 @@ public class Project extends SuperEntity {
     }
 
     public void changePeriod(Period period) {
-        if (period == null) {
-            period = Period.noPeriod();
+        if (period.isNull()) {
+            this.period = Period.noPeriod();
         } else {
             this.period = period;
         }

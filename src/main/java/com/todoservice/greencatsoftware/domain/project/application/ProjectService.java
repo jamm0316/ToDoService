@@ -1,8 +1,6 @@
 package com.todoservice.greencatsoftware.domain.project.application;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
-import com.todoservice.greencatsoftware.common.enums.Status;
-import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.model.ColorService;
@@ -11,7 +9,6 @@ import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectReposi
 import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +20,6 @@ import java.util.List;
 public class ProjectService {
     private final ProjectFactory projectFactory;
     private final ProjectRepository projectRepository;
-    private final ModelMapper modelMapper;
     private final ColorService colorService;
 
     public List<Project> listProject() {
