@@ -25,10 +25,9 @@ public class ProjectController {
         return new BaseResponse<>(projectService.createProject(newProjectDTO));
     }
 
-    //todo: update로직 수정필요
     @PatchMapping("/{id}")
     public BaseResponse<Project> updateColor(ProjectCreateRequest newProjectDTO, @PathVariable Long id) {
-        return new BaseResponse<>();
+        return new BaseResponse<>(projectService.updateProject(newProjectDTO, id));
     }
 
     @DeleteMapping("/{id}")
