@@ -9,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Locale;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,7 +29,7 @@ public class Color extends SuperEntity {
 
     public Color(String name, String hexCode) {
         validateDomainInvariants(name, hexCode);
-        this.name = name.trim();
+        this.name = name.trim().toUpperCase(Locale.ROOT);
         this.hexCode = hexCode.trim();
     }
 
