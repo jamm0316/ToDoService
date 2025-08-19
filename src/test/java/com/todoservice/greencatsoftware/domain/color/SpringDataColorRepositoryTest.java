@@ -76,4 +76,19 @@ public class SpringDataColorRepositoryTest {
         //then
         assertThat(colorRepository.findById(id)).isEmpty();
     }
+
+    @Test
+    @DisplayName("유니크 제약: name/hexCode 중복 저장 시 제약")
+    public void unique_constraints() throws Exception {
+        //given
+        colorRepository.saveAndFlush(Color.create("RED", "#FF0000"));
+
+        //then
+        assertThatThrownBy(() -> colorRepository.saveAndFlush(Color.create("RED", "#FF1111")))
+                .isInstanceOf(DataIntegrityViolationException.class);
+
+        assertThatThrownBy(() -> colorRepository.saveAndFlush(Color.create("BLUE", "#FF0000")))
+                .isInstanceOf(DataIntegrityViolationException.class);
+
+    }
 }
