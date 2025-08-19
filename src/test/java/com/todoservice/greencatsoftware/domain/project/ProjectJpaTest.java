@@ -3,7 +3,7 @@ package com.todoservice.greencatsoftware.domain.project;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
+import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.SpringDataColorRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -23,12 +23,10 @@ public class ProjectJpaTest {
     SpringDataProjectJpaRepository projectRepository;
 
     @Autowired
-    ColorRepository colorRepository;
+    SpringDataColorRepository colorRepository;
 
     private Color saveColor() {
-        Color color = new Color();
-        color.setName("RED");
-        color.setHexCode("FF0000");
+        Color color = Color.create("RED", "FF0000");
         return colorRepository.saveAndFlush(color);
     }
 

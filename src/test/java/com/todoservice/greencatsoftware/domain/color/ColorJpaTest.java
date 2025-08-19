@@ -1,7 +1,7 @@
 package com.todoservice.greencatsoftware.domain.color;
 
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
+import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.SpringDataColorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +10,21 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class ColorJpaTest {
     @Autowired
-    ColorRepository colorRepository;
+    SpringDataColorRepository colorRepository;
 
     @Test
     @DisplayName("색상저장조회")
     public void 색상_저장_조회() throws Exception {
         //given
-        Color color = new Color();
-        color.setName("RED");
-        color.setHexCode("#FF0000");
+        Color color = Color.create("RED", "#FF0000");
 
         //when
         Color save = colorRepository.save(color);
@@ -40,13 +39,8 @@ public class ColorJpaTest {
     @DisplayName("색상명_유니크_제약")
     public void 색상명_유니크_제약() throws Exception {
         //given
-        Color color1 = new Color();
-        color1.setName("RED");
-        color1.setHexCode("#FF0000");
-
-        Color color2 = new Color();
-        color2.setName("RED");
-        color2.setHexCode("#FF0010");
+        Color color1 = Color.create("RED", "#FF0000");
+        Color color2 = Color.create("RED", "#0000FF");
 
         //when
         colorRepository.saveAndFlush(color1);
@@ -60,13 +54,8 @@ public class ColorJpaTest {
     @DisplayName("색상코드_유니크_제약")
     public void 생상코드_유니크_제약() throws Exception {
         //given
-        Color color1 = new Color();
-        color1.setName("GREEN");
-        color1.setHexCode("#00FF00");
-
-        Color color2 = new Color();
-        color2.setName("RED");
-        color2.setHexCode("#00FF00");
+        Color color1 = Color.create("RED", "#FF0000");
+        Color color2 = Color.create("BLUE", "#FF0000");
 
         //when
         colorRepository.saveAndFlush(color1);

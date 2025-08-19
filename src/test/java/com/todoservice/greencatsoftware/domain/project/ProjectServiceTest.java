@@ -1,32 +1,11 @@
 package com.todoservice.greencatsoftware.domain.project;
 
-import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
-import com.todoservice.greencatsoftware.common.enums.Status;
-import com.todoservice.greencatsoftware.common.enums.Visibility;
-import com.todoservice.greencatsoftware.common.exception.BaseException;
-import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorService;
-import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
-import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
-import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
-import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {

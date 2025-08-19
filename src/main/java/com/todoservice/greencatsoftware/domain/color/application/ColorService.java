@@ -1,8 +1,9 @@
-package com.todoservice.greencatsoftware.domain.color.model;
+package com.todoservice.greencatsoftware.domain.color.application;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
+import com.todoservice.greencatsoftware.domain.color.port.ColorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,7 @@ public class ColorService {
     }
 
     public Color createColor(String name, String hexCode) {
-        Color color = new Color();
-        color.setName(name);
-        color.setHexCode(hexCode);
+        Color color = Color.create(name, hexCode);
         return colorRepository.save(color);
     }
 
@@ -35,8 +34,8 @@ public class ColorService {
 
     public Color updateColor(String name, String hexCode, Long id) {
         Color color = getColorByIdOrThrow(id);
-        color.setName(name);
-        color.setHexCode(hexCode);
+        color.changeName(name);
+        color.changeHexCode(hexCode);
         return color;
     }
 }

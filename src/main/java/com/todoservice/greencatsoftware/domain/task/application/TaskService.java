@@ -4,7 +4,7 @@ import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorService;
+import com.todoservice.greencatsoftware.domain.color.application.ColorService;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;

@@ -3,7 +3,7 @@ package com.todoservice.greencatsoftware.domain.project.application;
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorService;
+import com.todoservice.greencatsoftware.domain.color.application.ColorService;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;

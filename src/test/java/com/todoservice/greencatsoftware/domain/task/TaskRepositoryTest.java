@@ -5,9 +5,8 @@ import com.todoservice.greencatsoftware.common.enums.Priority;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorRepository;
+import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.SpringDataColorRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
-import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.infrastructure.persistence.SpringDataTaskJpaRepository;
@@ -28,15 +27,13 @@ public class TaskRepositoryTest {
     SpringDataTaskJpaRepository taskRepository;
 
     @Autowired
-    ColorRepository colorRepository;
+    SpringDataColorRepository colorRepository;
 
     @Autowired
     SpringDataProjectJpaRepository projectRepository;
 
     private Color saveColor(String name, String hexCode) {
-        Color color = new Color();
-        color.setName(name);
-        color.setHexCode(hexCode);
+        Color color = Color.create(name, hexCode);
         return colorRepository.saveAndFlush(color);
     }
 

@@ -70,9 +70,13 @@ public enum BaseResponseStatus {
     MISSING_START_TIME_VALUE(false, 8004, "시작 시간이 활성화되면 시작 시간 값이 필요합니다"),
     MISSING_DUE_TIME_VALUE(false, 8005, "마감 시간이 활성화되면 마감 시간 값이 필요합니다"),
     INVALID_TIME_ORDER_SAME_DATE(false, 8006, "같은 날짜에서 마감 시간은 시작 시간보다 이후여야 합니다"),
+
+    /**
+     * 9000: Color 오류
+     */
+    MISSING_NAME_FOR_COLOR(false, 9001, "색상 이름은 필수입니다."),
+    MISSING_HEX_CODE_FOR_COLOR(false, 9002, "핵사코드는 필수입니다."),
     ;
-
-
 
     private final boolean isSuccess;
     private final int code;
