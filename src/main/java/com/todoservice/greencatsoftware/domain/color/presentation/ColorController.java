@@ -1,8 +1,8 @@
-package com.todoservice.greencatsoftware.domain.color;
+package com.todoservice.greencatsoftware.domain.color.presentation;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.model.ColorService;
+import com.todoservice.greencatsoftware.domain.color.application.ColorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
