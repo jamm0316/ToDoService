@@ -96,7 +96,7 @@ public class ProjectTest {
         String longName = "a".repeat(101);
         assertThatThrownBy(() -> Project.create(
                 color, longName, Status.SCHEDULE, "description", true, Visibility.PUBLIC
-        ));
+        )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_PROJECT.getMessage());
 
         //status null
         assertThatThrownBy(() -> Project.create(
