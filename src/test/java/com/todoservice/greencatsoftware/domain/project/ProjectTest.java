@@ -82,22 +82,33 @@ public class ProjectTest {
         Color color = Color.create("RED", "FF0000");
 
         //then
+        //color null
         assertThatThrownBy(() -> Project.create(
                 null, "name", Status.SCHEDULE, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT.getMessage());
 
+        //name empty
         assertThatThrownBy(() -> Project.create(
                 color, "", Status.SCHEDULE, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT.getMessage());
 
+        //name toLong
+        String longName = "a".repeat(101);
+        assertThatThrownBy(() -> Project.create(
+                color, longName, Status.SCHEDULE, "description", true, Visibility.PUBLIC
+        ));
+
+        //status null
         assertThatThrownBy(() -> Project.create(
                 color, "name", null, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_PROJECT.getMessage());
 
+        //isPublic null
         assertThatThrownBy(() -> Project.create(
                 color, "name", Status.SCHEDULE, "description", null, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_IS_PUBLIC_FOR_PROJECT.getMessage());
 
+        //visibility null
         assertThatThrownBy(() -> Project.create(
                 color, "name", Status.SCHEDULE, "description", true, null
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_VISIBILITY_FOR_PROJECT.getMessage());
