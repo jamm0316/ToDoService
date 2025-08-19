@@ -97,5 +97,9 @@ public class ProjectTest {
         assertThatThrownBy(() -> Project.create(
                 color, "name", Status.SCHEDULE, "description", null, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_IS_PUBLIC_FOR_PROJECT.getMessage());
+
+        assertThatThrownBy(() -> Project.create(
+                color, "name", Status.SCHEDULE, "description", true, null
+        )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_VISIBILITY_FOR_PROJECT.getMessage());
     }
 }
