@@ -100,4 +100,12 @@ public class ColorServiceTest {
         assertThat(color.getHexCode()).isEqualTo("#0000FF");
         verify(colorRepository, never()).save(any());
     }
+
+    @Test
+    @DisplayName("deleteColor: 삭제")
+    public void deleteColor() throws Exception {
+        //then
+        colorService.deleteColor(1L);
+        verify(colorRepository).deleteById(1L);
+    }
 }
