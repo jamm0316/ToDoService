@@ -29,4 +29,13 @@ public class ColorTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_NAME_FOR_COLOR.getMessage());
     }
+
+    @Test
+    @DisplayName("생성 실패: hexCode가 비면 BaseException 발생")
+    public void create_fail_empty_hex() throws Exception {
+        //then
+        assertThatThrownBy(() -> Color.create("RED", ""))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_HEX_CODE_FOR_COLOR.getMessage());
+    }
 }
