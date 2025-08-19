@@ -5,6 +5,7 @@ import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.SpringDataColorRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,4 +61,53 @@ public class SpringDataProjectRepositoryTest {
         assertThat(found.getVisibility()).isEqualTo(Visibility.PRIVATE);
     }
 
+    @Test
+    @DisplayName("수정(더티체킹): 조회, 변경, flush 시 반영")
+    public void update_dirty_checking() throws Exception {
+        //given
+        Color color = colorRepository.saveAndFlush(Color.create("RED", "#FF0000"));
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate endDate = LocalDate.of(2025, 12, 31);
+        LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Project project = Project.createWithPeriod(
+                color,
+                "프로젝트A",
+                Status.SCHEDULE,
+                startDate,
+                endDate,
+                actualEndDate,
+                "프로젝트A 입니다.",
+                true,
+                Visibility.PRIVATE
+        );
+
+        Project saved = projectRepository.saveAndFlush(project);
+
+        Project found = projectRepository.findById(saved.getId()).orElseThrow();
+
+        //when
+        LocalDate newStartDate = LocalDate.of(2025, 1, 10);
+        LocalDate newEndDate = LocalDate.of(2025, 12, 30);
+        LocalDate newActualEndDate = LocalDate.of(2025, 12, 29);
+
+        found.changeColor(Color.create("BLUE", "#0000FF"));
+        found.changeName("   새로운 프로젝트   ");
+        found.changePeriod(Period.of(newStartDate, newEndDate, newActualEndDate));
+        found.changeStatus(Status.COMPLETED);
+        found.changeDescription(" 변경 된 프로젝트입니다.   ");
+        found.changeIsPublic(false);
+        found.changeVisibility(Visibility.TEAM);
+
+        //then
+        assertThat(found.getColor().getName()).isEqualTo("BLUE");
+        assertThat(found.getColor().getHexCode()).isEqualTo("#0000FF");
+        assertThat(found.getName()).isEqualTo("새로운 프로젝트");
+        assertThat(found.getPeriod().startDate()).isEqualTo(LocalDate.of(2025, 1, 10));
+        assertThat(found.getPeriod().endDate()).isEqualTo(LocalDate.of(2025, 12, 30));
+        assertThat(found.getPeriod().actualEndDate()).isEqualTo(LocalDate.of(2025, 12, 29));
+        assertThat(found.getStatus()).isEqualTo(Status.COMPLETED);
+        assertThat(found.getDescription()).isEqualTo("변경 된 프로젝트입니다.");
+        assertThat(found.getIsPublic()).isFalse();
+        assertThat(found.getVisibility()).isEqualTo(Visibility.TEAM);
+    }
 }
