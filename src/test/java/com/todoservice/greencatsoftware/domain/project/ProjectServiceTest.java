@@ -112,4 +112,40 @@ public class ProjectServiceTest {
         projectService.deleteProjectById(3L);
         verify(projectRepository).deleteById(3L);
     }
+
+    @Test
+    @DisplayName("updateProject: 조회 -> 엔티티 내부 상태 변경 (save 호출 없이 반환)")
+    public void updateProject() throws Exception {
+        //given
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate endDate = LocalDate.of(2025, 12, 31);
+        LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.SCHEDULE,
+                startDate, endDate, actualEndDate, "프로젝트 A입니다", true, Visibility.PRIVATE);
+
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+
+        ProjectCreateRequest request = mock(ProjectCreateRequest.class);
+        when(request.colorId()).thenReturn(99L);
+        when(request.name()).thenReturn("newTitle");
+        when(request.status()).thenReturn(Status.COMPLETED);
+        when(request.period()).thenReturn(null);
+        when(request.description()).thenReturn("newDescription");
+        when(request.isPublic()).thenReturn(false);
+        when(request.visibility()).thenReturn(Visibility.TEAM);
+
+        //when
+        when(colorService.getColorByIdOrThrow(99L)).thenReturn(Color.create("BLUE", "#0000FF"));
+        Project update = projectService.updateProject(request, 1L);
+
+        //then
+        assertThat(update.getColor().getName()).isEqualTo("BLUE");
+        assertThat(update.getColor().getHexCode()).isEqualTo("#0000FF");
+        assertThat(update.getName()).isEqualTo("newTitle");
+        assertThat(update.getStatus()).isEqualTo(Status.COMPLETED);
+        assertThat(update.getDescription()).isEqualTo("newDescription");
+        assertThat(update.getIsPublic()).isFalse();
+        assertThat(update.getVisibility()).isEqualTo(Visibility.TEAM);
+        verify(projectRepository, never()).save(any());
+    }
 }
