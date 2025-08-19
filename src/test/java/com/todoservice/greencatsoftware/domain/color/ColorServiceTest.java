@@ -84,4 +84,20 @@ public class ColorServiceTest {
         assertThat(saved.getName()).isEqualTo("RED");
         assertThat(saved.getHexCode()).isEqualTo("#FF0000");
     }
+
+    @Test
+    @DisplayName("updateColor: 조회 -> 엔티티 내부 상태 변경 (save 호출 없이 반환)")
+    public void updateColor() throws Exception {
+        //given
+        Color color = Color.create("RED", "#FF0000");
+        when(colorRepository.findById(1L)).thenReturn(Optional.of(color));
+
+        //when
+        colorService.updateColor("BLUE", "#0000FF", 1L);
+
+        //then
+        assertThat(color.getName()).isEqualTo("BLUE");
+        assertThat(color.getHexCode()).isEqualTo("#0000FF");
+        verify(colorRepository, never()).save(any());
+    }
 }
