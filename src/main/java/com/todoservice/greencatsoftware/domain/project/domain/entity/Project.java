@@ -75,7 +75,7 @@ public class Project extends SuperEntity {
                                          Boolean isPublic,
                                          Visibility visibility) {
         if (color == null) {
-            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_TASK);
+            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT);
         }
 
         if (name == null || name.trim().isEmpty()) {
