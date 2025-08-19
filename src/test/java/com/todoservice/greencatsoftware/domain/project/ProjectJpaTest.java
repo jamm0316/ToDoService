@@ -4,7 +4,6 @@ import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.SpringDataColorRepository;
-import com.todoservice.greencatsoftware.domain.color.port.ColorRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import org.junit.jupiter.api.DisplayName;
