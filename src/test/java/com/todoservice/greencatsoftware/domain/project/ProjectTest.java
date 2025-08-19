@@ -154,4 +154,44 @@ public class ProjectTest {
         assertThat(project.getIsPublic()).isFalse();
         assertThat(project.getVisibility()).isEqualTo(Visibility.PRIVATE);
     }
+
+    @Test
+    @DisplayName("수정 실패: 잘못된 값이 들어오면 BaseException 반환")
+    public void change_fail() throws Exception {
+        //given
+        Color color = Color.create("RED", "FF0000");
+        Project project = Project.create(
+                color,
+                "name",
+                Status.SCHEDULE,
+                "description",
+                true,
+                Visibility.PUBLIC);
+
+        //then
+        assertThatThrownBy(() -> project.changeColor(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT.getMessage());
+
+        assertThatThrownBy(() -> project.changeName(""))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT.getMessage());
+
+        String longName = "a".repeat(101);
+        assertThatThrownBy(() -> project.changeName(longName))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_PROJECT.getMessage());
+
+        assertThatThrownBy(() -> project.changeStatus(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_PROJECT.getMessage());
+
+        assertThatThrownBy(() -> project.changeIsPublic(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_IS_PUBLIC_FOR_PROJECT.getMessage());
+
+        assertThatThrownBy(() -> project.changeVisibility(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_VISIBILITY_FOR_PROJECT.getMessage());
+    }
 }
