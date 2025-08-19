@@ -78,10 +78,16 @@ public class ProjectTest {
     @Test
     @DisplayName("검증 실패: color, name, status, isPublic, visibility가 null 이면 BaseException 반환")
     public void create_fail_validation() throws Exception {
+        //given
+        Color color = Color.create("RED", "FF0000");
+
         //then
         assertThatThrownBy(() -> Project.create(
                 null, "name", Status.SCHEDULE, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT.getMessage());
 
+        assertThatThrownBy(() -> Project.create(
+                color, "", Status.SCHEDULE, "description", true, Visibility.PUBLIC
+        )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT.getMessage());
     }
 }

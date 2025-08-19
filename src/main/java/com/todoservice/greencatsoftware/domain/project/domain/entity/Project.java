@@ -79,7 +79,7 @@ public class Project extends SuperEntity {
         }
 
         if (name == null || name.trim().isEmpty()) {
-            throw new BaseException(BaseResponseStatus.MISSING_TITLE_FOR_TASK);
+            throw new BaseException(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT);
         }
 
         if (name.length() > 100) {
