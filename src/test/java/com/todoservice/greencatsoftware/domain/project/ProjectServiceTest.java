@@ -10,6 +10,7 @@ import com.todoservice.greencatsoftware.domain.project.application.ProjectFactor
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
+import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -147,5 +148,38 @@ public class ProjectServiceTest {
         assertThat(update.getIsPublic()).isFalse();
         assertThat(update.getVisibility()).isEqualTo(Visibility.TEAM);
         verify(projectRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("updateProject: period가 존재하는 요청이면 새 Period로 교체")
+    void updateProject_change_period() {
+        // 기존
+        Project existing = Project.create(Color.create("RED", "#FF0000"), "old", Status.SCHEDULE,
+                null, true, Visibility.PRIVATE);
+        when(projectRepository.findById(5L)).thenReturn(Optional.of(existing));
+
+        Period periodDto = Period.of(
+                LocalDate.of(2025, 4, 1),
+                LocalDate.of(2025, 4, 30),
+                null
+        );
+
+        ProjectCreateRequest req = mock(ProjectCreateRequest.class);
+        when(req.colorId()).thenReturn(null); // 색상은 유지
+        when(req.name()).thenReturn("withPeriod");
+        when(req.status()).thenReturn(Status.SCHEDULE);
+        when(req.period()).thenReturn(periodDto);
+        when(req.description()).thenReturn(null);
+        when(req.isPublic()).thenReturn(true);
+        when(req.visibility()).thenReturn(Visibility.PRIVATE);
+
+        // when
+        Project updated = projectService.updateProject(req, 5L);
+
+        // then
+        assertThat(updated.getName()).isEqualTo("withPeriod");
+        assertThat(updated.getPeriod()).isNotNull();
+        assertThat(updated.getPeriod().startDate()).isEqualTo(LocalDate.of(2025,4,1));
+        assertThat(updated.getPeriod().endDate()).isEqualTo(LocalDate.of(2025,4,30));
     }
 }
