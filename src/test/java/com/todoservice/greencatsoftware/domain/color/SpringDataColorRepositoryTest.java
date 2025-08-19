@@ -41,4 +41,24 @@ public class SpringDataColorRepositoryTest {
         assertThat(savedColor.getName()).isEqualTo("RED");
         assertThat(savedColor.getHexCode()).isEqualTo("#FF0000");
     }
+
+    @Test
+    @DisplayName("수정(더티체킹): 조회, 변경, flush 시 반영")
+    public void update_dirty_checking() throws Exception {
+        //given
+        Color color = colorRepository.saveAndFlush(Color.create("RED", "#FF0000"));
+        Long id = color.getId();
+        Color managed = colorRepository.findById(id).orElseThrow();
+
+        //when
+        managed.changeName("BLUE");
+        managed.changeHexCode("#0000FF");
+        colorRepository.flush();
+
+        //then
+        em.clear();
+        Color found = colorRepository.findById(id).orElseThrow();
+        assertThat(found.getName()).isEqualTo("BLUE");
+        assertThat(found.getHexCode()).isEqualTo("#0000FF");
+    }
 }
