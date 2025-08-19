@@ -6,12 +6,15 @@ import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.application.ColorService;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
+import com.todoservice.greencatsoftware.domain.project.application.ProjectFactory;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,8 +25,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
@@ -32,6 +34,9 @@ public class ProjectServiceTest {
 
     @Mock
     private ColorService colorService;
+
+    @Mock
+    private ProjectFactory factory;
 
     @InjectMocks
     private ProjectService projectService;
@@ -76,5 +81,30 @@ public class ProjectServiceTest {
         assertThatThrownBy(() -> projectService.getProjectByIdOrThrow(9L))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.NOT_FOUND_PROJECT.getMessage());
+    }
+
+    @Test
+    @DisplayName("createProject: Factory가 조립한 엔티티를 save한다.")
+    public void createProject() throws Exception {
+        //given
+        ProjectCreateRequest request = mock(ProjectCreateRequest.class);
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate endDate = LocalDate.of(2025, 12, 31);
+        LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.SCHEDULE,
+                startDate, endDate, actualEndDate, "프로젝트 A입니다", true, Visibility.PRIVATE);
+
+        //when
+        when(factory.createProject(request)).thenReturn(project);
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
+
+        Project saved = projectService.createProject(request);
+
+        //then
+        assertThat(saved).isEqualTo(project);
+        verify(factory).createProject(request);
+        verify(projectRepository).save(project);
+
+
     }
 }
