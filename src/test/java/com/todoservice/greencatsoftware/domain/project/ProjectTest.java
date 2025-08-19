@@ -113,4 +113,45 @@ public class ProjectTest {
                 color, "name", Status.SCHEDULE, "description", true, null
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_VISIBILITY_FOR_PROJECT.getMessage());
     }
+
+    @Test
+    @DisplayName("수정 로직: color/name/status/period/description/isPublic/visibility")
+    public void change_fields() throws Exception {
+        //given
+        Color color = Color.create("RED", "FF0000");
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate endDate = LocalDate.of(2025, 12, 31);
+        LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Period period = Period.of(startDate, endDate, actualEndDate);
+        Project project = Project.createWithPeriod(color
+                , "   나의 프로젝트    "
+                , Status.SCHEDULE
+                , period.startDate()
+                , period.endDate()
+                , period.actualEndDate()
+                , "   잘해보자구~"
+                , true
+                , Visibility.PUBLIC);
+
+        //when
+        project.changeColor(Color.create("BLUE", "0000FF"));
+        project.changeName(" 변경됨      ");
+        project.changeStatus(Status.COMPLETED);
+        project.changePeriod(Period.of(startDate.plusDays(1), endDate.minusDays(5), actualEndDate.minusDays(5)));
+        project.changeDescription("  내용이 변경 되었어요  ");
+        project.changeIsPublic(false);
+        project.changeVisibility(Visibility.PRIVATE);
+
+        //then
+        assertThat(project.getColor().getName()).isEqualTo("BLUE");
+        assertThat(project.getColor().getHexCode()).isEqualTo("0000FF");
+        assertThat(project.getName()).isEqualTo("변경됨");
+        assertThat(project.getStatus()).isEqualTo(Status.COMPLETED);
+        assertThat(project.getPeriod().startDate()).isEqualTo(LocalDate.of(2025, 1, 2));
+        assertThat(project.getPeriod().endDate()).isEqualTo(LocalDate.of(2025, 12, 26));
+        assertThat(project.getPeriod().actualEndDate()).isEqualTo(LocalDate.of(2025, 12, 26));
+        assertThat(project.getDescription()).isEqualTo("내용이 변경 되었어요");
+        assertThat(project.getIsPublic()).isFalse();
+        assertThat(project.getVisibility()).isEqualTo(Visibility.PRIVATE);
+    }
 }
