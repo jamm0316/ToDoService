@@ -61,4 +61,19 @@ public class SpringDataColorRepositoryTest {
         assertThat(found.getName()).isEqualTo("BLUE");
         assertThat(found.getHexCode()).isEqualTo("#0000FF");
     }
+
+    @Test
+    @DisplayName("삭제")
+    public void delete() throws Exception {
+        //given
+        Color color = colorRepository.saveAndFlush(Color.create("RED", "#FF0000"));
+        Long id = color.getId();
+
+        //when
+        colorRepository.deleteById(id);
+        colorRepository.flush();
+
+        //then
+        assertThat(colorRepository.findById(id)).isEmpty();
+    }
 }
