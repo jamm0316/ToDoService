@@ -75,11 +75,11 @@ public class Project extends SuperEntity {
                                          Boolean isPublic,
                                          Visibility visibility) {
         if (color == null) {
-            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_TASK);
+            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT);
         }
 
         if (name == null || name.trim().isEmpty()) {
-            throw new BaseException(BaseResponseStatus.MISSING_TITLE_FOR_TASK);
+            throw new BaseException(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT);
         }
 
         if (name.length() > 100) {
@@ -87,7 +87,7 @@ public class Project extends SuperEntity {
         }
 
         if (status == null) {
-            throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_TASK);
+            throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_PROJECT);
         }
 
         if (isPublic == null) {

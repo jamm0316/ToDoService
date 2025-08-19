@@ -32,7 +32,7 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public BaseResponse<Void> deleteColor(@PathVariable Long id) {
-        projectService.deleteProject(id);
+        projectService.deleteProjectById(id);
         return new BaseResponse<>();
     }
 }
