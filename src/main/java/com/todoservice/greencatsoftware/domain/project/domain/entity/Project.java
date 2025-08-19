@@ -87,7 +87,7 @@ public class Project extends SuperEntity {
         }
 
         if (status == null) {
-            throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_TASK);
+            throw new BaseException(BaseResponseStatus.MISSING_STATUS_FOR_PROJECT);
         }
 
         if (isPublic == null) {
