@@ -65,4 +65,23 @@ public class ColorServiceTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.VALIDATION_ERROR.getMessage());
     }
+
+    @Test
+    @DisplayName("createColor: 도메인 팩토리, save")
+    public void createColor() throws Exception {
+        //given
+        ArgumentCaptor<Color> captor = ArgumentCaptor.forClass(Color.class);
+
+        //when
+        when(colorRepository.save(any(Color.class))).thenAnswer(i -> i.getArgument(0));
+        Color saved = colorService.createColor("RED", "#FF0000");
+
+        //then
+        verify(colorRepository).save(captor.capture());
+        Color toSave = captor.getValue();
+        assertThat(toSave.getName()).isEqualTo("RED");
+        assertThat(toSave.getHexCode()).isEqualTo("#FF0000");
+        assertThat(saved.getName()).isEqualTo("RED");
+        assertThat(saved.getHexCode()).isEqualTo("#FF0000");
+    }
 }
