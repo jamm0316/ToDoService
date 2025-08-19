@@ -110,4 +110,33 @@ public class SpringDataProjectRepositoryTest {
         assertThat(found.getIsPublic()).isFalse();
         assertThat(found.getVisibility()).isEqualTo(Visibility.TEAM);
     }
+
+    @Test
+    @DisplayName("삭제")
+    public void delete() throws Exception {
+        //given
+        Color color = colorRepository.saveAndFlush(Color.create("RED", "#FF0000"));
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate endDate = LocalDate.of(2025, 12, 31);
+        LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Project project = Project.createWithPeriod(
+                color,
+                "삭제용",
+                Status.SCHEDULE,
+                startDate,
+                endDate,
+                actualEndDate,
+                "삭제할 프로젝트",
+                true,
+                Visibility.PRIVATE
+        );
+        Project saved = projectRepository.saveAndFlush(project);
+
+        //when
+        projectRepository.deleteById(saved.getId());
+        projectRepository.flush();
+
+        //then
+        assertThat(projectRepository.findById(saved.getId())).isEmpty();
+    }
 }
