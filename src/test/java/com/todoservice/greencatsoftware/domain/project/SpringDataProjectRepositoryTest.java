@@ -6,6 +6,7 @@ import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.SpringDataColorRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +19,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-public class ProjectJpaTest {
+public class SpringDataProjectRepositoryTest {
     @Autowired
     SpringDataProjectJpaRepository projectRepository;
 
     @Autowired
     SpringDataColorRepository colorRepository;
 
-    private Color saveColor() {
-        Color color = Color.create("RED", "FF0000");
-        return colorRepository.saveAndFlush(color);
-    }
+    @Autowired
+    EntityManager em;
 
     @Test
-    @DisplayName("프로젝트 저장 조회")
-    public void 프로젝트_저장_조회() throws Exception {
+    @DisplayName("저장 & 조회")
+    public void save_and_find() throws Exception {
         //given
-        Color color = saveColor();
-
+        Color color = colorRepository.saveAndFlush(Color.create("RED", "#FF0000"));
         Project project = Project.create(
                 color,
                 "프로젝트A",
@@ -46,21 +44,18 @@ public class ProjectJpaTest {
 
         //when
         Project saved = projectRepository.saveAndFlush(project);
-        Project savedProject = projectRepository.findById(saved.getId()).get();
+        em.clear();
+        Project found = projectRepository.findById(saved.getId()).orElseThrow();
 
         //then
-        assertThat(savedProject.getId()).isNotNull();
-        assertThat(savedProject.getColor().getHexCode()).isEqualTo("FF0000");
+        assertThat(found.getId()).isNotNull();
+        assertThat(found.getColor().getName()).isEqualTo("RED");
+        assertThat(found.getColor().getHexCode()).isEqualTo("#FF0000");
+        assertThat(found.getName()).isEqualTo("프로젝트A");
+        assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getDescription()).isEqualTo("프로젝트A 입니다.");
+        assertThat(found.getIsPublic()).isTrue();
+        assertThat(found.getVisibility()).isEqualTo(Visibility.PRIVATE);
     }
 
-//    @Test
-//    @DisplayName("필수값 누락 시 제약발생")
-//    public void 필수값_누락시_제약발생() throws Exception {
-//        //given
-//        Project project = new Project();
-//
-//        //then
-//        assertThatThrownBy(() -> projectRepository.saveAndFlush(project))
-//                .isInstanceOf(ConstraintViolationException.class);
-//    }
 }
