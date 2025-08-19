@@ -38,4 +38,19 @@ public class ColorTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_HEX_CODE_FOR_COLOR.getMessage());
     }
+
+    @Test
+    @DisplayName("수정 실패: 빈 name, 빈 hexCode는 각각 BaseException 발생")
+    public void change_fail() throws Exception {
+        //given
+        Color color = Color.create("RED", "#FF0000");
+        //then
+        assertThatThrownBy(() -> color.changeName(""))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_NAME_FOR_COLOR.getMessage());
+
+        assertThatThrownBy(() -> color.changeHexCode(""))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_HEX_CODE_FOR_COLOR.getMessage());
+    }
 }
