@@ -45,13 +45,12 @@ public class ProjectServiceTest {
     @DisplayName("listProject: 전체 조회")
     public void listProject() throws Exception {
         //given
-        Color color = colorService.createColor("RED", "#FF0000");
         LocalDate startDate = LocalDate.of(2025, 1, 1);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
-        Project projectA = Project.createWithPeriod(color, "프로젝트 A", Status.SCHEDULE,
+        Project projectA = Project.createWithPeriod(Color.create("RED", "#FF0000"), "프로젝트 A", Status.SCHEDULE,
                 startDate, endDate, actualEndDate, "프로젝트 A입니다", true, Visibility.PRIVATE);
-        Project projectB = Project.createWithPeriod(color, "프로젝트 B", Status.SCHEDULE,
+        Project projectB = Project.createWithPeriod(Color.create("RED", "#FF0000"), "프로젝트 B", Status.SCHEDULE,
                 startDate, endDate, actualEndDate, "프로젝트 B입니다", true, Visibility.PRIVATE);
 
         //when
