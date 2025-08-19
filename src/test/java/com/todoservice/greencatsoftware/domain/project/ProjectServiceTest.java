@@ -14,7 +14,6 @@ import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectC
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -104,7 +103,13 @@ public class ProjectServiceTest {
         assertThat(saved).isEqualTo(project);
         verify(factory).createProject(request);
         verify(projectRepository).save(project);
+    }
 
-
+    @Test
+    @DisplayName("deleteProject: 삭제")
+    public void delete() throws Exception {
+        //then
+        projectService.deleteProjectById(3L);
+        verify(projectRepository).deleteById(3L);
     }
 }
