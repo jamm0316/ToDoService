@@ -6,17 +6,17 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Embeddable
 public record Schedule(
         LocalDate startDate,
-        LocalDateTime startTime,
+        LocalTime startTime,
         @Column(columnDefinition = "boolean default false")
         Boolean startTimeEnabled,
 
         LocalDate dueDate,
-        LocalDateTime dueTime,
+        LocalTime dueTime,
         @Column(columnDefinition = "boolean default false")
         Boolean dueTimeEnabled
 ) {
@@ -28,10 +28,10 @@ public record Schedule(
         }
 
         private void validationSchedule(LocalDate startDate,
-                                       LocalDateTime startTime,
+                                       LocalTime startTime,
                                        Boolean startTimeEnabled,
                                        LocalDate dueDate,
-                                       LocalDateTime dueTime,
+                                       LocalTime dueTime,
                                        Boolean dueTimeEnabled) {
                 if (startDate != null && dueDate != null && dueDate.isBefore(startDate)) {
                         throw new BaseException(BaseResponseStatus.INVALID_DATE_ORDER);
@@ -64,8 +64,8 @@ public record Schedule(
                 return new Schedule(null, null, null, null, null, null);
         }
 
-        public static Schedule of (LocalDate startDate, LocalDateTime startTime, Boolean startTimeEnabled,
-                LocalDate dueDate, LocalDateTime dueTime, Boolean dueTimeEnabled) {
+        public static Schedule of (LocalDate startDate, LocalTime startTime, Boolean startTimeEnabled,
+                LocalDate dueDate, LocalTime dueTime, Boolean dueTimeEnabled) {
                 return new Schedule(startDate, startTime, startTimeEnabled,
                         dueDate, dueTime, dueTimeEnabled);
         }
