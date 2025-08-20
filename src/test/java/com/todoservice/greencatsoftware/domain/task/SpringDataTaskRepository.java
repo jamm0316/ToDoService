@@ -9,6 +9,7 @@ import com.todoservice.greencatsoftware.domain.color.infrastructure.persistence.
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
+import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import com.todoservice.greencatsoftware.domain.task.infrastructure.persistence.SpringDataTaskJpaRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -81,5 +85,48 @@ public class SpringDataTaskRepository {
         assertThat(found.getTitle()).isEqualTo("알고리즘 테스트 1문제 풀기");
         assertThat(found.getDayLabel()).isEqualTo(DayLabel.MORNING);
         assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
+    }
+
+
+    @Test
+    @DisplayName("저장 & 조회 (스케쥴 포함)")
+    public void saveAndFindWithSchedule() throws Exception {
+        //given
+        Color color = saveColor("RED", "#FF0000");
+        Project project = saveProject(color);
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDateTime startDateTime = LocalDateTime.of(2025, 1, 1, 10, 0);
+        LocalDate dueDate = LocalDate.of(2025, 12, 31);
+        Schedule schedule = Schedule.of(startDate, startDateTime, true, dueDate, null, false);
+        Task task = Task.createWithSchedule(project, color,
+                Priority.HIGH,
+                "알고리즘 테스트 1문제 풀기",
+                null,
+                DayLabel.MORNING,
+                schedule,
+                Status.SCHEDULE);
+
+        //when
+        Task save = taskRepository.saveAndFlush(task);
+        em.clear();
+
+        Task found = taskRepository.findById(save.getId()).get();
+
+        //then
+        assertThat(found.getProject().getName()).isEqualTo("프로젝트B");
+        assertThat(found.getProject().getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getColor().getName()).isEqualTo("RED");
+        assertThat(found.getColor().getHexCode()).isEqualTo("#FF0000");
+        assertThat(found.getPriority()).isEqualTo(Priority.HIGH);
+        assertThat(found.getTitle()).isEqualTo("알고리즘 테스트 1문제 풀기");
+        assertThat(found.getDayLabel()).isEqualTo(DayLabel.MORNING);
+        assertThat(found.getSchedule().startDate()).isEqualTo(LocalDate.of(2025, 1, 1));
+        assertThat(found.getSchedule().startTime()).isEqualTo(LocalDateTime.of(2025, 1, 1, 10, 0));
+        assertThat(found.getSchedule().startTimeEnabled()).isTrue();
+        assertThat(found.getSchedule().dueDate()).isEqualTo(LocalDate.of(2025, 12, 31));
+        assertThat(found.getSchedule().dueTime()).isNull();
+        assertThat(found.getSchedule().dueTimeEnabled()).isFalse();
+        assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
+
     }
 }
