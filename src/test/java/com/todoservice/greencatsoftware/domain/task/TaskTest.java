@@ -15,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -42,7 +42,7 @@ public class TaskTest {
     public void createWithoutScheduleOk() throws Exception {
         //given
         LocalDate startDate = LocalDate.of(2025, 1, 1);
-        LocalDateTime startTime = LocalDateTime.of(2025, 1, 1, 10, 0);
+        LocalTime startTime = LocalTime.of(10, 0);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         Schedule schedule = Schedule.of(startDate, startTime, true, endDate, null, false);
         Task task = Task.createWithSchedule(projectWithPeriod(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
@@ -56,7 +56,7 @@ public class TaskTest {
         assertThat(task.getDescription()).isEqualTo("이러저렇게 한다");
         assertThat(task.getDayLabel()).isEqualTo(DayLabel.MORNING);
         assertThat(task.getSchedule().startDate()).isEqualTo(LocalDate.of(2025, 1, 1));
-        assertThat(task.getSchedule().startTime()).isEqualTo(LocalDateTime.of(2025, 1, 1, 10, 0));
+        assertThat(task.getSchedule().startTime()).isEqualTo(LocalTime.of(10, 0));
         assertThat(task.getSchedule().dueDate()).isEqualTo(LocalDate.of(2025, 12, 31));
         assertThat(task.getSchedule().dueTimeEnabled()).isFalse();
         assertThat(task.getSchedule().startTimeEnabled()).isTrue();
