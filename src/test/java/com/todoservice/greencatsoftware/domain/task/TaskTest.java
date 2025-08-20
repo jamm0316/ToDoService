@@ -8,11 +8,13 @@ import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
+import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -28,12 +30,21 @@ public class TaskTest {
                 "description", true, Visibility.PUBLIC);
     }
 
+    private Project project() {
+        return Project.create(color("RED", "#FF0000"), "프로젝트", Status.SCHEDULE,
+                "description", true, Visibility.PUBLIC);
+    }
+
     @Test
     @DisplayName("정상 생성: 스케쥴 포함")
     public void createWithoutScheduleOk() throws Exception {
         //given
-        Task task = Task.create(projectWithPeriod(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
-                "이러저렇게 한다", DayLabel.MORNING, Status.SCHEDULE);
+        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDateTime startTime = LocalDateTime.of(2025, 1, 1, 10, 0);
+        LocalDate endDate = LocalDate.of(2025, 12, 31);
+        Schedule schedule = Schedule.of(startDate, startTime, true, endDate, null, false);
+        Task task = Task.createWithSchedule(projectWithPeriod(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
+                "이러저렇게 한다", DayLabel.MORNING, schedule, Status.SCHEDULE);
 
         //then
         assertThat(task.getColor().getName()).isEqualTo("BLUE");
@@ -42,6 +53,11 @@ public class TaskTest {
         assertThat(task.getTitle()).isEqualTo("해야할 일");
         assertThat(task.getDescription()).isEqualTo("이러저렇게 한다");
         assertThat(task.getDayLabel()).isEqualTo(DayLabel.MORNING);
+        assertThat(task.getSchedule().startDate()).isEqualTo(LocalDate.of(2025, 1, 1));
+        assertThat(task.getSchedule().startTime()).isEqualTo(LocalDateTime.of(2025, 1, 1, 10, 0));
+        assertThat(task.getSchedule().dueDate()).isEqualTo(LocalDate.of(2025, 12, 31));
+        assertThat(task.getSchedule().dueTimeEnabled()).isFalse();
+        assertThat(task.getSchedule().startTimeEnabled()).isTrue();
         assertThat(task.getStatus()).isEqualTo(Status.SCHEDULE);
     }
 }
