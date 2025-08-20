@@ -69,13 +69,12 @@ public class SpringDataProjectRepositoryTest {
         LocalDate startDate = LocalDate.of(2025, 1, 1);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Period period = Period.of(startDate, endDate, actualEndDate);
         Project project = Project.createWithPeriod(
                 color,
                 "프로젝트A",
                 Status.SCHEDULE,
-                startDate,
-                endDate,
-                actualEndDate,
+                period,
                 "프로젝트A 입니다.",
                 true,
                 Visibility.PRIVATE
@@ -119,13 +118,12 @@ public class SpringDataProjectRepositoryTest {
         LocalDate startDate = LocalDate.of(2025, 1, 1);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
+        Period period = Period.of(startDate, endDate, actualEndDate);
         Project project = Project.createWithPeriod(
                 color,
                 "삭제용",
                 Status.SCHEDULE,
-                startDate,
-                endDate,
-                actualEndDate,
+                period,
                 "삭제할 프로젝트",
                 true,
                 Visibility.PRIVATE
