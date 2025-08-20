@@ -6,11 +6,14 @@ import com.todoservice.greencatsoftware.common.enums.Priority;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.application.ColorService;
+import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
+import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.task.application.TaskFactory;
 import com.todoservice.greencatsoftware.domain.task.application.TaskService;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.port.TaskRepository;
+import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +23,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,5 +127,49 @@ public class TaskServiceTest {
 
         assertThat(updateTask).isSameAs(task);
         verify(taskRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("updateTask: projectId/colorId/schedule 제공 시 교체")
+    public void updateTaskReplaceRefs() throws Exception {
+        //given
+        Task task = mock(Task.class);
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+
+        Project project = mock(Project.class);
+        Color color = mock(Color.class);
+        when(projectService.getProjectByIdOrThrow(100L)).thenReturn(project);
+        when(colorService.getColorByIdOrThrow(200L)).thenReturn(color);
+
+        Schedule schedule = Schedule.of(
+                LocalDate.of(2025, 1, 1), LocalDateTime.of(2025, 1, 1, 10, 0), true,
+                LocalDate.of(2025, 12, 31), LocalDateTime.of(2025, 12, 31, 10, 0), true
+        );
+
+        //when
+        TaskUpdateRequest request = mock(TaskUpdateRequest.class);
+        when(request.projectId()).thenReturn(100L);
+        when(request.colorId()).thenReturn(200L);
+        when(request.schedule()).thenReturn(schedule);
+        when(request.priority()).thenReturn(Priority.HIGH);
+        when(request.priority()).thenReturn(Priority.HIGH);
+        when(request.title()).thenReturn("알고리즘 공부하기");
+        when(request.description()).thenReturn("백준 1234");
+        when(request.dayLabel()).thenReturn(DayLabel.AFTERNOON);
+        when(request.status()).thenReturn(Status.SCHEDULE);
+
+        Task updateTask = taskService.updateTask(request, 1L);
+
+        //then
+        verify(task).changeProject(project);
+        verify(task).changeColor(color);
+        verify(task).changeSchedule(schedule);
+        verify(task).changePriority(Priority.HIGH);
+        verify(task).changeTitle("알고리즘 공부하기");
+        verify(task).changeDescription("백준 1234");
+        verify(task).changeDayLabel(DayLabel.AFTERNOON);
+        verify(task).changeStatus(Status.SCHEDULE);
+
+        assertThat(updateTask).isSameAs(task);
     }
 }
