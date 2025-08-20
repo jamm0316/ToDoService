@@ -60,4 +60,28 @@ public class TaskTest {
         assertThat(task.getSchedule().startTimeEnabled()).isTrue();
         assertThat(task.getStatus()).isEqualTo(Status.SCHEDULE);
     }
+
+    @Test
+    @DisplayName("정상 생성: 스케쥴 없음, Schedule.noSchedule()로 셋팅")
+    public void createWithScheduleOk() throws Exception {
+        //given
+        Schedule noSchedule = Schedule.noSchedule();
+        Task task = Task.createWithSchedule(project(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
+                "이러저렇게 한다", DayLabel.MORNING, noSchedule, Status.SCHEDULE);
+
+        //then
+        assertThat(task.getColor().getName()).isEqualTo("BLUE");
+        assertThat(task.getColor().getHexCode()).isEqualTo("#0000FF");
+        assertThat(task.getPriority()).isEqualTo(Priority.HIGH);
+        assertThat(task.getTitle()).isEqualTo("해야할 일");
+        assertThat(task.getDescription()).isEqualTo("이러저렇게 한다");
+        assertThat(task.getDayLabel()).isEqualTo(DayLabel.MORNING);
+        assertThat(task.getSchedule().startDate()).isNull();
+        assertThat(task.getSchedule().startTime()).isNull();
+        assertThat(task.getSchedule().dueDate()).isNull();
+        assertThat(task.getSchedule().dueTime()).isNull();
+        assertThat(task.getSchedule().dueTimeEnabled()).isFalse();
+        assertThat(task.getSchedule().startTimeEnabled()).isFalse();
+        assertThat(task.getStatus()).isEqualTo(Status.SCHEDULE);
+    }
 }
