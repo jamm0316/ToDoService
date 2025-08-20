@@ -34,3 +34,12 @@ jobs:
 
       - name: npm run build
         run: npm run build
+
+      - name: PR에 빌드 성공 댓글 등록합니다.
+        if: github.event_name == 'pull_request' && success()
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ✅ 프론트엔드 CI 빌드가 성공했습니다!
