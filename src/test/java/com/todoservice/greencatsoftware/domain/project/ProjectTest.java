@@ -55,9 +55,7 @@ public class ProjectTest {
                 color
                 , "   나의 프로젝트    "
                 , Status.SCHEDULE
-                ,period.startDate()
-                ,period.endDate()
-                ,period.actualEndDate()
+                ,period
                 ,"   잘해보자구~"
                 , true
                 , Visibility.PUBLIC);
@@ -124,14 +122,12 @@ public class ProjectTest {
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
         Period period = Period.of(startDate, endDate, actualEndDate);
         Project project = Project.createWithPeriod(color
-                , "   나의 프로젝트    "
-                , Status.SCHEDULE
-                , period.startDate()
-                , period.endDate()
-                , period.actualEndDate()
-                , "   잘해보자구~"
-                , true
-                , Visibility.PUBLIC);
+                ,"   나의 프로젝트    "
+                ,Status.SCHEDULE
+                ,period
+                ,"   잘해보자구~"
+                ,true
+                ,Visibility.PUBLIC);
 
         //when
         project.changeColor(Color.create("BLUE", "0000FF"));
