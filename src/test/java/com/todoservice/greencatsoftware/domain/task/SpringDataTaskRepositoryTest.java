@@ -20,7 +20,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -94,7 +94,7 @@ public class SpringDataTaskRepositoryTest {
         Color color = saveColor("RED", "#FF0000");
         Project project = saveProject(color);
         LocalDate startDate = LocalDate.of(2025, 1, 1);
-        LocalDateTime startDateTime = LocalDateTime.of(2025, 1, 1, 10, 0);
+        LocalTime startDateTime = LocalTime.of(10, 0);
         LocalDate dueDate = LocalDate.of(2025, 12, 31);
         Schedule schedule = Schedule.of(startDate, startDateTime, true, dueDate, null, false);
         Task task = Task.createWithSchedule(project, color,
@@ -120,7 +120,7 @@ public class SpringDataTaskRepositoryTest {
         assertThat(found.getTitle()).isEqualTo("알고리즘 테스트 1문제 풀기");
         assertThat(found.getDayLabel()).isEqualTo(DayLabel.MORNING);
         assertThat(found.getSchedule().startDate()).isEqualTo(LocalDate.of(2025, 1, 1));
-        assertThat(found.getSchedule().startTime()).isEqualTo(LocalDateTime.of(2025, 1, 1, 10, 0));
+        assertThat(found.getSchedule().startTime()).isEqualTo(LocalTime.of(10, 0));
         assertThat(found.getSchedule().startTimeEnabled()).isTrue();
         assertThat(found.getSchedule().dueDate()).isEqualTo(LocalDate.of(2025, 12, 31));
         assertThat(found.getSchedule().dueTime()).isNull();
