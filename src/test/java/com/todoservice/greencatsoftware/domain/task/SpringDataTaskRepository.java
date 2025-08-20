@@ -10,6 +10,7 @@ import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.infrastructure.persistence.SpringDataProjectJpaRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.infrastructure.persistence.SpringDataTaskJpaRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-public class TaskRepositoryTest {
+public class SpringDataTaskRepository {
     @Autowired
     SpringDataTaskJpaRepository taskRepository;
 
@@ -31,6 +32,9 @@ public class TaskRepositoryTest {
 
     @Autowired
     SpringDataProjectJpaRepository projectRepository;
+
+    @Autowired
+    EntityManager em;
 
     private Color saveColor(String name, String hexCode) {
         Color color = Color.create(name, hexCode);
@@ -49,7 +53,7 @@ public class TaskRepositoryTest {
     }
 
     @Test
-    @DisplayName("테스크 저장 조회 검증")
+    @DisplayName("저장 & 조회(스케쥴없음)")
     public void 테스크_저장_조회_검증() throws Exception {
         //given
         Color color = saveColor("RED", "#FF0000");
@@ -64,22 +68,18 @@ public class TaskRepositoryTest {
 
         //when
         Task save = taskRepository.saveAndFlush(task);
-        Task savedTask = taskRepository.findById(save.getId()).get();
+        em.clear();
+
+        Task found = taskRepository.findById(save.getId()).get();
 
         //then
-        assertThat(savedTask.getId()).isNotNull();
-        assertThat(savedTask.getColor().getHexCode()).isEqualTo("#FF0000");
-        assertThat(savedTask.getPriority()).isEqualTo(Priority.HIGH);
+        assertThat(found.getProject().getName()).isEqualTo("프로젝트B");
+        assertThat(found.getProject().getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getColor().getName()).isEqualTo("RED");
+        assertThat(found.getColor().getHexCode()).isEqualTo("#FF0000");
+        assertThat(found.getPriority()).isEqualTo(Priority.HIGH);
+        assertThat(found.getTitle()).isEqualTo("알고리즘 테스트 1문제 풀기");
+        assertThat(found.getDayLabel()).isEqualTo(DayLabel.MORNING);
+        assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
     }
-
-//    @Test
-//    @DisplayName("필수값 누락시 제약 발생")
-//    public void 필수값_누락시_제약_발생() throws Exception {
-        //given
-        //Task task = new Task();
-
-        //then
-        //assertThatThrownBy(() -> taskRepository.saveAndFlush(task))
-        //      .isInstanceOf(ConstraintViolationException.class);
-//    }
 }
