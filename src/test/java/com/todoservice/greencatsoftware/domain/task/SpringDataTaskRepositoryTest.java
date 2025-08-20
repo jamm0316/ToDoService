@@ -174,4 +174,20 @@ public class SpringDataTaskRepositoryTest {
         assertThat(task.getSchedule().dueTimeEnabled()).isFalse();
         assertThat(task.getStatus()).isEqualTo(Status.COMPLETED);
     }
+
+    @Test
+    @DisplayName("삭제")
+    public void delete() throws Exception {
+        //given
+        Color color = saveColor("RED", "#FF0000");
+        Project project = saveProject(color);
+        Task task = taskRepository.saveAndFlush(Task.create(project, color, Priority.HIGH,
+                "삭제용", null, DayLabel.MORNING, Status.SCHEDULE));
+        //when
+        taskRepository.deleteById(task.getId());
+        taskRepository.flush();
+
+        //then
+        assertThat(taskRepository.findById(task.getId())).isEmpty();
+    }
 }
