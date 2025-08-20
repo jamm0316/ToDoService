@@ -50,6 +50,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ✅ 프론트엔드 CI 빌드가 성공했습니다!
-            - 워크플로우: **${{ github.workflow }}**
-            - 커밋: `${{ github.sha }}`
+            프론트엔드 CI 빌드가 성공했습니다!
