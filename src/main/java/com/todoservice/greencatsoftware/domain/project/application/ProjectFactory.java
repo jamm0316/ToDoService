@@ -23,7 +23,6 @@ public class ProjectFactory {
                 request.description(), request.isPublic(), request.visibility())
 
                 : Project.createWithPeriod(color, request.name(), request.status(),
-                request.period().startDate(), request.period().endDate(), request.period().actualEndDate(),
-                request.description(), request.isPublic(), request.visibility());
+                period, request.description(), request.isPublic(), request.visibility());
     }
 }
