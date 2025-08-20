@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-public class SpringDataTaskRepository {
+public class SpringDataTaskRepositoryTest {
     @Autowired
     SpringDataTaskJpaRepository taskRepository;
 
