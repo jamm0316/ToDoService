@@ -73,10 +73,10 @@ public class ProjectServiceTest {
 
         //when
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
-        when(projectRepository.findById(9L)).thenReturn(java.util.Optional.empty());
+        when(projectRepository.findById(9L)).thenReturn(Optional.empty());
 
         //then
-        assertThat(projectService.getProjectByIdOrThrow(1L)).isEqualTo(project);
+        assertThat(projectService.getProjectByIdOrThrow(1L)).isSameAs(project);
         assertThatThrownBy(() -> projectService.getProjectByIdOrThrow(9L))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.NOT_FOUND_PROJECT.getMessage());
