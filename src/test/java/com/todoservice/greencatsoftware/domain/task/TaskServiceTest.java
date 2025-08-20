@@ -172,4 +172,20 @@ public class TaskServiceTest {
 
         assertThat(updateTask).isSameAs(task);
     }
+
+    @Test
+    @DisplayName("updateTaskStatus: 상태만 변경")
+    public void updateTaskStatus() throws Exception {
+        //given
+        Task task = mock(Task.class);
+
+        //when
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+
+        Task update = taskService.updateTaskStatus(1L, Status.COMPLETED);
+
+        //then
+        assertThat(task).isSameAs(update);
+        verify(task).changeStatus(Status.COMPLETED);
+    }
 }
