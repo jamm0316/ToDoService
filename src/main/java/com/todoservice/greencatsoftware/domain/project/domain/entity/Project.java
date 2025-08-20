@@ -104,6 +104,7 @@ public class Project extends SuperEntity {
         return new Project(color, name, status, null, description, isPublic, visibility);
     }
 
+    //todo: period생성 방식 변경하기
     public static Project createWithPeriod(Color color, String name, Status status,
                                            LocalDate startDate, LocalDate endDate, LocalDate actualEndDate,
                                            String description, Boolean isPublic, Visibility visibility) {

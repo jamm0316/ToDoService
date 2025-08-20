@@ -93,7 +93,7 @@ public class Task extends SuperEntity {
         }
 
         if (title.length() > 100) {
-            throw new BaseException(BaseResponseStatus.TITLE_EXCEEDS_LIMIT);
+            throw new BaseException(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_TASK);
         }
 
         if (priority == null) {
@@ -144,7 +144,7 @@ public class Task extends SuperEntity {
         }
 
         if (name.length() > 100) {
-            throw new BaseException(BaseResponseStatus.TITLE_EXCEEDS_LIMIT);
+            throw new BaseException(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_TASK);
         }
         this.title = name.trim();
     }
