@@ -207,5 +207,6 @@ public class TaskTest {
         assertThatThrownBy(() -> task.changeStatus(null))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_TASK.getMessage());
+
     }
 }
