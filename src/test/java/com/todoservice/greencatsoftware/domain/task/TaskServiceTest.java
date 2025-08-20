@@ -76,4 +76,12 @@ public class TaskServiceTest {
         verify(factory).createTask(request);
         verify(taskRepository).save(task);
     }
+
+    @Test
+    @DisplayName("deleteTask: 삭제")
+    public void deleteTask() throws Exception {
+        //then
+        taskService.deleteTask(3L);
+        verify(taskRepository).deleteById(3L);
+    }
 }
