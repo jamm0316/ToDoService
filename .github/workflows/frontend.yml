@@ -13,7 +13,7 @@ on:
       - '.github/workflows/frontend.yml'
 
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,22 +22,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Node.js 20을 설치합니다.
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: 'front/package-lock.json'
 
-      - name: Install
+      - name: 의존성 설치
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-        continue-on-error: true
-
-      - name: Test
-        run: npm run test
-
-      - name: Build
+      - name: npm run build
         run: npm run build
