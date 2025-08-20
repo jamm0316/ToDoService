@@ -54,7 +54,7 @@ public class SpringDataTaskRepository {
 
     @Test
     @DisplayName("저장 & 조회(스케쥴없음)")
-    public void 테스크_저장_조회_검증() throws Exception {
+    public void saveAndFindWithoutSchedule() throws Exception {
         //given
         Color color = saveColor("RED", "#FF0000");
         Project project = saveProject(color);
