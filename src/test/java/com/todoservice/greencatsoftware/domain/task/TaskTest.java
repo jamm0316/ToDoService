@@ -22,7 +22,7 @@ public class TaskTest {
         return Color.create(name, hexCode);
     }
 
-    private Project project() {
+    private Project projectWithPeriod() {
         return Project.createWithPeriod(color("RED", "#FF0000"), "프로젝트", Status.SCHEDULE,
                 LocalDate.of(2005, 1, 1), LocalDate.of(2005, 12, 31), LocalDate.of(2005, 12, 31),
                 "description", true, Visibility.PUBLIC);
@@ -32,7 +32,7 @@ public class TaskTest {
     @DisplayName("정상 생성: 스케쥴 포함")
     public void createWithoutScheduleOk() throws Exception {
         //given
-        Task task = Task.create(project(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
+        Task task = Task.create(projectWithPeriod(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
                 "이러저렇게 한다", DayLabel.MORNING, Status.SCHEDULE);
 
         //then
