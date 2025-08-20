@@ -24,7 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -142,8 +141,8 @@ public class TaskServiceTest {
         when(colorService.getColorByIdOrThrow(200L)).thenReturn(color);
 
         Schedule schedule = Schedule.of(
-                LocalDate.of(2025, 1, 1), LocalDateTime.of(2025, 1, 1, 10, 0), true,
-                LocalDate.of(2025, 12, 31), LocalDateTime.of(2025, 12, 31, 10, 0), true
+                LocalDate.of(2025, 1, 1), LocalTime.of(10, 0), true,
+                LocalDate.of(2025, 12, 31), LocalTime.of(10, 0), true
         );
 
         //when
