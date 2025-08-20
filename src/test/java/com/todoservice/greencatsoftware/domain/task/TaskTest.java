@@ -170,4 +170,42 @@ public class TaskTest {
         assertThat(task.getSchedule().startTimeEnabled()).isFalse();
         assertThat(task.getStatus()).isEqualTo(Status.ON_HOLD);
     }
+
+    @Test
+    @DisplayName("수정 실패: null 값")
+    public void changeFail() throws Exception {
+        //given
+        Task task = Task.create(project(), color("RED", "#FF0000"), Priority.HIGH,
+                "해야할 일", null, DayLabel.MORNING, Status.SCHEDULE);
+
+        //then
+        assertThatThrownBy(() -> task.changeProject(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_PROJECT_FOR_TASK.getMessage());
+
+        assertThatThrownBy(() -> task.changeColor(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_TASK.getMessage());
+
+        assertThatThrownBy(() -> task.changePriority(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_PRIORITY_FOR_TASK.getMessage());
+
+        assertThatThrownBy(() -> task.changeTitle(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_TITLE_FOR_TASK.getMessage());
+
+        String longTitle = "a".repeat(101);
+        assertThatThrownBy(() -> task.changeTitle(longTitle))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_TASK.getMessage());
+
+        assertThatThrownBy(() -> task.changePriority(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_PRIORITY_FOR_TASK.getMessage());
+
+        assertThatThrownBy(() -> task.changeStatus(null))
+                .isInstanceOf(BaseException.class)
+                .hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_TASK.getMessage());
+    }
 }
