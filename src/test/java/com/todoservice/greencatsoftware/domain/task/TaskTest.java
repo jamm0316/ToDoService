@@ -126,4 +126,48 @@ public class TaskTest {
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_TASK.getMessage());
     }
+
+    @Test
+    @DisplayName("수정 로직: project/color/priority/title/description/dayLabel/schedule/status")
+    public void changeFields() throws Exception {
+        //given
+        Task task = Task.create(project(), color("RED", "#FF0000"), Priority.HIGH,
+                "알고리즘 공부", "백준123", DayLabel.MORNING, Status.SCHEDULE);
+
+        Project newProject = Project.create(color("BLUE", "#0000FF"), "새로운 프로젝트",
+                Status.COMPLETED, "new description", true, Visibility.TEAM);
+
+        Color newColor = Color.create("GREEN", "#00FF00");
+
+        LocalDate startDate = LocalDate.of(2025, 1, 10);
+        Schedule schedule = Schedule.of(startDate, null, false, null, null, false);
+
+        //when
+        task.changeProject(newProject);
+        task.changeColor(newColor);
+        task.changePriority(Priority.MEDIUM);
+        task.changeTitle("알고리즘 복습");
+        task.changeDescription("백준123 완료, 다음주에 복습하기");
+        task.changeDayLabel(DayLabel.AFTERNOON);
+        task.changeSchedule(schedule);
+        task.changeStatus(Status.ON_HOLD);
+
+        //then
+        assertThat(task.getProject().getName()).isEqualTo("새로운 프로젝트");
+        assertThat(task.getProject().getDescription()).isEqualTo("new description");
+        assertThat(task.getProject().getStatus()).isEqualTo(Status.COMPLETED);
+        assertThat(task.getColor().getName()).isEqualTo("GREEN");
+        assertThat(task.getColor().getHexCode()).isEqualTo("#00FF00");
+        assertThat(task.getPriority()).isEqualTo(Priority.MEDIUM);
+        assertThat(task.getTitle()).isEqualTo("알고리즘 복습");
+        assertThat(task.getDescription()).isEqualTo("백준123 완료, 다음주에 복습하기");
+        assertThat(task.getDayLabel()).isEqualTo(DayLabel.AFTERNOON);
+        assertThat(task.getSchedule().startDate()).isEqualTo(LocalDate.of(2025, 1, 10));
+        assertThat(task.getSchedule().startTime()).isNull();
+        assertThat(task.getSchedule().dueDate()).isNull();
+        assertThat(task.getSchedule().dueTime()).isNull();
+        assertThat(task.getSchedule().dueTimeEnabled()).isFalse();
+        assertThat(task.getSchedule().startTimeEnabled()).isFalse();
+        assertThat(task.getStatus()).isEqualTo(Status.ON_HOLD);
+    }
 }
