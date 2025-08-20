@@ -1,6 +1,9 @@
 package com.todoservice.greencatsoftware.domain.task;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
+import com.todoservice.greencatsoftware.common.enums.DayLabel;
+import com.todoservice.greencatsoftware.common.enums.Priority;
+import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.application.ColorService;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
@@ -9,6 +12,7 @@ import com.todoservice.greencatsoftware.domain.task.application.TaskService;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.port.TaskRepository;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,5 +87,39 @@ public class TaskServiceTest {
         //then
         taskService.deleteTask(3L);
         verify(taskRepository).deleteById(3L);
+    }
+
+    @Test
+    @DisplayName("updateTask: projectId/colorId/schedule null 처리 및 변경 반영")
+    public void updateTaskPartialUpdate() throws Exception {
+        //given
+        Task task = mock(Task.class);
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+
+        //when
+        TaskUpdateRequest request = mock(TaskUpdateRequest.class);
+        when(request.projectId()).thenReturn(null);
+        when(request.colorId()).thenReturn(null);
+        when(request.schedule()).thenReturn(null);
+        when(request.priority()).thenReturn(Priority.HIGH);
+        when(request.title()).thenReturn("알고리즘 공부하기");
+        when(request.description()).thenReturn("백준 1234");
+        when(request.dayLabel()).thenReturn(DayLabel.AFTERNOON);
+        when(request.status()).thenReturn(Status.SCHEDULE);
+
+        Task updateTask = taskService.updateTask(request, 1L);
+
+        //then
+        verify(task).changeProject(any());
+        verify(task).changeColor(any());
+        verify(task).changeSchedule(any());
+        verify(task).changePriority(Priority.HIGH);
+        verify(task).changeTitle("알고리즘 공부하기");
+        verify(task).changeDescription("백준 1234");
+        verify(task).changeDayLabel(DayLabel.AFTERNOON);
+        verify(task).changeStatus(Status.SCHEDULE);
+
+        assertThat(updateTask).isSameAs(task);
+        verify(taskRepository, never()).save(any());
     }
 }
