@@ -8,6 +8,7 @@ import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ public class TaskTest {
 
     private Project projectWithPeriod() {
         return Project.createWithPeriod(color("RED", "#FF0000"), "프로젝트", Status.SCHEDULE,
-                LocalDate.of(2005, 1, 1), LocalDate.of(2005, 12, 31), LocalDate.of(2005, 12, 31),
+                Period.of(LocalDate.of(2005, 1, 1), LocalDate.of(2005, 12, 31), LocalDate.of(2005, 12, 31)),
                 "description", true, Visibility.PUBLIC);
     }
 
