@@ -49,7 +49,7 @@ public class SpringDataTaskRepositoryTest {
         Project project = Project.create(
                 color,
                 "프로젝트B",
-                Status.SCHEDULE,
+                Status.PLANNING,
                 "프로젝트 입니다",
                 true,
                 Visibility.PRIVATE);
@@ -68,7 +68,7 @@ public class SpringDataTaskRepositoryTest {
                 "알고리즘 테스트 1문제 풀기",
                 null,
                 DayLabel.MORNING,
-                Status.SCHEDULE);
+                Status.PLANNING);
 
         //when
         Task save = taskRepository.saveAndFlush(task);
@@ -78,13 +78,13 @@ public class SpringDataTaskRepositoryTest {
 
         //then
         assertThat(found.getProject().getName()).isEqualTo("프로젝트B");
-        assertThat(found.getProject().getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getProject().getStatus()).isEqualTo(Status.PLANNING);
         assertThat(found.getColor().getName()).isEqualTo("RED");
         assertThat(found.getColor().getHexCode()).isEqualTo("#FF0000");
         assertThat(found.getPriority()).isEqualTo(Priority.HIGH);
         assertThat(found.getTitle()).isEqualTo("알고리즘 테스트 1문제 풀기");
         assertThat(found.getDayLabel()).isEqualTo(DayLabel.MORNING);
-        assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getStatus()).isEqualTo(Status.PLANNING);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class SpringDataTaskRepositoryTest {
                 null,
                 DayLabel.MORNING,
                 schedule,
-                Status.SCHEDULE);
+                Status.PLANNING);
 
         //when
         Task save = taskRepository.saveAndFlush(task);
@@ -113,7 +113,7 @@ public class SpringDataTaskRepositoryTest {
 
         //then
         assertThat(found.getProject().getName()).isEqualTo("프로젝트B");
-        assertThat(found.getProject().getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getProject().getStatus()).isEqualTo(Status.PLANNING);
         assertThat(found.getColor().getName()).isEqualTo("RED");
         assertThat(found.getColor().getHexCode()).isEqualTo("#FF0000");
         assertThat(found.getPriority()).isEqualTo(Priority.HIGH);
@@ -125,7 +125,7 @@ public class SpringDataTaskRepositoryTest {
         assertThat(found.getSchedule().dueDate()).isEqualTo(LocalDate.of(2025, 12, 31));
         assertThat(found.getSchedule().dueTime()).isNull();
         assertThat(found.getSchedule().dueTimeEnabled()).isFalse();
-        assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getStatus()).isEqualTo(Status.PLANNING);
     }
     
     @Test
@@ -135,14 +135,14 @@ public class SpringDataTaskRepositoryTest {
         Color color = saveColor("RED", "#FF0000");
         Project project = saveProject(color);
         Task task = taskRepository.saveAndFlush(Task.create(project, color, Priority.HIGH,
-                "새로운 할 일", null, DayLabel.MORNING, Status.SCHEDULE));
+                "새로운 할 일", null, DayLabel.MORNING, Status.PLANNING));
 
         Color newColor = saveColor("BLUE", "#0000FF");
         Project newProject = projectRepository.saveAndFlush(
                 Project.create(
                     newColor,
                     "새로운 프로젝트",
-                    Status.SCHEDULE,
+                    Status.PLANNING,
                     "새로운 프로젝트 입니다",
                     true,
                     Visibility.TEAM));
@@ -160,7 +160,7 @@ public class SpringDataTaskRepositoryTest {
 
         //then
         assertThat(task.getProject().getName()).isEqualTo("새로운 프로젝트");
-        assertThat(task.getProject().getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(task.getProject().getStatus()).isEqualTo(Status.PLANNING);
         assertThat(task.getColor().getName()).isEqualTo("BLUE");
         assertThat(task.getColor().getHexCode()).isEqualTo("#0000FF");
         assertThat(task.getPriority()).isEqualTo(Priority.MEDIUM);
@@ -182,7 +182,7 @@ public class SpringDataTaskRepositoryTest {
         Color color = saveColor("RED", "#FF0000");
         Project project = saveProject(color);
         Task task = taskRepository.saveAndFlush(Task.create(project, color, Priority.HIGH,
-                "삭제용", null, DayLabel.MORNING, Status.SCHEDULE));
+                "삭제용", null, DayLabel.MORNING, Status.PLANNING));
         //when
         taskRepository.deleteById(task.getId());
         taskRepository.flush();

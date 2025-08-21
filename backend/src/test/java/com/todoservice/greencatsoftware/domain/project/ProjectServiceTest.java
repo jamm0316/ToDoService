@@ -49,9 +49,9 @@ public class ProjectServiceTest {
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
         Period period = Period.of(startDate, endDate, actualEndDate);
-        Project projectA = Project.createWithPeriod(Color.create("RED", "#FF0000"), "프로젝트 A", Status.SCHEDULE,
+        Project projectA = Project.createWithPeriod(Color.create("RED", "#FF0000"), "프로젝트 A", Status.PLANNING,
                 period, "프로젝트 A입니다", true, Visibility.PRIVATE);
-        Project projectB = Project.createWithPeriod(Color.create("RED", "#FF0000"), "프로젝트 B", Status.SCHEDULE,
+        Project projectB = Project.createWithPeriod(Color.create("RED", "#FF0000"), "프로젝트 B", Status.PLANNING,
                 period, "프로젝트 B입니다", true, Visibility.PRIVATE);
 
         //when
@@ -70,7 +70,7 @@ public class ProjectServiceTest {
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
         Period period = Period.of(startDate, endDate, actualEndDate);
-        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.SCHEDULE,
+        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.PLANNING,
                 period, "프로젝트 A입니다", true, Visibility.PRIVATE);
 
         //when
@@ -93,7 +93,7 @@ public class ProjectServiceTest {
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
         Period period = Period.of(startDate, endDate, actualEndDate);
-        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.SCHEDULE,
+        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.PLANNING,
                 period, "프로젝트 A입니다", true, Visibility.PRIVATE);
 
         //when
@@ -124,7 +124,7 @@ public class ProjectServiceTest {
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
         Period period = Period.of(startDate, endDate, actualEndDate);
-        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.SCHEDULE,
+        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.PLANNING,
                 period, "프로젝트 A입니다", true, Visibility.PRIVATE);
 
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
@@ -157,7 +157,7 @@ public class ProjectServiceTest {
     @DisplayName("updateProject: period가 존재하는 요청이면 새 Period로 교체")
     void updateProject_change_period() {
         // 기존
-        Project existing = Project.create(Color.create("RED", "#FF0000"), "old", Status.SCHEDULE,
+        Project existing = Project.create(Color.create("RED", "#FF0000"), "old", Status.PLANNING,
                 null, true, Visibility.PRIVATE);
         when(projectRepository.findById(5L)).thenReturn(Optional.of(existing));
 
@@ -170,7 +170,7 @@ public class ProjectServiceTest {
         ProjectCreateRequest req = mock(ProjectCreateRequest.class);
         when(req.colorId()).thenReturn(null); // 색상은 유지
         when(req.name()).thenReturn("withPeriod");
-        when(req.status()).thenReturn(Status.SCHEDULE);
+        when(req.status()).thenReturn(Status.PLANNING);
         when(req.period()).thenReturn(periodDto);
         when(req.description()).thenReturn(null);
         when(req.isPublic()).thenReturn(true);
