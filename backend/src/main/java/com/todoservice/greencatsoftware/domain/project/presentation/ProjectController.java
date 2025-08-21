@@ -4,6 +4,7 @@ import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectSummaryResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,11 @@ public class ProjectController {
     @GetMapping("")
     public BaseResponse<List<Project>> listProject() {
         return new BaseResponse<>(projectService.listProject());
+    }
+
+    @GetMapping("/summary")
+    public BaseResponse<List<ProjectSummaryResponse>> summaryListProject() {
+        return new BaseResponse<>(projectService.summaryListProject());
     }
 
     @PostMapping("")
