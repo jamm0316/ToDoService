@@ -4,6 +4,8 @@ import TabSelector from "/src/components/layout/TabSelector.jsx";
 import HorizontalProjectScroll from "/src/components/ui/HorizontalProjectScroll.jsx";
 import {mockProjects, mockRecentActivity} from "/src/data/mockProjects.jsx";
 import RecentActivityItem from "/src/components/features/RecentActivityItem.jsx";
+import Header from "/src/components/layout/Header.jsx";
+import BottomNav from "/src/components/layout/BottomNav.jsx";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('today');
@@ -15,6 +17,7 @@ const Dashboard = () => {
 
   return (
     <div>
+      <Header />
       {/* 메인 콘텐츠 */}
       <main className="px-6 pb-24">
         <SearchBar placeholder="Search" onSearch={handleSearch}/>
@@ -42,7 +45,7 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
-
+      <BottomNav activeTab="home" onTabChange={() => {}} />
     </div>
   );
 };
