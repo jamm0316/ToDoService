@@ -1,19 +1,37 @@
 import React from 'react';
-import {Bell, Calendar, Home, Search} from 'lucide-react';
+import {Plus, Bell, Calendar, Home, Search} from 'lucide-react';
 
-const BottomNav = ({ activeTab, onTabChange }) => {
+const BottomNav = ({ activeTab, onTabChange, onAddTask }) => {
   const navItems = [
     { id: 'home', icon: Home, active: true },
     { id: 'calendar', icon: Calendar, active: false },
+    { id: 'add', icon: Plus, active: false, isCenter: true }, // 중앙 + 버튼
     { id: 'notifications', icon: Bell, active: false, hasNotification: true },
     { id: 'search', icon: Search, active: false }
   ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 backdrop-blur-sm bg-white/90">
-      <div className="flex justify-around items-center max-w-md mx-auto">
-        {navItems.map((item) => {
+      <div className="flex justify-around items-center max-w-md mx-auto relative">
+        {navItems.map((item, index) => {
           const Icon = item.icon;
+
+          // 중앙 + 버튼 특별 스타일링
+          if (item.isCenter) {
+            return (
+              <button
+                key={item.id}
+                onClick={() => onAddTask?.()}
+                className="relative -top-4 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+              >
+                <Icon className="w-7 h-7 text-white" />
+                {/* 중앙 버튼 백그라운드 원 */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 scale-125 animate-pulse"></div>
+              </button>
+            );
+          }
+
+          // 일반 네비게이션 버튼들
           return (
             <button
               key={item.id}
