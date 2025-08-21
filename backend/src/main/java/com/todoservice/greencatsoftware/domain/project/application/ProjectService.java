@@ -8,6 +8,7 @@ import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,8 @@ public class ProjectService {
     public List<Project> listProject() {
         return projectRepository.findAll();
     }
+
+    public List<ProjectSummaryResponse> summaryListProject() {return projectRepository.findProjectSummary();}
 
     public Project getProjectByIdOrThrow(Long id) {
         return projectRepository.findById(id)
