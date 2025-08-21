@@ -1,5 +1,5 @@
 import React from 'react';
-import {projectApi} from "src/api/project/projectApi.js";
+import {projectApi} from "/src/api/project/projectApi.js";
 
 const UseCreateProject = () => {
   const [loading, setLoading] = React.useState(false);
