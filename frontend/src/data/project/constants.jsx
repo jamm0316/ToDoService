@@ -1,10 +1,10 @@
 export const projectColors = [
-  { id: 1, color: '#8B5CF6', name: 'Purple' },
-  { id: 2, color: '#3B82F6', name: 'Blue' },
-  { id: 3, color: '#EF4444', name: 'Red' },
-  { id: 4, color: '#10B981', name: 'Green' },
-  { id: 5, color: '#F59E0B', name: 'Orange' },
-  { id: 6, color: '#EC4899', name: 'Pink' },
+  { id: 1, color: '#8B5CF6', name: 'VIOLET' },
+  { id: 2, color: '#3B82F6', name: 'BLUE' },
+  { id: 3, color: '#EF4444', name: 'RED' },
+  { id: 4, color: '#10B981', name: 'GREEN' },
+  { id: 5, color: '#F59E0B', name: 'YELLOW' },
+  { id: 6, color: '#EC4899', name: 'PINK' },
 ];
 
 export const statusOptions = [
