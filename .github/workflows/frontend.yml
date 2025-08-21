@@ -1,0 +1,53 @@
+name: 프론트엔드 CI 테스트 자동화
+
+on:
+  push:
+    branches: [ main, dev, 'release/*' ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+  pull_request:
+    branches: [ main, dev, 'release/*' ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+
+# PR 코멘트를 쓰려면 권한이 필요
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: 리포지토리를 가져옵니다
+        uses: actions/checkout@v4
+
+      - name: Node.js 20을 설치합니다
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: PR에 빌드 성공 댓글 달기
+        if: github.event_name == 'pull_request' && success()
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            프론트엔드 CI 빌드가 성공했습니다!
