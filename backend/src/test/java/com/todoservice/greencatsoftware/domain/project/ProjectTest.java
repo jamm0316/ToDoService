@@ -26,14 +26,14 @@ public class ProjectTest {
         //when
         Project project = Project.create(color
                 , "   나의 프로젝트    "
-                , Status.SCHEDULE,
+                , Status.PLANNING,
                 "   잘해보자구~"
                 , true
                 , Visibility.PUBLIC);
 
         //then
         assertThat(project.getName()).isEqualTo("나의 프로젝트");
-        assertThat(project.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(project.getStatus()).isEqualTo(Status.PLANNING);
         assertThat(project.getDescription()).isEqualTo("잘해보자구~");
         assertThat(project.getIsPublic()).isTrue();
         assertThat(project.getVisibility()).isEqualTo(Visibility.PUBLIC);
@@ -54,7 +54,7 @@ public class ProjectTest {
         Project project = Project.createWithPeriod(
                 color
                 , "   나의 프로젝트    "
-                , Status.SCHEDULE
+                , Status.PLANNING
                 ,period
                 ,"   잘해보자구~"
                 , true
@@ -62,7 +62,7 @@ public class ProjectTest {
 
         //then
         assertThat(project.getName()).isEqualTo("나의 프로젝트");
-        assertThat(project.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(project.getStatus()).isEqualTo(Status.PLANNING);
         assertThat(project.getPeriod().startDate()).isEqualTo(startDate);
         assertThat(project.getPeriod().endDate()).isEqualTo(endDate);
         assertThat(project.getPeriod().actualEndDate()).isNull();
@@ -82,18 +82,18 @@ public class ProjectTest {
         //then
         //color null
         assertThatThrownBy(() -> Project.create(
-                null, "name", Status.SCHEDULE, "description", true, Visibility.PUBLIC
+                null, "name", Status.PLANNING, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_PROJECT.getMessage());
 
         //name empty
         assertThatThrownBy(() -> Project.create(
-                color, "", Status.SCHEDULE, "description", true, Visibility.PUBLIC
+                color, "", Status.PLANNING, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_TITLE_FOR_PROJECT.getMessage());
 
         //name toLong
         String longName = "a".repeat(101);
         assertThatThrownBy(() -> Project.create(
-                color, longName, Status.SCHEDULE, "description", true, Visibility.PUBLIC
+                color, longName, Status.PLANNING, "description", true, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_PROJECT.getMessage());
 
         //status null
@@ -103,12 +103,12 @@ public class ProjectTest {
 
         //isPublic null
         assertThatThrownBy(() -> Project.create(
-                color, "name", Status.SCHEDULE, "description", null, Visibility.PUBLIC
+                color, "name", Status.PLANNING, "description", null, Visibility.PUBLIC
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_IS_PUBLIC_FOR_PROJECT.getMessage());
 
         //visibility null
         assertThatThrownBy(() -> Project.create(
-                color, "name", Status.SCHEDULE, "description", true, null
+                color, "name", Status.PLANNING, "description", true, null
         )).isInstanceOf(BaseException.class).hasMessage(BaseResponseStatus.MISSING_VISIBILITY_FOR_PROJECT.getMessage());
     }
 
@@ -123,7 +123,7 @@ public class ProjectTest {
         Period period = Period.of(startDate, endDate, actualEndDate);
         Project project = Project.createWithPeriod(color
                 ,"   나의 프로젝트    "
-                ,Status.SCHEDULE
+                ,Status.PLANNING
                 ,period
                 ,"   잘해보자구~"
                 ,true
@@ -159,7 +159,7 @@ public class ProjectTest {
         Project project = Project.create(
                 color,
                 "name",
-                Status.SCHEDULE,
+                Status.PLANNING,
                 "description",
                 true,
                 Visibility.PUBLIC);

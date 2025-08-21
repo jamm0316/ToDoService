@@ -40,7 +40,7 @@ public class SpringDataProjectRepositoryTest {
         Project project = Project.create(
                 color,
                 "프로젝트A",
-                Status.SCHEDULE,
+                Status.PLANNING,
                 "프로젝트A 입니다.",
                 true,
                 Visibility.PRIVATE);
@@ -55,7 +55,7 @@ public class SpringDataProjectRepositoryTest {
         assertThat(found.getColor().getName()).isEqualTo("RED");
         assertThat(found.getColor().getHexCode()).isEqualTo("#FF0000");
         assertThat(found.getName()).isEqualTo("프로젝트A");
-        assertThat(found.getStatus()).isEqualTo(Status.SCHEDULE);
+        assertThat(found.getStatus()).isEqualTo(Status.PLANNING);
         assertThat(found.getDescription()).isEqualTo("프로젝트A 입니다.");
         assertThat(found.getIsPublic()).isTrue();
         assertThat(found.getVisibility()).isEqualTo(Visibility.PRIVATE);
@@ -73,7 +73,7 @@ public class SpringDataProjectRepositoryTest {
         Project project = Project.createWithPeriod(
                 color,
                 "프로젝트A",
-                Status.SCHEDULE,
+                Status.PLANNING,
                 period,
                 "프로젝트A 입니다.",
                 true,
@@ -122,7 +122,7 @@ public class SpringDataProjectRepositoryTest {
         Project project = Project.createWithPeriod(
                 color,
                 "삭제용",
-                Status.SCHEDULE,
+                Status.PLANNING,
                 period,
                 "삭제할 프로젝트",
                 true,

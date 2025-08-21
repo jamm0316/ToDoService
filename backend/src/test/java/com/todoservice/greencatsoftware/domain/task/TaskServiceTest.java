@@ -110,7 +110,7 @@ public class TaskServiceTest {
         when(request.title()).thenReturn("알고리즘 공부하기");
         when(request.description()).thenReturn("백준 1234");
         when(request.dayLabel()).thenReturn(DayLabel.AFTERNOON);
-        when(request.status()).thenReturn(Status.SCHEDULE);
+        when(request.status()).thenReturn(Status.PLANNING);
 
         Task updateTask = taskService.updateTask(request, 1L);
 
@@ -122,7 +122,7 @@ public class TaskServiceTest {
         verify(task).changeTitle("알고리즘 공부하기");
         verify(task).changeDescription("백준 1234");
         verify(task).changeDayLabel(DayLabel.AFTERNOON);
-        verify(task).changeStatus(Status.SCHEDULE);
+        verify(task).changeStatus(Status.PLANNING);
 
         assertThat(updateTask).isSameAs(task);
         verify(taskRepository, never()).save(any());
@@ -155,7 +155,7 @@ public class TaskServiceTest {
         when(request.title()).thenReturn("알고리즘 공부하기");
         when(request.description()).thenReturn("백준 1234");
         when(request.dayLabel()).thenReturn(DayLabel.AFTERNOON);
-        when(request.status()).thenReturn(Status.SCHEDULE);
+        when(request.status()).thenReturn(Status.PLANNING);
 
         Task updateTask = taskService.updateTask(request, 1L);
 
@@ -167,7 +167,7 @@ public class TaskServiceTest {
         verify(task).changeTitle("알고리즘 공부하기");
         verify(task).changeDescription("백준 1234");
         verify(task).changeDayLabel(DayLabel.AFTERNOON);
-        verify(task).changeStatus(Status.SCHEDULE);
+        verify(task).changeStatus(Status.PLANNING);
 
         assertThat(updateTask).isSameAs(task);
     }
