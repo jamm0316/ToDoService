@@ -6,13 +6,13 @@ import SelectField from '/src/components/ui/project/SelectField.jsx';
 import VisibilityOptionCard from '/src/components/ui/project/VisibilityOptionCard.jsx';
 import StickyFooter from '/src/components/ui/project/StickyFooter.jsx';
 
-const ProjectForm = ({ form, onSubmit }) => {
+const ProjectForm = ({ form, onSubmit, loading }) => {
   const { formData, errors, setField, validate } = form;
 
   const handleSubmit = () => {
     if (!validate()) return;
     const payload = {
-      colorId: formData.colorId,
+      colorId: Number(formData.colorId),
       name: formData.name,
       status: formData.status,
       period: { startDate: formData.startDate, endDate: formData.endDate },
@@ -87,9 +87,14 @@ const ProjectForm = ({ form, onSubmit }) => {
       <StickyFooter>
         <button
           onClick={handleSubmit}
-          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-2xl font-bold text-lg hover:shadow-xl transition-shadow active:scale-95"
+          disabled={loading}
+          className={`w-full py-4 rounded-2xl font-bold text-lg transition-all ${
+            loading
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-xl active:scale-95'
+          } text-white`}
         >
-          Create New Task
+          {loading ? '생성 중...' : 'Create New Task'}
         </button>
       </StickyFooter>
     </>
