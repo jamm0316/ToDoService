@@ -9,6 +9,7 @@ import lombok.Builder;
 
 @Builder
 public record ProjectCreateRequest(
+        @NotNull(message = "colorId는 필수 입니다.")
         Long colorId,  //프로젝트 컬러
 
         @NotBlank(message = "프로젝트 이름은 필수입니다.")
