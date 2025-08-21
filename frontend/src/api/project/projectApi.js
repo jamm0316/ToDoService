@@ -1,4 +1,4 @@
-import {ENDPOINTS} from "/src/api/project/endpoints.js";
+import {ENDPOINTS} from "./endpoints.js";
 import apiClient from "/src/api/client.js";
 
 export const projectApi = {
