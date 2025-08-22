@@ -11,6 +11,7 @@ import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.port.TaskRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,10 @@ public class TaskService {
 
     public List<Task> listTask() {
         return taskRepository.findAll();
+    }
+
+    public List<TaskSummaryResponse> summaryListTask() {
+        return taskRepository.summaryListTask();
     }
 
     public Task getTaskByIdOrThrow(Long id) {
