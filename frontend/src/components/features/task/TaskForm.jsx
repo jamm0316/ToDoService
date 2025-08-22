@@ -278,31 +278,6 @@ const TaskForm = ({ form, onSubmit, loading = false }) => {
             </div>
           </div>
         </div>
-
-        {/* 색상 선택 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            <Palette className="w-4 h-4 inline mr-2" />
-            태스크 색상
-          </label>
-          <div className="grid grid-cols-6 gap-3">
-            {taskColors.map((color) => (
-              <button
-                key={color.id}
-                type="button"
-                onClick={() => setField('colorId', color.id)}
-                className={`w-12 h-12 rounded-full border-4 transition-all ${
-                  formData.colorId === color.id
-                    ? 'border-gray-800 scale-110'
-                    : 'border-gray-200 hover:border-gray-400'
-                }`}
-                style={{ backgroundColor: color.color }}
-                title={color.name}
-              />
-            ))}
-          </div>
-          {errors.colorId && <p className="text-red-500 text-sm mt-1">{errors.colorId}</p>}
-        </div>
       </main>
 
       <StickyFooter>
