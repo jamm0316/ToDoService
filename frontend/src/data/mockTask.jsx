@@ -37,10 +37,10 @@ export const mockTasks = [
   {
     id: 1,
     title: 'API 문서 작성',
-    status: 'IN_PROGRESS',
+    status: '진행중',
     priority: 'HIGH',
     dueDate: '2025-08-25',
-    assignee: '김개발',
+    dayLabel: '🌱 아침',
     colorId: 1,
     progress: 75,
   }
