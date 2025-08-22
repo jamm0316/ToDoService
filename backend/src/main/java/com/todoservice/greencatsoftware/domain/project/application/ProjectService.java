@@ -7,6 +7,7 @@ import com.todoservice.greencatsoftware.domain.color.application.ColorService;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectRepository;
 import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectDetailResponse;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectSummaryResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,10 @@ public class ProjectService {
     public Project getProjectByIdOrThrow(Long id) {
         return projectRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_PROJECT));
+    }
+
+    public ProjectDetailResponse getProjectDetailWithProgress(Long id) {
+        return projectRepository.findDetailWithProgress(id);
     }
 
     @Transactional

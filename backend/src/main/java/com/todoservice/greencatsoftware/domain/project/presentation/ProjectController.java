@@ -1,6 +1,7 @@
 package com.todoservice.greencatsoftware.domain.project.presentation;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectDetailResponse;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
@@ -25,6 +26,11 @@ public class ProjectController {
     @GetMapping("/summary")
     public BaseResponse<List<ProjectSummaryResponse>> summaryListProject() {
         return new BaseResponse<>(projectService.summaryListProject());
+    }
+
+    @GetMapping("/{id}")
+    public BaseResponse<ProjectDetailResponse> getProjectDetailWithProgress(@PathVariable Long id) {
+        return new BaseResponse<>(projectService.getProjectDetailWithProgress(id));
     }
 
     @PostMapping("")

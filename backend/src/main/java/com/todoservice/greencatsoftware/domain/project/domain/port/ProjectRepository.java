@@ -1,6 +1,7 @@
 package com.todoservice.greencatsoftware.domain.project.domain.port;
 
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectDetailResponse;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectSummaryResponse;
 
 import java.util.List;
@@ -11,5 +12,6 @@ public interface ProjectRepository {
     List<ProjectSummaryResponse> findProjectSummary();
     Project save(Project project);
     Optional<Project> findById(Long id);
+    ProjectDetailResponse findDetailWithProgress(Long id);
     void deleteById(Long id);
 }
