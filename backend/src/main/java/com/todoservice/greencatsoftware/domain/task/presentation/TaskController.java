@@ -5,6 +5,7 @@ import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.application.TaskService;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,11 @@ public class TaskController {
     @GetMapping("")
     public BaseResponse<List<Task>> listTask() {
         return new BaseResponse<>(taskService.listTask());
+    }
+
+    @GetMapping("/summary")
+    public BaseResponse<List<TaskSummaryResponse>> summaryListTask() {
+        return new BaseResponse<>(taskService.summaryListTask());
     }
 
     @PostMapping("")
