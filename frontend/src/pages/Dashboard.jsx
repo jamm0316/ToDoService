@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import SearchBar from "/src/components/ui/SearchBar.jsx";
 import TabSelector from "/src/components/layout/TabSelector.jsx";
 import HorizontalProjectScroll from "/src/components/ui/HorizontalProjectScroll.jsx";
@@ -20,28 +20,52 @@ const colorMap = {
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('today');
   const [activeNavTab, setActiveNavTab] = useState('home');
-  const { data, loading, error} = useSummaryProject();
+  const { data: projectData, loading: projectLoading, error: projectError} = useSummaryProject();
   const handleSearch = (query) => {
     console.log('Searching for:', query);
   };
 
 
   const projectsForCard = useMemo(() => {
-    const list = Array.isArray(data) ? data : [];
+    const list = Array.isArray(projectData) ? projectData : [];
 
     return list.map((p) => ({
       id: p.id,
       title: p.name,
       type: p.visibility,
-      date: `${p.startDate} ~ ${p.endDate}`,      // 기존 ProjectCard가 date 사용
+      date: `${p.startDate} ~ ${p.endDate}`,
       color: colorMap[p.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
       progress:
         typeof p.progress === 'number'
           ? (p.progress <= 1 ? Math.round(p.progress * 100) : Math.round(p.progress))
           : 0,
     }));
-  }, [data]);
-  console.log(projectsForCard);
+  }, [projectData]);
+
+  // 현재 탭에 따라 표시할 콘텐츠 결정
+  const renderMainContent = () => {
+    if (activeTab === 'projects') {
+      return (
+        <>
+          {projectLoading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
+          {projectError && <div className="py-6 text-red-500">에러: {String(projectError)}</div>}
+          {!projectLoading && !projectError && (
+            <HorizontalProjectScroll
+              projects={projectsForCard}
+              title="Active Projects"
+            />
+          )}
+        </>
+      );
+    }
+
+    // activeTab === 'today' 또는 기본값
+    return (
+      <div className="py-6 text-gray-500">
+        오늘 할 일 내용이 여기에 표시됩니다.
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -52,16 +76,8 @@ const Dashboard = () => {
 
         <TabSelector activeTab={activeTab} onTabChange={setActiveTab}/>
 
-        {/* 가로 스크롤 프로젝트 카드 */}
-        {loading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
-        {error && <div className="py-6 text-red-500">에러: {String(error)}</div>}
-
-        {!loading && !error && (
-          <HorizontalProjectScroll
-            projects={projectsForCard}
-            title="Active Projects"
-          />
-        )}
+        {/* 탭에 따른 동적 콘텐츠 */}
+        {renderMainContent()}
 
         {/* 최근 활동 섹션 */}
         <section>
