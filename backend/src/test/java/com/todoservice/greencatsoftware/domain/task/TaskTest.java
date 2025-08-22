@@ -45,12 +45,10 @@ public class TaskTest {
         LocalTime startTime = LocalTime.of(10, 0);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         Schedule schedule = Schedule.of(startDate, startTime, true, endDate, null, false);
-        Task task = Task.createWithSchedule(projectWithPeriod(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
+        Task task = Task.createWithSchedule(projectWithPeriod(), Priority.HIGH, "해야할 일",
                 "이러저렇게 한다", DayLabel.MORNING, schedule, Status.PLANNING);
 
         //then
-        assertThat(task.getColor().getName()).isEqualTo("BLUE");
-        assertThat(task.getColor().getHexCode()).isEqualTo("#0000FF");
         assertThat(task.getPriority()).isEqualTo(Priority.HIGH);
         assertThat(task.getTitle()).isEqualTo("해야할 일");
         assertThat(task.getDescription()).isEqualTo("이러저렇게 한다");
@@ -68,12 +66,10 @@ public class TaskTest {
     public void createWithScheduleOk() throws Exception {
         //given
         Schedule noSchedule = Schedule.noSchedule();
-        Task task = Task.createWithSchedule(project(), color("BLUE", "#0000FF"), Priority.HIGH, "해야할 일",
+        Task task = Task.createWithSchedule(project(), Priority.HIGH, "해야할 일",
                 "이러저렇게 한다", DayLabel.MORNING, noSchedule, Status.PLANNING);
 
         //then
-        assertThat(task.getColor().getName()).isEqualTo("BLUE");
-        assertThat(task.getColor().getHexCode()).isEqualTo("#0000FF");
         assertThat(task.getPriority()).isEqualTo(Priority.HIGH);
         assertThat(task.getTitle()).isEqualTo("해야할 일");
         assertThat(task.getDescription()).isEqualTo("이러저렇게 한다");
@@ -92,36 +88,30 @@ public class TaskTest {
     public void createFailValidation() throws Exception {
         //given
         Project project = project();
-        Color color = color("RED", "#FF0000");
 
         //then
-        assertThatThrownBy(() -> Task.create(null, color, Priority.HIGH,
+        assertThatThrownBy(() -> Task.create(null, Priority.HIGH,
                 "알고리즘 공부", null, DayLabel.MORNING, Status.PLANNING))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_PROJECT_FOR_TASK.getMessage());
 
-        assertThatThrownBy(() -> Task.create(project, null, Priority.HIGH,
-                "알고리즘 공부", null, DayLabel.MORNING, Status.PLANNING))
-                .isInstanceOf(BaseException.class)
-                .hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_TASK.getMessage());
-
-        assertThatThrownBy(() -> Task.create(project, color, null,
+        assertThatThrownBy(() -> Task.create(project, null,
                 "알고리즘 공부", null, DayLabel.MORNING, Status.PLANNING))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_PRIORITY_FOR_TASK.getMessage());
 
-        assertThatThrownBy(() -> Task.create(project, color, Priority.HIGH,
+        assertThatThrownBy(() -> Task.create(project, Priority.HIGH,
                 null, null, DayLabel.MORNING, Status.PLANNING))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_TITLE_FOR_TASK.getMessage());
 
         String longTitle = "a".repeat(101);
-        assertThatThrownBy(() -> Task.create(project, color, Priority.HIGH,
+        assertThatThrownBy(() -> Task.create(project, Priority.HIGH,
                 longTitle, null, DayLabel.MORNING, Status.PLANNING))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.TITLE_EXCEEDS_LIMIT_FOR_TASK.getMessage());
 
-        assertThatThrownBy(() -> Task.create(project, color, Priority.HIGH,
+        assertThatThrownBy(() -> Task.create(project, Priority.HIGH,
                 "알고리즘 공부", null, null, null))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_TASK.getMessage());
@@ -131,7 +121,7 @@ public class TaskTest {
     @DisplayName("수정 로직: project/color/priority/title/description/dayLabel/schedule/status")
     public void changeFields() throws Exception {
         //given
-        Task task = Task.create(project(), color("RED", "#FF0000"), Priority.HIGH,
+        Task task = Task.create(project(), Priority.HIGH,
                 "알고리즘 공부", "백준123", DayLabel.MORNING, Status.PLANNING);
 
         Project newProject = Project.create(color("BLUE", "#0000FF"), "새로운 프로젝트",
@@ -144,7 +134,6 @@ public class TaskTest {
 
         //when
         task.changeProject(newProject);
-        task.changeColor(newColor);
         task.changePriority(Priority.MEDIUM);
         task.changeTitle("알고리즘 복습");
         task.changeDescription("백준123 완료, 다음주에 복습하기");
@@ -156,8 +145,6 @@ public class TaskTest {
         assertThat(task.getProject().getName()).isEqualTo("새로운 프로젝트");
         assertThat(task.getProject().getDescription()).isEqualTo("new description");
         assertThat(task.getProject().getStatus()).isEqualTo(Status.COMPLETED);
-        assertThat(task.getColor().getName()).isEqualTo("GREEN");
-        assertThat(task.getColor().getHexCode()).isEqualTo("#00FF00");
         assertThat(task.getPriority()).isEqualTo(Priority.MEDIUM);
         assertThat(task.getTitle()).isEqualTo("알고리즘 복습");
         assertThat(task.getDescription()).isEqualTo("백준123 완료, 다음주에 복습하기");
@@ -175,17 +162,13 @@ public class TaskTest {
     @DisplayName("수정 실패: null 값")
     public void changeFail() throws Exception {
         //given
-        Task task = Task.create(project(), color("RED", "#FF0000"), Priority.HIGH,
+        Task task = Task.create(project(), Priority.HIGH,
                 "해야할 일", null, DayLabel.MORNING, Status.PLANNING);
 
         //then
         assertThatThrownBy(() -> task.changeProject(null))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_PROJECT_FOR_TASK.getMessage());
-
-        assertThatThrownBy(() -> task.changeColor(null))
-                .isInstanceOf(BaseException.class)
-                .hasMessage(BaseResponseStatus.MISSING_COLOR_FOR_TASK.getMessage());
 
         assertThatThrownBy(() -> task.changePriority(null))
                 .isInstanceOf(BaseException.class)
@@ -207,6 +190,5 @@ public class TaskTest {
         assertThatThrownBy(() -> task.changeStatus(null))
                 .isInstanceOf(BaseException.class)
                 .hasMessage(BaseResponseStatus.MISSING_STATUS_FOR_TASK.getMessage());
-
     }
 }

@@ -57,15 +57,11 @@ public class TaskService {
         Project project = (request.projectId() != null)
                 ? projectService.getProjectByIdOrThrow(request.projectId())
                 : task.getProject();
-        Color color = (request.colorId() != null)
-                ? colorService.getColorByIdOrThrow(request.colorId())
-                : task.getColor();
         Schedule schedule = (request.schedule() != null)
                 ? request.schedule()
                 : task.getSchedule();
 
         task.changeProject(project);
-        task.changeColor(color);
         task.changePriority(request.priority());
         task.changeTitle(request.title());
         task.changeDescription(request.description());

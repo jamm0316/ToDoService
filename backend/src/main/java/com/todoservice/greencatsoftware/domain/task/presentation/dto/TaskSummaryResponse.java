@@ -22,6 +22,6 @@ public record TaskSummaryResponse (
         DayLabel dayLabel,
 
         @NotNull(message = "colorId는 필수 입니다.")
-        Long colorId
+        Long colorId  //project.id와 동일한 색상
 ) {
 }
