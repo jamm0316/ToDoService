@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,6 +28,11 @@ public class TaskController {
     @GetMapping("/summary")
     public BaseResponse<List<TaskSummaryResponse>> summaryListTask() {
         return new BaseResponse<>(taskService.summaryListTask());
+    }
+
+    @GetMapping("/today")
+    public BaseResponse<List<TaskSummaryResponse>> todayListTask() {
+        return new BaseResponse<>(taskService.todayListTask(LocalDate.now()));
     }
 
     @PostMapping("")
