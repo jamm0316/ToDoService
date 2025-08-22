@@ -9,6 +9,7 @@ import useSummaryProject from "/src/hooks/project/useSummaryProject.jsx";
 import {mockRecentActivity} from "/src/data/mockProjects.jsx";
 import HorizontalTaskScroll from "/src/components/ui/HorizontalTaskScroll.jsx";
 import useSummaryTask from "/src/hooks/task/useSummaryTask.jsx";
+import useTodayTask from "/src/hooks/task/useTodayTask.jsx";
 
 const colorMap = {
   1: 'bg-gradient-to-br from-blue-600 to-purple-700',
@@ -24,6 +25,7 @@ const Dashboard = () => {
   const [activeNavTab, setActiveNavTab] = useState('home');
   const { data: projectData, loading: projectLoading, error: projectError} = useSummaryProject();
   const { data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
+  const { data: todayData, loading: todayLoading, error: todayError} = useTodayTask();
   const handleSearch = (query) => {
   };
 
@@ -57,17 +59,46 @@ const Dashboard = () => {
     }));
   }, [taskData]);
 
+  const todayForCard = useMemo(() => {
+    const list = Array.isArray(todayData) ? todayData : [];
+
+    return list.map((t) => ({
+      id: t.id,
+      title: t.title,
+      status: t.status,
+      priority: t.priority,
+      dueDate: t.dueDate,
+      dayLabel: t.dayLabel,
+      color: colorMap[t.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
+    }));
+  }, [todayData]);
+
   // 현재 탭에 따라 표시할 콘텐츠 결정
   const renderMainContent = () => {
+    if (activeTab === 'today') {
+      return (
+        <>
+          {taskLoading && <div className="py-6 text-gray-500">오늘 할 일 불러오는 중…</div>}
+          {taskError && <div className="py-6 text-red-500">😅오늘 할 일을 불러오지 못했어요...</div>}
+          {!taskLoading && !taskError && (
+            <HorizontalTaskScroll
+              tasks={todayForCard}
+              title="Active Tasks"
+            />
+          )}
+        </>
+      );
+    }
+
     if (activeTab === 'projects') {
       return (
         <>
           {projectLoading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
-          {projectError && <div className="py-6 text-red-500">에러: {String(projectError)}</div>}
+          {projectError && <div className="py-6 text-red-500">😅프로젝트를 불러오지 못했어요...</div>}
           {!projectLoading && !projectError && (
             <HorizontalProjectScroll
               projects={projectsForCard}
-              title="Active Projects"
+              title="ALL Projects"
             />
           )}
         </>
@@ -78,18 +109,16 @@ const Dashboard = () => {
       return (
         <>
           {taskLoading && <div className="py-6 text-gray-500">태스크 불러오는 중…</div>}
-          {taskError && <div className="py-6 text-red-500">에러: {String(taskError)}</div>}
+          {taskError && <div className="py-6 text-red-500">😅할 일을 불러오지 못했어요...</div>}
           {!taskLoading && !taskError && (
             <HorizontalTaskScroll
               tasks={tasksForCard}
-              title="Active Tasks"
+              title="ALL Tasks"
             />
           )}
         </>
       );
     }
-
-    // activeTab === 'today' 또는 기본값
     return (
       <div className="py-6 text-gray-500">
         오늘 할 일 내용이 여기에 표시됩니다.
