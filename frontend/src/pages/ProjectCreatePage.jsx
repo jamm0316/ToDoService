@@ -10,7 +10,6 @@ const ProjectCreatePage = () => {
   const { createProject, loading, error } = useCreateProject()
 
   const handleSubmit = async (payload) => {
-    console.log('submit', payload);
     const result = await createProject(payload);
     if (result.success) {
       navigate('/');

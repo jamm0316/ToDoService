@@ -10,7 +10,6 @@ const TaskCreatePage = () => {
   const { createTask, loading, error } = useCreateTask();
 
   const handleSubmit = async (payload) => {
-    console.log('submit', payload);
     const result = await createTask(payload);
     if (result.success) {
       navigate('/');
