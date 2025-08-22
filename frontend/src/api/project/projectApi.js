@@ -10,5 +10,10 @@ export const projectApi = {
   summaryProject: async () => {
     const response = await apiClient.get(ENDPOINTS.SUMMARY_PROJECTS);
     return response.data.result;
+  },
+
+  getProjectById: async (id) => {
+    const response = await apiClient.get(ENDPOINTS.PROJECT_BY_ID(id));
+    return response.data.result;
   }
 }
