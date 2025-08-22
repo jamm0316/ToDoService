@@ -6,6 +6,7 @@ import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateR
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.application.TaskService;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class TaskController {
     }
 
     @PostMapping("")
-    public BaseResponse<Task> createTask(TaskCreateRequest newTaskDTO) {
+    public BaseResponse<Task> createTask(@Valid @RequestBody TaskCreateRequest newTaskDTO) {
         return new BaseResponse<>(taskService.createTask(newTaskDTO));
     }
 
