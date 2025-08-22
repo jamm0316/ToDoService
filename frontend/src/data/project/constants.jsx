@@ -7,6 +7,15 @@ export const projectColors = [
   { id: 6, color: '#EC4899', name: 'PINK' },
 ];
 
+export const colorMap = {
+  1: 'bg-gradient-to-br from-blue-600 to-purple-700',
+  2: 'bg-gradient-to-br from-blue-500 to-cyan-500',
+  3: 'bg-gradient-to-br from-purple-600 to-pink-600',
+  4: 'bg-gradient-to-br from-green-500 to-teal-600',
+  5: 'bg-gradient-to-br from-orange-500 to-amber-600',
+  6: 'bg-gradient-to-br from-pink-500 to-rose-600',
+};
+
 export const statusOptions = [
   { value: 'PLANNING', label: '진행예정' },
   { value: 'IN_PROGRESS', label: '진행중' },
