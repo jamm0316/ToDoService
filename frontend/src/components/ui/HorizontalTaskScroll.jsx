@@ -1,11 +1,10 @@
 import React from 'react';
-import ProjectCard from "/src/components/features/projects/ProjectCard.jsx";
+import TaskCard from "/src/components/features/task/TaskCard.jsx";
 import {ChevronRight, SquarePlus} from 'lucide-react';
 import {useNavigate} from "react-router-dom";
 import {ROUTES} from "/src/router/routes.js";
 
-
-const HorizontalProjectScroll = ({projects, title}) => {
+const HorizontalTaskScroll = ({tasks, title}) => {
   const navigate = useNavigate();
 
   return (
@@ -15,7 +14,7 @@ const HorizontalProjectScroll = ({projects, title}) => {
         <div className="flex items-center space-x-2">
           <SquarePlus
             className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600"
-            onClick={() => navigate(ROUTES.PROJECT.CREATE)}
+            onClick={() => navigate(ROUTES.TASK.CREATE)}
           />
           <ChevronRight className="w-5 h-5 text-gray-400"/>
         </div>
@@ -24,8 +23,8 @@ const HorizontalProjectScroll = ({projects, title}) => {
       {/* 가로 스크롤 컨테이너 */}
       <div className="overflow-x-auto pb-4">
         <div className="flex">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} isCompact/>
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} isCompact/>
           ))}
         </div>
       </div>
@@ -33,7 +32,7 @@ const HorizontalProjectScroll = ({projects, title}) => {
       {/* 스크롤 인디케이터 */}
       <div className="flex justify-center mt-4">
         <div className="flex space-x-2">
-          {projects.map((_, index) => (
+          {tasks.map((_, index) => (
             <div
               key={index}
               className={`w-2 h-2 rounded-full ${
@@ -47,4 +46,4 @@ const HorizontalProjectScroll = ({projects, title}) => {
   );
 };
 
-export default HorizontalProjectScroll;
+export default HorizontalTaskScroll;

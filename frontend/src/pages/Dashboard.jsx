@@ -5,8 +5,10 @@ import HorizontalProjectScroll from "/src/components/ui/HorizontalProjectScroll.
 import RecentActivityItem from "/src/components/features/RecentActivityItem.jsx";
 import Header from "/src/components/layout/Header.jsx";
 import BottomNav from "/src/components/layout/BottomNav.jsx";
-import useSummaryProject from "/src/hooks/useSummaryProject.jsx";
+import useSummaryProject from "/src/hooks/project/useSummaryProject.jsx";
 import {mockRecentActivity} from "/src/data/mockProjects.jsx";
+import HorizontalTaskScroll from "/src/components/ui/HorizontalTaskScroll.jsx";
+import {mockTasks} from "/src/data/mockTask.jsx";
 
 const colorMap = {
   1: 'bg-gradient-to-br from-blue-600 to-purple-700',
@@ -21,10 +23,13 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('today');
   const [activeNavTab, setActiveNavTab] = useState('home');
   const { data: projectData, loading: projectLoading, error: projectError} = useSummaryProject();
+  const taskData = mockTasks
+  const taskLoading = false;
+  const taskError = null;
+
   const handleSearch = (query) => {
     console.log('Searching for:', query);
   };
-
 
   const projectsForCard = useMemo(() => {
     const list = Array.isArray(projectData) ? projectData : [];
@@ -42,6 +47,24 @@ const Dashboard = () => {
     }));
   }, [projectData]);
 
+  const tasksForCard = useMemo(() => {
+    const list = Array.isArray(taskData) ? taskData : [];
+
+    return list.map((t) => ({
+      id: t.id,
+      title: t.title,
+      status: t.status,
+      priority: t.priority,
+      dueDate: t.dueDate,
+      assignee: t.assignee,
+      color: colorMap[t.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
+      progress:
+        typeof t.progress === 'number'
+          ? (t.progress <= 1 ? Math.round(t.progress * 100) : Math.round(t.progress))
+          : 0,
+    }));
+  }, [taskData]);
+
   // 현재 탭에 따라 표시할 콘텐츠 결정
   const renderMainContent = () => {
     if (activeTab === 'projects') {
@@ -53,6 +76,21 @@ const Dashboard = () => {
             <HorizontalProjectScroll
               projects={projectsForCard}
               title="Active Projects"
+            />
+          )}
+        </>
+      );
+    }
+
+    if (activeTab === 'tasks') {
+      return (
+        <>
+          {taskLoading && <div className="py-6 text-gray-500">태스크 불러오는 중…</div>}
+          {taskError && <div className="py-6 text-red-500">에러: {String(taskError)}</div>}
+          {!taskLoading && !taskError && (
+            <HorizontalTaskScroll
+              tasks={tasksForCard}
+              title="Active Tasks"
             />
           )}
         </>

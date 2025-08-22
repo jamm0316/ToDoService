@@ -3,13 +3,16 @@ import Dashboard from "/src/pages/Dashboard.jsx";
 import ProjectCreatePage from "/src/pages/ProjectCreatePage.jsx";
 import {Route, Routes,} from "react-router-dom";
 import App from "/src/App.jsx";
+import {ROUTES} from "/src/router/routes.js";
+import TaskCreatePage from "/src/pages/TaskCreatePage.jsx";
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route element={<App/>}>
-        <Route path="/" element={<Dashboard/>}/>
-        <Route path="/create-project" element={<ProjectCreatePage/>}/>
+        <Route path={ROUTES.ROOT} element={<Dashboard/>}/>
+        <Route path={ROUTES.PROJECT.CREATE} element={<ProjectCreatePage />}/>
+        <Route path={ROUTES.TASK.CREATE} element={<TaskCreatePage />}/>
       </Route>
     </Routes>
   );
