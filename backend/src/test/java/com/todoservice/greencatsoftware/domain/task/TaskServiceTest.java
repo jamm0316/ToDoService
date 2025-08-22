@@ -104,7 +104,6 @@ public class TaskServiceTest {
         //when
         TaskUpdateRequest request = mock(TaskUpdateRequest.class);
         when(request.projectId()).thenReturn(null);
-        when(request.colorId()).thenReturn(null);
         when(request.schedule()).thenReturn(null);
         when(request.priority()).thenReturn(Priority.HIGH);
         when(request.title()).thenReturn("알고리즘 공부하기");
@@ -116,7 +115,6 @@ public class TaskServiceTest {
 
         //then
         verify(task).changeProject(any());
-        verify(task).changeColor(any());
         verify(task).changeSchedule(any());
         verify(task).changePriority(Priority.HIGH);
         verify(task).changeTitle("알고리즘 공부하기");
@@ -138,7 +136,6 @@ public class TaskServiceTest {
         Project project = mock(Project.class);
         Color color = mock(Color.class);
         when(projectService.getProjectByIdOrThrow(100L)).thenReturn(project);
-        when(colorService.getColorByIdOrThrow(200L)).thenReturn(color);
 
         Schedule schedule = Schedule.of(
                 LocalDate.of(2025, 1, 1), LocalTime.of(10, 0), true,
@@ -148,7 +145,6 @@ public class TaskServiceTest {
         //when
         TaskUpdateRequest request = mock(TaskUpdateRequest.class);
         when(request.projectId()).thenReturn(100L);
-        when(request.colorId()).thenReturn(200L);
         when(request.schedule()).thenReturn(schedule);
         when(request.priority()).thenReturn(Priority.HIGH);
         when(request.priority()).thenReturn(Priority.HIGH);
@@ -161,7 +157,6 @@ public class TaskServiceTest {
 
         //then
         verify(task).changeProject(project);
-        verify(task).changeColor(color);
         verify(task).changeSchedule(schedule);
         verify(task).changePriority(Priority.HIGH);
         verify(task).changeTitle("알고리즘 공부하기");
