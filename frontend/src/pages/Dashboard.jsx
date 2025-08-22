@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import SearchBar from "/src/components/ui/SearchBar.jsx";
 import TabSelector from "/src/components/layout/TabSelector.jsx";
 import HorizontalProjectScroll from "/src/components/ui/HorizontalProjectScroll.jsx";
@@ -8,7 +8,7 @@ import BottomNav from "/src/components/layout/BottomNav.jsx";
 import useSummaryProject from "/src/hooks/project/useSummaryProject.jsx";
 import {mockRecentActivity} from "/src/data/mockProjects.jsx";
 import HorizontalTaskScroll from "/src/components/ui/HorizontalTaskScroll.jsx";
-import {mockTasks} from "/src/data/mockTask.jsx";
+import useSummaryTask from "/src/hooks/task/useSummaryTask.jsx";
 
 const colorMap = {
   1: 'bg-gradient-to-br from-blue-600 to-purple-700',
@@ -23,12 +23,8 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('today');
   const [activeNavTab, setActiveNavTab] = useState('home');
   const { data: projectData, loading: projectLoading, error: projectError} = useSummaryProject();
-  const taskData = mockTasks
-  const taskLoading = false;
-  const taskError = null;
-
+  const { data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
   const handleSearch = (query) => {
-    console.log('Searching for:', query);
   };
 
   const projectsForCard = useMemo(() => {
@@ -56,12 +52,8 @@ const Dashboard = () => {
       status: t.status,
       priority: t.priority,
       dueDate: t.dueDate,
-      assignee: t.assignee,
+      dayLabel: t.dayLabel,
       color: colorMap[t.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
-      progress:
-        typeof t.progress === 'number'
-          ? (t.progress <= 1 ? Math.round(t.progress * 100) : Math.round(t.progress))
-          : 0,
     }));
   }, [taskData]);
 
