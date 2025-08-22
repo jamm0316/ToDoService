@@ -28,11 +28,6 @@ public class Task extends SuperEntity {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    @NotNull(message = "color는 필수 입니다.")
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "color_id", nullable = false)
-    private Color color;
-
     @NotNull(message = "priority는 필수 입니다.")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(10) default 'HIGH'")
@@ -55,7 +50,6 @@ public class Task extends SuperEntity {
     private Status status;
 
     public Task(Project project,
-                Color color,
                 Priority priority,
                 String title,
                 String description,
@@ -63,10 +57,9 @@ public class Task extends SuperEntity {
                 Schedule schedule,
                 Status status) {
 
-        validateDomainInvariants(project, color, priority, title, status);
+        validateDomainInvariants(project, priority, title, status);
 
         this.project = project;
-        this.color = color;
         this.priority = priority;
         this.title = title.trim();
         this.description = description != null ? description.trim() : null;
@@ -76,16 +69,11 @@ public class Task extends SuperEntity {
     }
 
     private void validateDomainInvariants(Project project,
-                                          Color color,
                                           Priority priority,
                                           String title,
                                           Status status) {
         if (project == null) {
             throw new BaseException(BaseResponseStatus.MISSING_PROJECT_FOR_TASK);
-        }
-
-        if (color == null) {
-            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_TASK);
         }
 
         if (title == null || title.trim().isEmpty()) {
@@ -105,16 +93,16 @@ public class Task extends SuperEntity {
         }
     }
 
-    public static Task create(Project project, Color color, Priority priority, String title, String description,
+    public static Task create(Project project, Priority priority, String title, String description,
                               DayLabel dayLabel, Status status
                               ) {
-        return new Task(project, color, priority, title, description, dayLabel, null, status);
+        return new Task(project, priority, title, description, dayLabel, null, status);
     }
 
-    public static Task createWithSchedule(Project project, Color color, Priority priority, String title, String description,
+    public static Task createWithSchedule(Project project, Priority priority, String title, String description,
                               DayLabel dayLabel, Schedule schedule, Status status
                               ) {
-        return new Task(project, color, priority, title, description, dayLabel, schedule, status);
+        return new Task(project, priority, title, description, dayLabel, schedule, status);
     }
 
     public void changeProject(Project project) {
@@ -122,13 +110,6 @@ public class Task extends SuperEntity {
             throw new BaseException(BaseResponseStatus.MISSING_PROJECT_FOR_TASK);
         }
         this.project = project;
-    }
-
-    public void changeColor(Color color) {
-        if (color == null) {
-            throw new BaseException(BaseResponseStatus.MISSING_COLOR_FOR_TASK);
-        }
-        this.color = color;
     }
 
     public void changePriority(Priority priority) {
