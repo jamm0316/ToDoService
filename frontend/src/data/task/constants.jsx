@@ -16,12 +16,3 @@ export const dayLabelOptions = [
   { value: 'AFTERNOON', label: '점심', short: '☀️ 점심' },
   { value: 'EVENING', label: '저녁', short: '🌙 저녁' },
 ];
-
-export const taskColors = [
-  { id: 1, color: '#8B5CF6', name: 'PURPLE' },
-  { id: 2, color: '#3B82F6', name: 'BLUE' },
-  { id: 3, color: '#EF4444', name: 'RED' },
-  { id: 4, color: '#10B981', name: 'GREEN' },
-  { id: 5, color: '#F59E0B', name: 'ORANGE' },
-  { id: 6, color: '#EC4899', name: 'PINK' },
-];
