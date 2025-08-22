@@ -1,9 +1,16 @@
 import React from 'react';
-import {User} from 'lucide-react';
+import { User } from 'lucide-react';
 
-const ProjectCard = ({project, isCompact = false}) => {
+const ProjectCard = ({ project, isCompact = false, onClick }) => {
+  const handleClick = () => {
+    if (onClick) {
+      onClick(project.id);
+    }
+  };
+
   return (
     <div
+      onClick={handleClick}
       className={`${project.color} rounded-2xl p-5 text-white shadow-lg ${
         isCompact ? 'min-w-[280px] mr-4' : 'min-h-[200px]'
       } flex flex-col justify-between transition-transform hover:scale-105 cursor-pointer`}
