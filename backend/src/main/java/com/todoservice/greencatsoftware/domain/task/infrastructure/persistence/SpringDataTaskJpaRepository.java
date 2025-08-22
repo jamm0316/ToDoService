@@ -6,8 +6,10 @@ import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummary
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,23 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
             """)
     List<TaskSummaryResponse> summaryListTask();
 
+    @Query("""
+            SELECT new com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse
+                (
+                t.title,
+                t.status,
+                t.priority,
+                t.schedule.dueDate,
+                t.dayLabel,
+                t.project.color.id
+                )
+            FROM Task t
+            WHERE t.status <> com.todoservice.greencatsoftware.common.enums.Status.COMPLETED
+                AND t.schedule.startDate <= :today
+                AND (t.schedule.dueDate IS NULL OR t.schedule.dueDate >= :today)
+            """)
+    List<TaskSummaryResponse> todayListTask(@Param("today") LocalDate today);
+
     @Repository
     @RequiredArgsConstructor
     class TaskRepositoryImpl implements TaskRepository {
@@ -38,6 +57,9 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
 
         @Override
         public List<TaskSummaryResponse> summaryListTask() {return jpa.summaryListTask();}
+
+        @Override
+        public List<TaskSummaryResponse> todayListTask(LocalDate today) {return jpa.todayListTask(today);}
 
         @Override
         public Task save(Task task) {return jpa.save(task);}
