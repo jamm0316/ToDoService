@@ -1,7 +1,8 @@
 import React from 'react';
-import ProjectCard from "/src/components/features/ProjectCard.jsx";
+import ProjectCard from "/src/components/features/projects/ProjectCard.jsx";
 import {ChevronRight, SquarePlus} from 'lucide-react';
 import {useNavigate} from "react-router-dom";
+import {ROUTES} from "/src/router/routes.js";
 
 
 const HorizontalProjectScroll = ({projects, title}) => {
@@ -14,7 +15,7 @@ const HorizontalProjectScroll = ({projects, title}) => {
         <div className="flex items-center space-x-2">
           <SquarePlus
             className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600"
-            onClick={() => navigate('/create-project')}
+            onClick={() => navigate(ROUTES.PROJECT.CREATE)}
           />
           <ChevronRight className="w-5 h-5 text-gray-400"/>
         </div>
