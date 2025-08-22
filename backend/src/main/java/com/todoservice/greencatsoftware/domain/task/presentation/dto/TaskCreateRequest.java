@@ -12,9 +12,6 @@ public record TaskCreateRequest(
         @NotNull(message = "projectId는 필수 입니다.")
         Long projectId,
 
-        @NotNull(message = "colorId는 필수 입니다.")
-        Long colorId,
-
         @NotNull(message = "priority는 필수 입니다.")
         Priority priority,
 
