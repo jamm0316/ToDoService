@@ -3,7 +3,8 @@ import React from 'react';
 const TabSelector = ({ activeTab, onTabChange }) => {
   const tabs = [
     { id: 'today', label: '오늘 할일', isActive: true },
-    { id: 'projects', label: '프로젝트', isActive: false }
+    { id: 'projects', label: '프로젝트', isActive: false },
+    { id: 'task', label: '할일들', isActive: false }
   ];
 
   return (

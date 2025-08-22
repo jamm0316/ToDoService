@@ -3,7 +3,12 @@ import apiClient from "/src/api/client.js";
 
 export const projectApi = {
   createProject: async (projectData) => {
-    const reponse = await apiClient.post(ENDPOINTS.PROJECT, projectData);
-    return reponse.data;
+    const response = await apiClient.post(ENDPOINTS.PROJECT, projectData);
+    return response.data;
   },
+  
+  summaryProject: async () => {
+    const response = await apiClient.get(ENDPOINTS.SUMMARY_PROJECTS);
+    return response.data.result;
+  }
 }
