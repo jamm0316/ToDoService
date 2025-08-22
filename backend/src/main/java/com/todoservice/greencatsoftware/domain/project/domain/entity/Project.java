@@ -31,7 +31,7 @@ public class Project extends SuperEntity {
 
     @NotNull(message = "상태값은 필수 입니다.")
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(10) default 'SCHEDULE'")
+    @Column(columnDefinition = "varchar(30) default 'PLANNING'")
     private Status status;
 
     @Embedded
