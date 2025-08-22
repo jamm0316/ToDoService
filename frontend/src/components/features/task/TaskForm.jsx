@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, Flag, Folder, Palette, FileText, Tag } from 'lucide-react';
-import { taskColors, taskStatusOptions, taskPriorityOptions, dayLabelOptions } from '/src/data/task/constants.jsx';
+import React from 'react';
+import { Calendar, Flag, FileText, Tag } from 'lucide-react';
+import { taskStatusOptions, taskPriorityOptions, dayLabelOptions } from '/src/data/task/constants.jsx';
+import ProjectSelector from '/src/components/features/task/ProjectSelector.jsx';
 
 const TaskForm = ({ form, onSubmit, loading = false }) => {
   const { formData, errors, setField, validate, getRequestData } = form;
-  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const handleSubmit = () => {
     if (validate()) {
@@ -53,7 +53,7 @@ const TaskForm = ({ form, onSubmit, loading = false }) => {
 
   return (
     <>
-      <main className="p-6 pb-24">
+      <main className="p-6 pb-24 space-y-6">
         {/* 제목 입력 */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -86,26 +86,13 @@ const TaskForm = ({ form, onSubmit, loading = false }) => {
           />
         </div>
 
-        {/* 프로젝트 선택 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            <Folder className="w-4 h-4 inline mr-2" />
-            프로젝트
-          </label>
-          <select
-            value={formData.projectId || ''}
-            onChange={(e) => setField('projectId', e.target.value ? Number(e.target.value) : null)}
-            className={`w-full px-4 py-3 rounded-lg border ${
-              errors.projectId ? 'border-red-500' : 'border-gray-300'
-            } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-          >
-            <option value="">프로젝트를 선택하세요</option>
-            <option value="1">웹 애플리케이션 개발</option>
-            <option value="2">모바일 앱 개발</option>
-            <option value="3">데이터 분석 프로젝트</option>
-          </select>
-          {errors.projectId && <p className="text-red-500 text-sm mt-1">{errors.projectId}</p>}
-        </div>
+        {/* 프로젝트 선택 - ProjectSelector 컴포넌트 사용 */}
+        <ProjectSelector
+          value={formData.projectId}
+          onChange={(projectId) => setField('projectId', projectId)}
+          error={errors.projectId}
+          showCreateButton={true}
+        />
 
         {/* 우선순위 선택 */}
         <div>
