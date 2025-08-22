@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TaskFactory {
     private final ProjectService projectService;
-    private final ColorService colorService;
 
     public Task createTask(TaskCreateRequest request) {
         Project project = projectService.getProjectByIdOrThrow(request.projectId());
