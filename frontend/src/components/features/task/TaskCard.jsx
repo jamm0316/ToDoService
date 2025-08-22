@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, User, CheckCircle2 } from 'lucide-react';
+import { Tag, Clock, User, CheckCircle2 } from 'lucide-react';
 
 const TaskCard = ({ task, isCompact = false }) => {
   const {
@@ -7,9 +7,8 @@ const TaskCard = ({ task, isCompact = false }) => {
     status,
     priority,
     dueDate,
-    assignee,
+    dayLabel,
     color,
-    progress = 0
   } = task;
 
   const getPriorityColor = (priority) => {
@@ -53,18 +52,12 @@ const TaskCard = ({ task, isCompact = false }) => {
         </div>
       </div>
 
-      {/* 진행률 바 */}
-      {progress !== undefined && (
+      {/* Day Label */}
+      {dayLabel && (
         <div className="mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm opacity-90">진행률</span>
-            <span className="text-sm font-medium">{progress}%</span>
-          </div>
-          <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-            <div
-              className="bg-white h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
+          <div className="flex items-center space-x-1 text-sm text-white text-opacity-90">
+            <Tag className="w-4 h-4" />
+            <span>{dayLabel}</span>
           </div>
         </div>
       )}
@@ -72,12 +65,10 @@ const TaskCard = ({ task, isCompact = false }) => {
       {/* 하단 정보 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          {assignee && (
             <div className="flex items-center space-x-1 text-sm opacity-90">
               <User className="w-4 h-4" />
-              <span>{assignee}</span>
+              <span>evan</span>
             </div>
-          )}
         </div>
         {dueDate && (
           <div className="text-sm opacity-90">

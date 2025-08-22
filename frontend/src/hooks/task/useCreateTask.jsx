@@ -10,8 +10,6 @@ const useCreateTask = () => {
       setLoading(true);
       setError(null);
 
-      console.log('Creating task with data:', taskData);
-
       const result = await taskApi.createTask(taskData);
       return {success: true, data: result};
     } catch (err) {
