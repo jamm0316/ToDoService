@@ -9,7 +9,7 @@
 ---
 
 ## 🛠 소스 빌드 및 실행 방법
-| 💡 Tip: 실행 전 application.properties를 반드시 작성해야 정상 실행됩니다!
+> 💡 Tip: 실행 전 application.properties를 반드시 작성해야 정상 실행됩니다!
 
 ### 1. 소스 빌드
 ```bash
