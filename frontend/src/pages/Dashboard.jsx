@@ -11,6 +11,8 @@ import HorizontalTaskScroll from "/src/components/ui/HorizontalTaskScroll.jsx";
 import useSummaryTask from "/src/hooks/task/useSummaryTask.jsx";
 import useTodayTask from "/src/hooks/task/useTodayTask.jsx";
 import useSearchProjects from "/src/hooks/project/useSearchProjects.jsx";
+import {ROUTES} from "/src/router/routes.js";
+import {useNavigate} from "react-router-dom";
 
 const colorMap = {
   1: 'bg-gradient-to-br from-blue-600 to-purple-700',
@@ -24,9 +26,14 @@ const colorMap = {
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('today');
   const [activeNavTab, setActiveNavTab] = useState('home');
-  const { data: projectData, loading: projectLoading, error: projectError, refetch: refetchProjects } = useSummaryProject();
-  const { data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
-  const { data: todayData, loading: todayLoading, error: todayError} = useTodayTask();
+  const {
+    data: projectData,
+    loading: projectLoading,
+    error: projectError,
+    refetch: refetchProjects
+  } = useSummaryProject();
+  const {data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
+  const {data: todayData, loading: todayLoading, error: todayError} = useTodayTask();
 
   const {
     keyword: searchKeyword,
@@ -127,6 +134,20 @@ const Dashboard = () => {
     }
   }
 
+  const navigate = useNavigate();
+
+  const handleBottomAddTask = () => {
+    navigate(ROUTES.TASK.CREATE);
+  };
+
+  const handleBottomTabChange = (id) => {
+    // 네비게이션 탭 → 화면 탭 연동 (원하는 매핑으로 조정 가능)
+    if (id === 'home') setActiveTab('today');
+    else if (id === 'search') setActiveTab('projects');
+    else if (id === 'calendar') setActiveTab('tasks');
+    // 'notifications' 등은 추후 구현
+  };
+
   const projectsForCard = useMemo(() => {
     const list = Array.isArray(projectData) ? projectData : [];
 
@@ -173,7 +194,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header />
+      <Header/>
       {/* 메인 콘텐츠 */}
       <main className="px-6 pb-24">
         <SearchBar placeholder="Search" onSearch={handleSearch}/>
@@ -201,7 +222,11 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
-      <BottomNav activeTab="home" onTabChange={() => {}} />
+      <BottomNav
+      activeTab={activeTab === 'today' ? 'home' : activeTab}
+      onTabChange={handleBottomTabChange}
+      onAddTask={handleBottomAddTask}
+      />
     </div>
   );
 };

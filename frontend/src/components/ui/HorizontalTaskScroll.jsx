@@ -13,10 +13,6 @@ const HorizontalTaskScroll = ({tasks, title}) => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-gray-800">{title}</h2>
         <div className="flex items-center space-x-2">
-          <SquarePlus
-            className="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-600"
-            onClick={() => navigate(ROUTES.TASK.CREATE)}
-          />
           <ChevronRight className="w-5 h-5 text-gray-400"/>
         </div>
       </div>
