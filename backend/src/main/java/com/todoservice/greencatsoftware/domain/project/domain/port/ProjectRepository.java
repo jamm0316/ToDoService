@@ -14,4 +14,5 @@ public interface ProjectRepository {
     Optional<Project> findById(Long id);
     ProjectDetailResponse findDetailWithProgress(Long id);
     void deleteById(Long id);
+    List<Project> searchByName(String keyword);
 }

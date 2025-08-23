@@ -68,6 +68,12 @@ public interface SpringDataProjectJpaRepository extends JpaRepository<Project, L
            """)
     ProjectDetailResponse findDetailWithProgress(@Param("projectId") Long projectId);
 
+    @Query("""
+           SELECT p
+           FROM Project p
+           WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+           """)
+    List<Project> searchByName(@Param("keyword") String keyword);
 
     @Repository
     @RequiredArgsConstructor
@@ -91,6 +97,9 @@ public interface SpringDataProjectJpaRepository extends JpaRepository<Project, L
 
         @Override
         public void deleteById(Long id) {jpa.deleteById(id);}
+
+        @Override
+        public List<Project> searchByName(String keyword) {return jpa.searchByName(keyword);}
 
     }
 }
