@@ -5,4 +5,6 @@ export const ENDPOINTS = {
   SUMMARY_PROJECTS: `${VERSION}/${DOMAIN}/summary`,
   PROJECT_BY_ID: (id) => `${VERSION}/${DOMAIN}/${id}`,
   UPDATE_PROJECT_FIELD_BY_ID: (id) => `${VERSION}/${DOMAIN}/${id}/field`,
+  SEARCH_PROJECTS: (q) =>
+    `${VERSION}/${DOMAIN}/search?keyword=${encodeURIComponent(q)}`
 }

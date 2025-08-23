@@ -20,5 +20,10 @@ export const projectApi = {
   updateProjectFieldById: async (id, projectData) => {
     const response = await apiClient.patch(ENDPOINTS.UPDATE_PROJECT_FIELD_BY_ID(id), projectData);
     return response.data.result;
+  },
+
+  searchProject: async (search) => {
+    const response  = await apiClient.get(ENDPOINTS.SEARCH_PROJECTS(search));
+    return response.data.result;
   }
 }
