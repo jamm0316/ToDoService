@@ -5,6 +5,7 @@ import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectD
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
 import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectFieldUpdateRequest;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectSummaryResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,17 +35,17 @@ public class ProjectController {
     }
 
     @PostMapping("")
-    public BaseResponse<Project> createColor(@Valid @RequestBody ProjectCreateRequest newProjectDTO) {
+    public BaseResponse<Project> createProject(@Valid @RequestBody ProjectCreateRequest newProjectDTO) {
         return new BaseResponse<>(projectService.createProject(newProjectDTO));
     }
 
-    @PatchMapping("/{id}")
-    public BaseResponse<Project> updateColor(ProjectCreateRequest newProjectDTO, @PathVariable Long id) {
-        return new BaseResponse<>(projectService.updateProject(newProjectDTO, id));
+    @PatchMapping("/{id}/field")
+    public BaseResponse<Project> updateProject(@RequestBody ProjectFieldUpdateRequest request, @PathVariable Long id) {
+        return new BaseResponse<>(projectService.updateProjectField(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public BaseResponse<Void> deleteColor(@PathVariable Long id) {
+    public BaseResponse<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProjectById(id);
         return new BaseResponse<>();
     }
