@@ -1,13 +1,13 @@
 import React from 'react';
 import {Plus, Bell, Calendar, Home, Search} from 'lucide-react';
 
-const BottomNav = ({ activeTab, onTabChange, onAddTask }) => {
+const BottomNav = ({ activeTab = 'home', onTabChange, onAddTask }) => {
   const navItems = [
-    { id: 'home', icon: Home, active: true },
-    { id: 'calendar', icon: Calendar, active: false },
+    { id: 'home', icon: Home },
+    { id: 'calendar', icon: Calendar },
     { id: 'add', icon: Plus, active: false, isCenter: true }, // 중앙 + 버튼
-    { id: 'notifications', icon: Bell, active: false, hasNotification: true },
-    { id: 'search', icon: Search, active: false }
+    { id: 'notifications', icon: Bell, hasNotification: true },
+    { id: 'search', icon: Search }
   ];
 
   return (
@@ -30,6 +30,8 @@ const BottomNav = ({ activeTab, onTabChange, onAddTask }) => {
               </button>
             );
           }
+          const isActive = activeTab === item.id;
+
 
           // 일반 네비게이션 버튼들
           return (
@@ -38,7 +40,7 @@ const BottomNav = ({ activeTab, onTabChange, onAddTask }) => {
               onClick={() => onTabChange(item.id)}
               className="relative p-3 rounded-xl hover:bg-gray-100 transition-colors"
             >
-              <Icon className={`w-6 h-6 ${item.active ? 'text-blue-600' : 'text-gray-400'}`} />
+              <Icon className={`w-6 h-6 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
               {item.hasNotification && (
                 <div className="absolute top-2 right-2 w-3 h-3 bg-blue-600 rounded-full border-2 border-white"></div>
               )}
