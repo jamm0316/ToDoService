@@ -24,6 +24,12 @@ public class ProjectController {
         return new BaseResponse<>(projectService.listProject());
     }
 
+    @GetMapping("/search")
+    public BaseResponse<List<Project>> searchProjects(@RequestParam("keyword") String keyword) {
+        return new BaseResponse<>(projectService.searchProjects(keyword));
+    }
+
+
     @GetMapping("/summary")
     public BaseResponse<List<ProjectSummaryResponse>> summaryListProject() {
         return new BaseResponse<>(projectService.summaryListProject());

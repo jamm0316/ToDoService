@@ -48,6 +48,14 @@ public class ProjectService {
         return projectRepository.findDetailWithProgress(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<Project> searchProjects(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return List.of();
+        }
+        return projectRepository.searchByName(keyword.trim());
+    }
+
     @Transactional
     public Project createProject(ProjectCreateRequest newProjectDTO) {
         return projectRepository.save(projectFactory.createProject(newProjectDTO));
