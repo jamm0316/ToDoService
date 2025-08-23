@@ -23,7 +23,7 @@ const colorMap = {
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('today');
   const [activeNavTab, setActiveNavTab] = useState('home');
-  const { data: projectData, loading: projectLoading, error: projectError} = useSummaryProject();
+  const { data: projectData, loading: projectLoading, error: projectError, refetch: refetchProjects } = useSummaryProject();
   const { data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
   const { data: todayData, loading: todayLoading, error: todayError} = useTodayTask();
   const handleSearch = (query) => {
@@ -99,6 +99,7 @@ const Dashboard = () => {
             <HorizontalProjectScroll
               projects={projectsForCard}
               title="ALL Projects"
+              onUpdate={refetchProjects}
             />
           )}
         </>

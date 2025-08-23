@@ -1,31 +1,39 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {projectApi} from "/src/api/project/projectApi.js";
 
 const useSummaryProject = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const isMountedRef = useRef(true);
+
+  const refetch = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await projectApi.summaryProject();
+      if (!isMountedRef.current) return;
+      setData(Array.isArray(response) ? response : []);
+    } catch (err) {
+      if (!isMountedRef.current) return;
+      setError(err);
+    } finally {
+      if (!isMountedRef.current) return;
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    let ignore = false;
-    (async () => {
-      try {
-        setLoading(true);
-        const response = await projectApi.summaryProject()
-        if (!ignore) {
-          setData(response);
-        }
-      } catch (err) {
-        if (!ignore) setError(err);
-      } finally {
-        if (!ignore) setLoading(false);
-      }
-    })();
+    isMountedRef.current = true;
+    // 마운트 시 자동 로드
+    refetch();
     return () => {
-      ignore = true
+      isMountedRef.current = false;
     };
-  }, []);
-  return {data, loading, error};
+  }, [refetch]);
+
+  return { data, loading, error, refetch, setData }; // setData도 필요하면 노출
 };
+
 
 export default useSummaryProject;
