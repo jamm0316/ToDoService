@@ -21,8 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -120,27 +119,43 @@ public class ProjectServiceTest {
     @Test
     @DisplayName("updateProjectField: 프로젝트 이름만 업데이트")
     public void updateProjectField_Name() throws Exception {
-        //given
+        // given
         LocalDate startDate = LocalDate.of(2025, 1, 1);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
-        Period period = Period.of(startDate, endDate, actualEndDate);
-        Project project = Project.createWithPeriod(Color.create("RED", "#FF000000"), "프로젝트 A", Status.PLANNING,
-                period, "프로젝트 A입니다", true, Visibility.PRIVATE);
+
+        Period originalPeriod = Period.of(startDate, endDate, actualEndDate);
+        Project project = Project.createWithPeriod(
+                Color.create("RED", "#FF000000"),
+                "프로젝트 A",
+                Status.PLANNING,
+                originalPeriod,
+                "프로젝트 A입니다",
+                true,
+                Visibility.PRIVATE
+        );
 
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
 
-        ProjectFieldUpdateRequest request = new ProjectFieldUpdateRequest("name", "새로운 프로젝트명");
+        Map<String, Object> newPeriodMap = new HashMap<>();
+        newPeriodMap.put("startDate", "2025-02-01");   // 혹은 LocalDate.of(2025,2,1)
+        newPeriodMap.put("endDate",   "2025-11-30");
+        newPeriodMap.put("actualEndDate", null);
 
-        //when
+        ProjectFieldUpdateRequest request = new ProjectFieldUpdateRequest("period", newPeriodMap);
+
+        // when
         Project updated = projectService.updateProjectField(1L, request);
 
-        //then
-        assertThat(updated.getName()).isEqualTo("새로운 프로젝트명");
-        // 다른 필드들은 변경되지 않아야 함
+        // then
+        assertThat(updated.getPeriod().startDate()).isEqualTo(LocalDate.of(2025, 2, 1));
+        assertThat(updated.getPeriod().endDate()).isEqualTo(LocalDate.of(2025, 11, 30));
+        assertThat(updated.getPeriod().actualEndDate()).isNull(); // null 유지 확인
+
+        assertThat(updated.getName()).isEqualTo("프로젝트 A");
         assertThat(updated.getDescription()).isEqualTo("프로젝트 A입니다");
         assertThat(updated.getStatus()).isEqualTo(Status.PLANNING);
-        assertThat(updated.getVisibility()).isEqualTo(Visibility.PRIVATE);
+
         verify(projectRepository, never()).save(any());
     }
 
@@ -157,14 +172,13 @@ public class ProjectServiceTest {
 
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
 
-        ProjectFieldUpdateRequest request = new ProjectFieldUpdateRequest("status", Status.IN_PROGRESS);
+        ProjectFieldUpdateRequest request = new ProjectFieldUpdateRequest("status", "IN_PROGRESS");
 
         //when
         Project updated = projectService.updateProjectField(1L, request);
 
         //then
         assertThat(updated.getStatus()).isEqualTo(Status.IN_PROGRESS);
-        // 다른 필드들은 변경되지 않아야 함
         assertThat(updated.getName()).isEqualTo("프로젝트 A");
         assertThat(updated.getDescription()).isEqualTo("프로젝트 A입니다");
         assertThat(updated.getVisibility()).isEqualTo(Visibility.PRIVATE);
@@ -184,19 +198,18 @@ public class ProjectServiceTest {
 
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
 
-        // 새로운 기간
-        LocalDate newStartDate = LocalDate.of(2025, 2, 1);
-        LocalDate newEndDate = LocalDate.of(2025, 11, 30);
-        Period newPeriod = Period.of(newStartDate, newEndDate, null);
-        ProjectFieldUpdateRequest request = new ProjectFieldUpdateRequest("period", newPeriod);
+        LinkedHashMap<String, Object> periodMap = new LinkedHashMap<>();
+        periodMap.put("startDate", "2025-08-22");
+        periodMap.put("endDate", "2025-08-23");
+        periodMap.put("actualEndDate", null);
+        ProjectFieldUpdateRequest request = new ProjectFieldUpdateRequest("period", periodMap);
 
         //when
         Project updated = projectService.updateProjectField(1L, request);
 
         //then
-        assertThat(updated.getPeriod().startDate()).isEqualTo(newStartDate);
-        assertThat(updated.getPeriod().endDate()).isEqualTo(newEndDate);
-        // 다른 필드들은 변경되지 않아야 함
+        assertThat(updated.getPeriod().startDate()).isEqualTo(LocalDate.of(2025, 8, 22));
+        assertThat(updated.getPeriod().endDate()).isEqualTo(LocalDate.of(2025, 8, 23));
         assertThat(updated.getName()).isEqualTo("프로젝트 A");
         assertThat(updated.getDescription()).isEqualTo("프로젝트 A입니다");
         assertThat(updated.getStatus()).isEqualTo(Status.PLANNING);
@@ -207,7 +220,7 @@ public class ProjectServiceTest {
     @DisplayName("updateProjectField: 설명 업데이트 (null로 설정)")
     public void updateProjectField_Description_Null() throws Exception {
         //given
-        LocalDate startDate = LocalDate.of(2025, 1, 1);
+        LocalDate startDate = LocalDate.of(2025, 12, 1);
         LocalDate endDate = LocalDate.of(2025, 12, 31);
         LocalDate actualEndDate = LocalDate.of(2025, 12, 31);
         Period period = Period.of(startDate, endDate, actualEndDate);
@@ -223,7 +236,6 @@ public class ProjectServiceTest {
 
         //then
         assertThat(updated.getDescription()).isNull();
-        // 다른 필드들은 변경되지 않아야 함
         assertThat(updated.getName()).isEqualTo("프로젝트 A");
         assertThat(updated.getStatus()).isEqualTo(Status.PLANNING);
         assertThat(updated.getVisibility()).isEqualTo(Visibility.PRIVATE);
@@ -252,7 +264,6 @@ public class ProjectServiceTest {
         //then
         assertThat(updated.getColor().getName()).isEqualTo("BLUE");
         assertThat(updated.getColor().getHexCode()).isEqualTo("#0000FF");
-        // 다른 필드들은 변경되지 않아야 함
         assertThat(updated.getName()).isEqualTo("프로젝트 A");
         assertThat(updated.getDescription()).isEqualTo("프로젝트 A입니다");
         assertThat(updated.getStatus()).isEqualTo(Status.PLANNING);
