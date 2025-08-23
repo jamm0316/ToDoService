@@ -1,6 +1,10 @@
 package com.todoservice.greencatsoftware.domain.project.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
+import com.todoservice.greencatsoftware.common.enums.Status;
+import com.todoservice.greencatsoftware.common.enums.Visibility;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
 import com.todoservice.greencatsoftware.domain.color.entity.Color;
 import com.todoservice.greencatsoftware.domain.color.application.ColorService;
@@ -9,13 +13,18 @@ import com.todoservice.greencatsoftware.domain.project.domain.port.ProjectReposi
 import com.todoservice.greencatsoftware.domain.project.domain.vo.Period;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectDetailResponse;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectCreateRequest;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectFieldUpdateRequest;
 import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectSummaryResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -50,24 +59,55 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project updateProject(ProjectCreateRequest request, Long id) {
+    public Project updateProjectField(Long id, ProjectFieldUpdateRequest request) {
         Project project = getProjectByIdOrThrow(id);
-        Color color = (request.colorId() != null)
-                ? colorService.getColorByIdOrThrow(request.colorId())
-                : project.getColor();
 
-        Period period = (request.period() != null)
-                ? Period.of(request.period().startDate(), request.period().endDate(), request.period().actualEndDate())
-                : project.getPeriod();
+        switch (request.fieldType()) {
+            case "name" -> project.changeName((String) request.value());
+            case "description" -> project.changeDescription((String) request.value());
+            case "status" -> {
+                if (request.value().equals("PLANNING")) {
+                    project.changeStatus(Status.PLANNING);
+                }
+                if (request.value().equals("IN_PROGRESS")) {
+                    project.changeStatus(Status.IN_PROGRESS);
+                }
+                if (request.value().equals("COMPLETED")) {
+                    project.changeStatus(Status.COMPLETED);
+                }
+                if (request.value().equals("ON_HOLD")) {
+                    project.changeStatus(Status.ON_HOLD);
+                }
+            }
+            case "period" -> {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
 
-        project.changeColor(color);
-        project.changeName(request.name());
-        project.changeStatus(request.status());
-        project.changePeriod(period);
-        project.changeDescription(request.description());
-        project.changeIsPublic(request.isPublic());
-        project.changeVisibility(request.visibility());
+                Period requestPeriod = objectMapper.convertValue(request.value(), Period.class);
 
+                LocalDate startDate = requestPeriod.startDate();
+                LocalDate endDate = requestPeriod.endDate();
+                LocalDate actualDate = requestPeriod.actualEndDate();
+
+                project.changePeriod(Period.of(startDate, endDate, actualDate));
+            }
+            case "colorId" -> {
+                Color color = colorService.getColorByIdOrThrow((Long) request.value());
+                project.changeColor(color);
+            }
+            case "isPublic" -> project.changeIsPublic((Boolean) request.value());
+            case "visibility" -> {
+                if (request.value().equals("PRIVATE")) {
+                    project.changeVisibility(Visibility.PRIVATE);
+                }
+                if (request.value().equals("PUBLIC")) {
+                    project.changeVisibility(Visibility.PUBLIC);
+                }
+                if (request.value().equals("TEAM")) {
+                    project.changeVisibility(Visibility.TEAM);
+                }
+            }
+        }
         return project;
     }
 }
