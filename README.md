@@ -11,48 +11,92 @@
 ## 🛠 소스 빌드 및 실행 방법
 > 💡 Tip: 실행 전 application.properties를 반드시 작성해야 정상 실행됩니다!
 
-### 1. 소스 빌드
+좋아 Evan 👍 그러면 README.md → 실행 방법 섹션을 더 구체적으로 git clone → 백엔드 빌드 → 프론트엔드 빌드 → 프론트엔드 실행까지 순차적으로 정리해줄게.
+
+⸻
+
+
+## 🛠 소스 빌드 및 실행 방법
+
+### 0. 프로젝트 클론
+먼저 저장소를 로컬에 복제합니다.
+
+⸻
+
+### 1. 백엔드 (Spring Boot)
+
+#### (1) application.yml 생성 (필수)
+
+src/main/resources/application.properties 경로에 아래 예시대로 작성 (본인 DB 환경에 맞게 수정):
+
+```yaml
+spring.application.name=greencatsoftware
+
+### Local DB ###
+spring.datasource.url=jdbc:mysql://{DB_HOST}:{DB_PORT}/{DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8
+spring.datasource.username={DB_USERNAME}
+spring.datasource.password={DB_PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+### JPA ###
+spring.jpa.hibernate.ddl-auto={DDL_AUTO}   # ex) none | validate | update | create | create-drop
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.show-sql=true
+
+### Swagger-ui ###
+springdoc.api-docs.enabled=true
+springdoc.api-docs.path=/v3/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+```
+##### 채워 넣을 값 가이드
+- {DB_HOST} : 예) localhost
+- {DB_PORT} : 예) 3306
+- {DB_NAME} : 예) greencatsoftware-db
+- {DB_USERNAME} : 예) evan
+- {DB_PASSWORD} : 실제 비밀번호
+- {DDL_AUTO} : 최초 create, 테이블 생성 이후 none
+
+#### (2) 빌드
+
+프로젝트 루트(백엔드 폴더)에서 터미널 실행:
 ```bash
 ./gradlew build
 ```
 
-### 2. DB 스키마
-	•	Spring Data JPA의 ddl-auto 옵션에 따라 애플리케이션 실행 시 엔티티 기반으로 자동 생성됨
-	•	별도의 SQL 스키마 파일은 제공되지 않음
-
-### 3. 기초 데이터
-	•	초기 데이터 백업 파일 없음 → 필요시 수동 Insert
-
-### 4. 실행 방법
-
-(1) application.application 생성 (필수)
-
-src/main/resources/application.yml 경로에 아래 예시대로 작성 (본인 DB 환경에 맞게 수정):
-
-```java
-spring.application.name: greencatsoftware
-
-### Local DB ###
-spring.datasource.url: jdbc:mysql://localhost:3306/
-spring.datasource.username: {사용자이름}
-spring.datasource.password: {DB 비밀번호}
-spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
-
-### JPA ###
-spring.jpa.hibernate.ddl-auto: none  #최초 create로 DB 테이블 생성해야함
-spring.jpa.properties.hibernate.format_sql: true
-spring.jpa.show-sql: true
-
-### Swagger-ui ###
-springdoc.api-docs.enabled: true
-springdoc.api-docs.path: /v3/api-docs
-springdoc.swagger-ui.path: /swagger-ui.html
-```
-
-(2) 애플리케이션 실행
+#### (3) 실행
 ```bash
 ./gradlew bootRun
 ```
+
+> 💡 실행 후 API 문서 확인: http://localhost:8080/swagger-ui.html
+
+⸻
+
+### 2. 프론트엔드 (React)
+
+#### (1) 디렉토리 이동
+```bash
+cd frontend
+```
+
+#### (2) 패키지 설치
+```bash
+npm install
+```
+
+#### (3) 개발 서버 실행
+```bash
+npm run dev
+```
+> 💡 실행 후: http://localhost:5173 (Vite 기본 포트 기준)
+
+⸻
+
+### 실행 순서 요약
+	1.	git clone으로 소스 내려받기
+	2.	application.yml 작성
+	3.	백엔드: ./gradlew build && ./gradlew bootRun
+	4.	프론트엔드: cd frontend && npm install && npm run dev
 
 ⸻
 
@@ -69,9 +113,9 @@ springdoc.swagger-ui.path: /swagger-ui.html
 ⸻
 
 ## 🔐 API 명세
-	•	실행 후 http://localhost:8080/swagger-ui.html 접속 시 전체 API 확인 가능
+> 💡 실행 후 http://localhost:8080/swagger-ui.html 접속 시 전체 API 확인 가능
 
-추가 기능 API
+### 추가 기능 API
 
 Method	Endpoint	설명
 `GET	/api/v1/project/summary`	프로젝트별 진행률 포함 요약 조회
