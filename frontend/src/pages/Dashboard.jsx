@@ -10,6 +10,7 @@ import {mockRecentActivity} from "/src/data/mockProjects.jsx";
 import HorizontalTaskScroll from "/src/components/ui/HorizontalTaskScroll.jsx";
 import useSummaryTask from "/src/hooks/task/useSummaryTask.jsx";
 import useTodayTask from "/src/hooks/task/useTodayTask.jsx";
+import useSearchProjects from "/src/hooks/project/useSearchProjects.jsx";
 
 const colorMap = {
   1: 'bg-gradient-to-br from-blue-600 to-purple-700',
@@ -26,8 +27,105 @@ const Dashboard = () => {
   const { data: projectData, loading: projectLoading, error: projectError, refetch: refetchProjects } = useSummaryProject();
   const { data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
   const { data: todayData, loading: todayLoading, error: todayError} = useTodayTask();
+
+  const {
+    keyword: searchKeyword,
+    setKeyword: setSearchKeyword,
+    data: searchedProjects,
+    loading: searchLoading,
+    error: searchError,
+    clear: clearSearch,
+  } = useSearchProjects("");
+
   const handleSearch = (query) => {
+    setSearchKeyword(query);
+    if (query && query.trim().length > 0) {
+      setActiveTab('projects');
+    }
   };
+
+  const searchedProjectsForCard = useMemo(() => {
+    const list = Array.isArray(searchedProjects) ? searchedProjects : [];
+    return list.map((p) => ({
+      id: p.id,
+      title: p.name ?? p.title ?? "(이름 없음)",
+      type: p.visibility ?? "", // 없으면 빈 값
+      date: p.startDate && p.endDate ? `${p.startDate} ~ ${p.endDate}` : "",
+      color: colorMap[p.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
+      progress:
+        typeof p.progress === 'number'
+          ? (p.progress <= 1 ? Math.round(p.progress * 100) : Math.round(p.progress))
+          : 0,
+    }));
+  }, [searchedProjects]);
+
+  const renderMainContent = () => {
+    if (activeTab === 'today') {
+      return (
+        <>
+          {taskLoading && <div className="py-6 text-gray-500">오늘 할 일 불러오는 중…</div>}
+          {taskError && <div className="py-6 text-red-500">😅오늘 할 일을 불러오지 못했어요...</div>}
+          {!taskLoading && !taskError && (
+            <HorizontalTaskScroll
+              tasks={todayForCard}
+              title="Active Tasks"
+            />
+          )}
+        </>
+      );
+    }
+
+    if (activeTab === 'projects') {
+      // ✅ 검색어가 있으면 검색결과를, 없으면 기존 요약을
+      const isSearching = (searchKeyword ?? "").trim().length > 0;
+
+      if (isSearching) {
+        return (
+          <>
+            {searchLoading && <div className="py-6 text-gray-500">검색 중…</div>}
+            {searchError && <div className="py-6 text-red-500">😅검색 중 오류가 발생했어요: {searchError}</div>}
+            {!searchLoading && !searchError && (
+              <HorizontalProjectScroll
+                projects={searchedProjectsForCard}
+                title={`Search Results (${searchedProjectsForCard.length})`}
+                onUpdate={refetchProjects} // 선택: 카드에서 수정 시 목록 갱신
+              />
+            )}
+          </>
+        );
+      }
+
+      // 기본(검색어 없음) → 요약 프로젝트
+      return (
+        <>
+          {projectLoading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
+          {projectError && <div className="py-6 text-red-500">😅프로젝트를 불러오지 못했어요...</div>}
+          {!projectLoading && !projectError && (
+            <HorizontalProjectScroll
+              projects={projectsForCard}
+              title="ALL Projects"
+              onUpdate={refetchProjects}
+            />
+          )}
+        </>
+      );
+    }
+
+    if (activeTab === 'tasks') {
+      return (
+        <>
+          {taskLoading && <div className="py-6 text-gray-500">태스크 불러오는 중…</div>}
+          {taskError && <div className="py-6 text-red-500">😅할 일을 불러오지 못했어요...</div>}
+          {!taskLoading && !taskError && (
+            <HorizontalTaskScroll
+              tasks={tasksForCard}
+              title="ALL Tasks"
+            />
+          )}
+        </>
+      );
+    }
+  }
 
   const projectsForCard = useMemo(() => {
     const list = Array.isArray(projectData) ? projectData : [];
@@ -73,60 +171,6 @@ const Dashboard = () => {
     }));
   }, [todayData]);
 
-  // 현재 탭에 따라 표시할 콘텐츠 결정
-  const renderMainContent = () => {
-    if (activeTab === 'today') {
-      return (
-        <>
-          {taskLoading && <div className="py-6 text-gray-500">오늘 할 일 불러오는 중…</div>}
-          {taskError && <div className="py-6 text-red-500">😅오늘 할 일을 불러오지 못했어요...</div>}
-          {!taskLoading && !taskError && (
-            <HorizontalTaskScroll
-              tasks={todayForCard}
-              title="Active Tasks"
-            />
-          )}
-        </>
-      );
-    }
-
-    if (activeTab === 'projects') {
-      return (
-        <>
-          {projectLoading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
-          {projectError && <div className="py-6 text-red-500">😅프로젝트를 불러오지 못했어요...</div>}
-          {!projectLoading && !projectError && (
-            <HorizontalProjectScroll
-              projects={projectsForCard}
-              title="ALL Projects"
-              onUpdate={refetchProjects}
-            />
-          )}
-        </>
-      );
-    }
-
-    if (activeTab === 'tasks') {
-      return (
-        <>
-          {taskLoading && <div className="py-6 text-gray-500">태스크 불러오는 중…</div>}
-          {taskError && <div className="py-6 text-red-500">😅할 일을 불러오지 못했어요...</div>}
-          {!taskLoading && !taskError && (
-            <HorizontalTaskScroll
-              tasks={tasksForCard}
-              title="ALL Tasks"
-            />
-          )}
-        </>
-      );
-    }
-    return (
-      <div className="py-6 text-gray-500">
-        오늘 할 일 내용이 여기에 표시됩니다.
-      </div>
-    );
-  };
-
   return (
     <div>
       <Header />
@@ -134,7 +178,10 @@ const Dashboard = () => {
       <main className="px-6 pb-24">
         <SearchBar placeholder="Search" onSearch={handleSearch}/>
 
-        <TabSelector activeTab={activeTab} onTabChange={setActiveTab}/>
+        <TabSelector activeTab={activeTab} onTabChange={(tab) => {
+          setActiveTab(tab);
+          if (tab !== 'projects') clearSearch();
+        }}/>
 
         {/* 탭에 따른 동적 콘텐츠 */}
         {renderMainContent()}
