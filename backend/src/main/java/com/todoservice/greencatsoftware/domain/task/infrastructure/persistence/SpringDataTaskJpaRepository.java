@@ -19,6 +19,7 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
     @Query("""
             SELECT new com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse
                 (
+                t.id,
                 t.title,
                 t.status,
                 t.priority,
@@ -34,6 +35,7 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
     @Query("""
             SELECT new com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse
                 (
+                t.id,
                 t.title,
                 t.status,
                 t.priority,
@@ -51,6 +53,7 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
     @Query("""
            SELECT new com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskDetailResponse
                (
+                t.id,
                 p.color.id,
                 t.project.id,
                 t.priority,
