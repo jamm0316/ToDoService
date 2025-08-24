@@ -229,7 +229,7 @@ npm run dev
 	5.	프론트엔드: cd frontend && npm install && npm run dev
 
 
-## ⚙️ Tech Stack (주력 라이브러리) (필수 3 충족)
+## ⚙️ Tech Stack (주력 라이브러리)
 
 ### 기술	설명	사용 이유
 1. Spring Boot (Web, Data JPA, Validation)	Java 기반 웹 애플리케이션 프레임워크	REST API 개발 표준, 자동 설정/의존성 관리로 생산성↑
@@ -252,7 +252,7 @@ npm run dev
 	•	설명: 이름에 키워드가 포함된 프로젝트 목록 검색
 
 
-## 🧪 테스트 케이스 (필수 5 충족)
+## 🧪 테스트 케이스
 	•	프레임워크: JUnit 5
 	•	경로: src/test/java/com/todoservice/greencatsoftware/domain/
 	•	도메인별 테스트 포함:
