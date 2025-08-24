@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag, Clock, User, CheckCircle2 } from 'lucide-react';
 
-const TaskCard = ({ task, isCompact = false }) => {
+const TaskCard = ({ task, isCompact = false, onClick }) => {
   const {
     title,
     status,
@@ -10,6 +10,12 @@ const TaskCard = ({ task, isCompact = false }) => {
     dayLabel,
     color,
   } = task;
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(task.id);
+    }
+  };
 
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -35,6 +41,7 @@ const TaskCard = ({ task, isCompact = false }) => {
 
   return (
     <div
+      onClick={handleClick}
       className={`${color} ${
         isCompact ? 'w-80 mr-4 flex-shrink-0' : 'w-full'
       } rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer`}
