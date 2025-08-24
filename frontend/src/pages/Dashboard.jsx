@@ -83,7 +83,6 @@ const Dashboard = () => {
     }
 
     if (activeTab === 'projects') {
-      // ✅ 검색어가 있으면 검색결과를, 없으면 기존 요약을
       const isSearching = (searchKeyword ?? "").trim().length > 0;
 
       if (isSearching) {

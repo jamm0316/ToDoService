@@ -52,7 +52,7 @@ const HorizontalProjectScroll = ({ projects, title, onUpdate }) => {
           {...dragScrollProps}
           className={`overflow-x-auto pb-4 ${dragScrollProps.className}`}
         >
-          <style jsx>{`
+          <style>{`
             /* Chrome, Safari, Opera */
             div::-webkit-scrollbar {
               display: none;
