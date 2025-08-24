@@ -7,6 +7,8 @@ import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import jakarta.validation.constraints.NotNull;
 
 public record TaskDetailResponse(
+        Long id,
+
         @NotNull(message = "colorId는 필수 입니다.")
         Long colorId,
 
