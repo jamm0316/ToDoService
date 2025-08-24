@@ -6,7 +6,7 @@ export default function useSearchProjects(initialKeyword = "") {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const clear = () => setKeyword("");
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function useSearchProjects(initialKeyword = "") {
       setLoading(true);
       setError("");
       try {
-        const result = await projectApi.searchProject(keyword); // ✅ 이거 재사용
+        const result = await projectApi.searchProject(keyword);
         setData(result);
       } catch (e) {
         setError(e.message);
@@ -34,5 +34,5 @@ export default function useSearchProjects(initialKeyword = "") {
     return () => clearTimeout(timerRef.current);
   }, [keyword]);
 
-  return { keyword, setKeyword, data, loading, error };
+  return { keyword, setKeyword, data, loading, error, clear };
 }
