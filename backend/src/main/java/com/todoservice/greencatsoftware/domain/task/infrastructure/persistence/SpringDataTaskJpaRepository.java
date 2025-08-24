@@ -2,6 +2,7 @@ package com.todoservice.greencatsoftware.domain.task.infrastructure.persistence;
 
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.port.TaskRepository;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskDetailResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,6 +48,24 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
             """)
     List<TaskSummaryResponse> todayListTask(@Param("today") LocalDate today);
 
+    @Query("""
+           SELECT new com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskDetailResponse
+               (
+                p.color.id,
+                t.project.id,
+                t.priority,
+                t.title,
+                t.description,
+                t.dayLabel,
+                t.schedule,
+                t.status
+                )
+           FROM Task t
+           JOIN t.project p
+           WHERE t.id = :id
+           """)
+    TaskDetailResponse getTaskDetailById(@Param("id") Long id);
+
     @Repository
     @RequiredArgsConstructor
     class TaskRepositoryImpl implements TaskRepository {
@@ -60,6 +79,9 @@ public interface SpringDataTaskJpaRepository extends JpaRepository<Task, Long> {
 
         @Override
         public List<TaskSummaryResponse> todayListTask(LocalDate today) {return jpa.todayListTask(today);}
+
+        @Override
+        public TaskDetailResponse getTaskDetailById(Long id) {return jpa.getTaskDetailById(id);}
 
         @Override
         public Task save(Task task) {return jpa.save(task);}

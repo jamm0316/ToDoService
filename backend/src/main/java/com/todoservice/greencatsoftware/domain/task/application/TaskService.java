@@ -3,14 +3,13 @@ package com.todoservice.greencatsoftware.domain.task.application;
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponseStatus;
 import com.todoservice.greencatsoftware.common.enums.Status;
 import com.todoservice.greencatsoftware.common.exception.BaseException;
-import com.todoservice.greencatsoftware.domain.color.entity.Color;
-import com.todoservice.greencatsoftware.domain.color.application.ColorService;
-import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.project.application.ProjectService;
+import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.port.TaskRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskDetailResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class TaskService {
     private final TaskFactory taskFactory;
     private final TaskRepository taskRepository;
     private final ProjectService projectService;
-    private final ColorService colorService;
 
     public List<Task> listTask() {
         return taskRepository.findAll();
@@ -44,6 +42,10 @@ public class TaskService {
     public Task getTaskByIdOrThrow(Long id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_TASK));
+    }
+
+    public TaskDetailResponse getTaskDetailById(Long id) {
+        return taskRepository.getTaskDetailById(id);
     }
 
     @Transactional
