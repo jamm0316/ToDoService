@@ -11,6 +11,7 @@ import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
 import com.todoservice.greencatsoftware.domain.task.domain.port.TaskRepository;
 import com.todoservice.greencatsoftware.domain.task.domain.vo.Schedule;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskDetailResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse;
 import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,6 @@ public class TaskService {
     private final TaskFactory taskFactory;
     private final TaskRepository taskRepository;
     private final ProjectService projectService;
-    private final ColorService colorService;
 
     public List<Task> listTask() {
         return taskRepository.findAll();
@@ -44,6 +44,10 @@ public class TaskService {
     public Task getTaskByIdOrThrow(Long id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_TASK));
+    }
+
+    public TaskDetailResponse getTaskDetailById(Long id) {
+        return taskRepository.getTaskDetailById(id);
     }
 
     @Transactional
