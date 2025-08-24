@@ -15,5 +15,10 @@ export const taskApi = {
   todayTask: async () => {
     const response = await apiClient.get(ENDPOINTS.TODAY_TASKS);
     return response.data.result;
-  }
+  },
+
+  getTaskById: async (id) => {
+    const response = await apiClient.get(ENDPOINTS.TASK_BY_ID(id));
+    return response.data.result;
+  },
 }
