@@ -8,19 +8,19 @@
 ### 현재 가능한 기능
 1. 검색기능
    - 검색어 입력으로 프로젝트 찾기 가능
-   - <img width="365" height="57" alt="image" src="https://github.com/user-attachments/assets/18614778-3b0b-4c0c-9b0b-cafdba45cfff" />
+   - <img width="365" alt="image" src="https://github.com/user-attachments/assets/18614778-3b0b-4c0c-9b0b-cafdba45cfff" />
 
 2. 프로젝트 생성기능
    - [+] 네모 + 버튼을 눌러 project 생성가능
-   - <img width="369" height="334" alt="image" src="https://github.com/user-attachments/assets/f6963ba4-1095-42ad-87cb-e7befdca4ee5" />
+   - <img width="365" alt="image" src="https://github.com/user-attachments/assets/f6963ba4-1095-42ad-87cb-e7befdca4ee5" />
 
 3. 프로젝트 수정 기능
    - 프로젝트 단건 조회 후 수정 기능
-   - <img width="455" height="625" alt="image" src="https://github.com/user-attachments/assets/276d1296-a6ff-4ed1-846a-5a897fefd2e8" />
+   - <img width="365" alt="image" src="https://github.com/user-attachments/assets/276d1296-a6ff-4ed1-846a-5a897fefd2e8" />
 
 4. 할 일 생성 기능
    - 하단 nav의 +버튼 클릭으로 할 일 생성 가능
-   - <img width="447" height="79" alt="image" src="https://github.com/user-attachments/assets/65077034-3fef-416e-9ce5-ff4bb45b1547" />
+   - <img width="365" alt="image" src="https://github.com/user-attachments/assets/65077034-3fef-416e-9ce5-ff4bb45b1547" />
  
 
 ## 🛠 소스 빌드 및 실행 방법
