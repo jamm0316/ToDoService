@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record TaskSummaryResponse (
+        Long id,
+
         @NotNull(message = "제목은 필수입니다.")
         String title,
 
