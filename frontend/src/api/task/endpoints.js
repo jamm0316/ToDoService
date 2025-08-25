@@ -5,4 +5,5 @@ export const ENDPOINTS = {
   SUMMARY_TASKS: `${VERSION}/${DOMAIN}/summary`,
   TODAY_TASKS: `${VERSION}/${DOMAIN}/today`,
   TASK_BY_ID: (id) => `${VERSION}/${DOMAIN}/${id}`,
+  UPDATE_TASK_FIELD_BY_ID: (id) => `${VERSION}/${DOMAIN}/${id}/field`,
 }
