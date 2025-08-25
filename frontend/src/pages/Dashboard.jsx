@@ -32,8 +32,20 @@ const Dashboard = () => {
     error: projectError,
     refetch: refetchProjects
   } = useSummaryProject();
-  const {data: taskData, loading: taskLoading, error: taskError} = useSummaryTask();
-  const {data: todayData, loading: todayLoading, error: todayError} = useTodayTask();
+
+  const {
+    data: taskData,
+    loading: taskLoading,
+    error: taskError,
+    refetch: refetchTasks
+  } = useSummaryTask();
+
+  const {
+    data: todayData,
+    loading: todayLoading,
+    error: todayError,
+    refetch: refetchTodayTasks
+  } = useTodayTask();
 
   const {
     keyword: searchKeyword,
@@ -49,102 +61,6 @@ const Dashboard = () => {
     if (query && query.trim().length > 0) {
       setActiveTab('projects');
     }
-  };
-
-  const searchedProjectsForCard = useMemo(() => {
-    const list = Array.isArray(searchedProjects) ? searchedProjects : [];
-    return list.map((p) => ({
-      id: p.id,
-      title: p.name ?? p.title ?? "(이름 없음)",
-      type: p.visibility ?? "", // 없으면 빈 값
-      date: p.startDate && p.endDate ? `${p.startDate} ~ ${p.endDate}` : "",
-      color: colorMap[p.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
-      progress:
-        typeof p.progress === 'number'
-          ? (p.progress <= 1 ? Math.round(p.progress * 100) : Math.round(p.progress))
-          : 0,
-    }));
-  }, [searchedProjects]);
-
-  const renderMainContent = () => {
-    if (activeTab === 'today') {
-      return (
-        <>
-          {taskLoading && <div className="py-6 text-gray-500">오늘 할 일 불러오는 중…</div>}
-          {taskError && <div className="py-6 text-red-500">😅오늘 할 일을 불러오지 못했어요...</div>}
-          {!taskLoading && !taskError && (
-            <HorizontalTaskScroll
-              tasks={todayForCard}
-              title="Active Tasks"
-            />
-          )}
-        </>
-      );
-    }
-
-    if (activeTab === 'projects') {
-      const isSearching = (searchKeyword ?? "").trim().length > 0;
-
-      if (isSearching) {
-        return (
-          <>
-            {searchLoading && <div className="py-6 text-gray-500">검색 중…</div>}
-            {searchError && <div className="py-6 text-red-500">😅검색 중 오류가 발생했어요: {searchError}</div>}
-            {!searchLoading && !searchError && (
-              <HorizontalProjectScroll
-                projects={searchedProjectsForCard}
-                title={`Search Results (${searchedProjectsForCard.length})`}
-                onUpdate={refetchProjects} // 선택: 카드에서 수정 시 목록 갱신
-              />
-            )}
-          </>
-        );
-      }
-
-      // 기본(검색어 없음) → 요약 프로젝트
-      return (
-        <>
-          {projectLoading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
-          {projectError && <div className="py-6 text-red-500">😅프로젝트를 불러오지 못했어요...</div>}
-          {!projectLoading && !projectError && (
-            <HorizontalProjectScroll
-              projects={projectsForCard}
-              title="ALL Projects"
-              onUpdate={refetchProjects}
-            />
-          )}
-        </>
-      );
-    }
-
-    if (activeTab === 'tasks') {
-      return (
-        <>
-          {taskLoading && <div className="py-6 text-gray-500">태스크 불러오는 중…</div>}
-          {taskError && <div className="py-6 text-red-500">😅할 일을 불러오지 못했어요...</div>}
-          {!taskLoading && !taskError && (
-            <HorizontalTaskScroll
-              tasks={tasksForCard}
-              title="ALL Tasks"
-            />
-          )}
-        </>
-      );
-    }
-  }
-
-  const navigate = useNavigate();
-
-  const handleBottomAddTask = () => {
-    navigate(ROUTES.TASK.CREATE);
-  };
-
-  const handleBottomTabChange = (id) => {
-    // 네비게이션 탭 → 화면 탭 연동 (원하는 매핑으로 조정 가능)
-    if (id === 'home') setActiveTab('today');
-    else if (id === 'search') setActiveTab('projects');
-    else if (id === 'calendar') setActiveTab('tasks');
-    // 'notifications' 등은 추후 구현
   };
 
   const projectsForCard = useMemo(() => {
@@ -190,6 +106,104 @@ const Dashboard = () => {
       color: colorMap[t.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
     }));
   }, [todayData]);
+
+  const searchedProjectsForCard = useMemo(() => {
+    const list = Array.isArray(searchedProjects) ? searchedProjects : [];
+    return list.map((p) => ({
+      id: p.id,
+      title: p.name ?? p.title ?? "(이름 없음)",
+      type: p.visibility ?? "", // 없으면 빈 값
+      date: p.startDate && p.endDate ? `${p.startDate} ~ ${p.endDate}` : "",
+      color: colorMap[p.colorId] ?? 'bg-gradient-to-br from-slate-500 to-slate-700',
+      progress:
+        typeof p.progress === 'number'
+          ? (p.progress <= 1 ? Math.round(p.progress * 100) : Math.round(p.progress))
+          : 0,
+    }));
+  }, [searchedProjects]);
+
+  const renderMainContent = () => {
+    if (activeTab === 'today') {
+      return (
+        <>
+          {todayLoading && <div className="py-6 text-gray-500">오늘 할 일 불러오는 중…</div>}
+          {todayError && <div className="py-6 text-red-500">😅오늘 할 일을 불러오지 못했어요...</div>}
+          {/*{!taskLoading && !taskError && (*/}
+            <HorizontalTaskScroll
+              tasks={todayForCard}
+              title="Active Tasks"
+              onUpdate={refetchTodayTasks}
+            />
+          {/*)}*/}
+        </>
+      );
+    }
+
+    if (activeTab === 'projects') {
+      const isSearching = (searchKeyword ?? "").trim().length > 0;
+
+      if (isSearching) {
+        return (
+          <>
+            {searchLoading && <div className="py-6 text-gray-500">검색 중…</div>}
+            {searchError && <div className="py-6 text-red-500">😅검색 중 오류가 발생했어요: {searchError}</div>}
+            {/*{!searchLoading && !searchError && (*/}
+              <HorizontalProjectScroll
+                projects={searchedProjectsForCard}
+                title={`Search Results (${searchedProjectsForCard.length})`}
+                onUpdate={refetchProjects} // 선택: 카드에서 수정 시 목록 갱신
+              />
+            {/*)}*/}
+          </>
+        );
+      }
+
+      // 기본(검색어 없음) → 요약 프로젝트
+      return (
+        <>
+          {projectLoading && <div className="py-6 text-gray-500">프로젝트 불러오는 중…</div>}
+          {projectError && <div className="py-6 text-red-500">😅프로젝트를 불러오지 못했어요...</div>}
+          {/*{!projectLoading && !projectError && (*/}
+            <HorizontalProjectScroll
+              projects={projectsForCard}
+              title="ALL Projects"
+              onUpdate={refetchProjects}
+            />
+          {/*)}*/}
+        </>
+      );
+    }
+
+    if (activeTab === 'tasks') {
+      return (
+        <>
+          {taskLoading && <div className="py-6 text-gray-500">태스크 불러오는 중…</div>}
+          {taskError && <div className="py-6 text-red-500">😅할 일을 불러오지 못했어요...</div>}
+          {/*{!taskLoading && !taskError && (*/}
+            <HorizontalTaskScroll
+              tasks={tasksForCard}
+              title="ALL Tasks"
+              onUpdate={refetchTasks}
+            />
+          {/*)}*/}
+        </>
+      );
+    }
+  }
+
+  const navigate = useNavigate();
+
+  const handleBottomAddTask = () => {
+    navigate(ROUTES.TASK.CREATE);
+  };
+
+  const handleBottomTabChange = (id) => {
+    // 네비게이션 탭 → 화면 탭 연동 (원하는 매핑으로 조정 가능)
+    if (id === 'home') setActiveTab('today');
+    else if (id === 'search') setActiveTab('projects');
+    else if (id === 'calendar') setActiveTab('tasks');
+    // 'notifications' 등은 추후 구현
+  };
 
   return (
     <div>

@@ -21,4 +21,9 @@ export const taskApi = {
     const response = await apiClient.get(ENDPOINTS.TASK_BY_ID(id));
     return response.data.result;
   },
+
+  updateTaskFieldById: async (id, taskData) => {
+    const response = await apiClient.patch(ENDPOINTS.UPDATE_TASK_FIELD_BY_ID(id), taskData);
+    return response.data.result;
+  },
 }
