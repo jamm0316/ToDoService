@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
 import TaskCard from "/src/components/features/task/TaskCard.jsx";
 import {ChevronRight, SquarePlus} from 'lucide-react';
-import {useNavigate} from "react-router-dom";
 import {useDragScroll} from "/src/hooks/useDragScroll.jsx";
 import TaskDetailModal from "/src/components/features/task/TaskDetailModal.jsx";
 
-const HorizontalTaskScroll = ({tasks, title}) => {
-  const navigate = useNavigate();
+const HorizontalTaskScroll = ({tasks, title, onUpdate}) => {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { dragScrollProps, currentScrollIndex, isDragging } = useDragScroll(tasks.length);
@@ -21,6 +19,13 @@ const HorizontalTaskScroll = ({tasks, title}) => {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedTaskId(null);
+  };
+
+  const handleTaskUpdate = () => {
+    // 프로젝트 목록 새로고침
+    if (onUpdate) {
+      onUpdate();
+    }
   };
 
   return (
@@ -80,6 +85,7 @@ const HorizontalTaskScroll = ({tasks, title}) => {
         taskId={selectedTaskId}
         isOpen={isModalOpen}
         onClose={handleModalClose}
+        onUpdate={handleTaskUpdate}
       />
     </>
   );
