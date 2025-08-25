@@ -2,12 +2,11 @@ package com.todoservice.greencatsoftware.domain.task.presentation;
 
 import com.todoservice.greencatsoftware.common.baseResponse.BaseResponse;
 import com.todoservice.greencatsoftware.common.enums.Status;
+import com.todoservice.greencatsoftware.domain.project.domain.entity.Project;
+import com.todoservice.greencatsoftware.domain.project.presentation.dto.ProjectFieldUpdateRequest;
 import com.todoservice.greencatsoftware.domain.task.application.TaskService;
 import com.todoservice.greencatsoftware.domain.task.domain.entity.Task;
-import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskCreateRequest;
-import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskDetailResponse;
-import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskSummaryResponse;
-import com.todoservice.greencatsoftware.domain.task.presentation.dto.TaskUpdateRequest;
+import com.todoservice.greencatsoftware.domain.task.presentation.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -46,9 +45,9 @@ public class TaskController {
         return new BaseResponse<>(taskService.createTask(newTaskDTO));
     }
 
-    @PatchMapping("/{id}")
-    public BaseResponse<Task> updateTask(TaskUpdateRequest updateTaskDTO, @PathVariable Long id) {
-        return new BaseResponse<>(taskService.updateTask(updateTaskDTO, id));
+    @PatchMapping("/{id}/field")
+    public BaseResponse<Task> updateProject(@RequestBody TaskFieldUpdateRequest request, @PathVariable Long id) {
+        return new BaseResponse<>(taskService.updateTaskField(id, request));
     }
 
     @DeleteMapping("/{id}")
