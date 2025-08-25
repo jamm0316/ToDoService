@@ -70,6 +70,11 @@ public class ProjectService {
     public Project updateProjectField(Long id, ProjectFieldUpdateRequest request) {
         Project project = getProjectByIdOrThrow(id);
 
+        updateProjectSwitch(request, project);
+        return project;
+    }
+
+    private void updateProjectSwitch(ProjectFieldUpdateRequest request, Project project) {
         switch (request.fieldType()) {
             case "name" -> project.changeName((String) request.value());
             case "description" -> project.changeDescription((String) request.value());
@@ -116,6 +121,5 @@ public class ProjectService {
                 }
             }
         }
-        return project;
     }
 }
